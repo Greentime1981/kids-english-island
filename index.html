@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#FF7A59">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="英語冒險島">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<title>小小英語冒險島｜台北市國小英語練習</title>
+<style>
+:root{
+  --bg:#FFF8EC; --ink:#2B2340; --muted:#7A7091; --card:#FFFFFF;
+  --g1:#FF7A59; --g2:#FFB23F; --g3:#3CC79A; --g4:#2FA9E0; --g5:#7B6CF6; --g6:#E85BB3;
+  --ok:#2EBD6B; --bad:#F2545B; --line:#EFE6D6; --accent:var(--g1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;min-height:100vh}
+.en{font-family:"Arial Rounded MT Bold","Avenir Next",system-ui,"PingFang TC",sans-serif}
+header{position:sticky;top:0;padding-top:max(10px,env(safe-area-inset-top))!important;z-index:5;background:var(--bg);border-bottom:2px dashed var(--line);padding:10px 16px;display:flex;align-items:center;gap:12px}
+header h1{font-size:20px;margin:0;font-weight:900;flex:1;cursor:pointer}
+header h1 span{color:var(--accent)}
+.starbox{background:#fff;border:2px solid var(--line);border-radius:999px;padding:4px 12px;font-weight:700}
+main{max-width:860px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right)) calc(60px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+body{-webkit-user-select:none;user-select:none;overscroll-behavior:none}
+.grades{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:6px 0 18px}
+.gbtn{border:0;border-radius:16px;padding:10px 4px;font-weight:900;font-size:16px;color:#fff;cursor:pointer;opacity:.45;transition:.15s;font-family:inherit}
+.gbtn.on{opacity:1;transform:translateY(-3px);box-shadow:0 5px 0 rgba(0,0,0,.15)}
+.gbtn small{display:block;font-weight:500;font-size:11px}
+.hero{background:var(--accent);color:#fff;border-radius:24px;padding:18px 20px;margin-bottom:18px;position:relative;overflow:hidden}
+.hero h2{margin:0 0 4px;font-size:24px;font-weight:900}
+.hero p{margin:0;opacity:.95;font-size:14px}
+.hero .big{position:absolute;right:14px;top:6px;font-size:64px;opacity:.9}
+.chapters{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.ch{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:16px;cursor:pointer;transition:.15s;text-align:left;font-family:inherit;color:inherit}
+.ch:hover{transform:translateY(-3px);border-color:var(--accent)}
+.ch .ico{font-size:34px}
+.ch b{display:block;font-size:17px;margin:6px 0 2px}
+.ch span{font-size:13px;color:var(--muted)}
+.ch .stars{margin-top:6px;font-size:14px;letter-spacing:2px}
+.panel{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:20px}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.back{border:0;background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 12px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--ink)}
+.topbar h3{margin:0;font-size:19px;flex:1}
+.prog{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:16px}
+.prog i{display:block;height:100%;background:var(--accent);transition:.3s}
+.q{font-size:24px;font-weight:700;text-align:center;margin:10px 0 18px;line-height:1.5}
+.q .blank{display:inline-block;min-width:70px;border-bottom:3px solid var(--accent);color:var(--accent)}
+.qsub{text-align:center;color:var(--muted);font-size:14px;margin-top:-10px;margin-bottom:12px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{border:2px solid var(--line);background:#fff;border-radius:16px;padding:14px;font-size:20px;font-weight:700;cursor:pointer;font-family:"Arial Rounded MT Bold","Avenir Next",system-ui,"PingFang TC",sans-serif;color:var(--ink);transition:.12s}
+.opt:hover{border-color:var(--accent)}
+.opt.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt:disabled{cursor:default}
+.tip{margin-top:14px;padding:12px 14px;border-radius:14px;background:#FFF3D6;font-size:15px;display:none}
+.tip.show{display:block}
+.btn{border:0;background:var(--accent);color:#fff;font-weight:900;font-size:17px;border-radius:16px;padding:12px 22px;cursor:pointer;font-family:inherit;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.speak{border:0;background:#fff;border:2px solid var(--line);border-radius:50%;width:46px;height:46px;font-size:20px;cursor:pointer}
+/* flashcard */
+.flash{text-align:center;padding:20px 10px}
+.flash .emo{font-size:90px;line-height:1.1}
+.flash .w{font-size:46px;font-weight:800;margin:6px 0}
+.flash .z{font-size:22px;color:var(--muted)}
+.wlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:16px}
+.wl{border:2px solid var(--line);border-radius:12px;padding:8px 10px;cursor:pointer;background:#fff;text-align:left;font-family:inherit;color:inherit}
+.wl b{font-family:"Arial Rounded MT Bold","Avenir Next",system-ui;font-size:17px}
+.wl small{display:block;color:var(--muted)}
+/* spelling */
+.slots{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:10px 0 18px}
+.slot{width:44px;height:54px;border-radius:12px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;font-family:"Arial Rounded MT Bold","Avenir Next",system-ui;background:#fff}
+.slot.hole{border-color:var(--accent);border-style:dashed;color:var(--accent)}
+.slot.cur{box-shadow:0 0 0 4px rgba(0,0,0,.08);background:#FFF3D6}
+.slot.sp{border:0;width:16px;background:none}
+.tiles{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
+.tile{width:52px;height:52px;border-radius:14px;border:0;background:var(--accent);color:#fff;font-size:26px;font-weight:800;font-family:"Arial Rounded MT Bold","Avenir Next",system-ui;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.tile.used{visibility:hidden}
+.shake{animation:shake .35s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.pop{animation:pop .4s}
+@keyframes pop{50%{transform:scale(1.15)}}
+/* translate */
+.zh{font-size:26px;font-weight:900;text-align:center;margin:8px 0 16px}
+.ansline{min-height:64px;border:2px dashed var(--accent);border-radius:16px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin-bottom:14px}
+.wt{border:0;background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 14px;font-size:20px;font-weight:700;font-family:"Arial Rounded MT Bold","Avenir Next",system-ui;cursor:pointer;color:var(--ink)}
+.ansline .wt{background:#FFF3D6;border-color:var(--accent)}
+/* match */
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mc{aspect-ratio:1/1.05;border-radius:16px;border:0;cursor:pointer;font-family:"Arial Rounded MT Bold","Avenir Next",system-ui,"PingFang TC";font-weight:800;font-size:18px;background:var(--accent);color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.15);padding:6px;line-height:1.2}
+.mc.open{background:#fff;color:var(--ink);border:2px solid var(--accent)}
+.mc.done{background:var(--ok);color:#fff;opacity:.55;cursor:default}
+.mc .e{font-size:28px;display:block}
+.stat{display:flex;gap:16px;justify-content:center;color:var(--muted);font-weight:700;margin-bottom:12px}
+/* result */
+.result{text-align:center;padding:20px}
+.result .s{font-size:54px;letter-spacing:6px}
+.result h2{font-size:30px;margin:8px 0}
+.review{text-align:left;margin-top:16px;font-size:15px}
+.review div{padding:8px 10px;border-radius:10px;background:#FFF0F0;margin-bottom:6px}
+/* info */
+.info h4{margin:18px 0 6px;font-size:17px}
+.info p,.info li{font-size:15px;line-height:1.7}
+.info table{border-collapse:collapse;width:100%;font-size:14px}
+.info td,.info th{border:1px solid var(--line);padding:6px 8px;text-align:left}
+.info th{background:#FFF3D6}
+.info a{color:var(--g4)}
+.toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:700;opacity:0;transition:.2s;pointer-events:none;z-index:9}
+.toast.show{opacity:1}
+@media (max-width:560px){
+  .grades{grid-template-columns:repeat(3,1fr)}
+  .q{font-size:20px}.opt{font-size:18px;padding:12px}
+  .mgrid{grid-template-columns:repeat(3,1fr)}
+  .flash .w{font-size:38px}
+  .slot{width:36px;height:46px;font-size:24px}
+}
+.badge{display:inline-block;background:#FFE1A8;color:#8A5A00;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;margin-left:8px;vertical-align:middle}
+.papers{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:14px}
+.remedy-box{background:#EAF6FF;border-radius:16px;padding:14px;margin-top:14px;line-height:1.7;font-size:15px}
+.slot.reveal{background:#FFE3E3;border-color:var(--bad);color:var(--bad)}
+.tile.wrongtile{background:var(--bad)}
+.tile:disabled{opacity:.6;cursor:default}
+.retry{background:#FFF0D9;color:#8A5A00;border-radius:12px;padding:8px 12px;font-weight:700;text-align:center;margin-bottom:10px}
+.opt.en{font-family:"Arial Rounded MT Bold","Avenir Next",system-ui,"PingFang TC",sans-serif}
+.installbar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:20;background:#2B2340;color:#fff;border-radius:20px;padding:12px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.installbar b{flex:1;font-size:15px;line-height:1.4}
+.installbar .btn{padding:10px 16px;font-size:16px;white-space:nowrap}
+.installbar .x{background:none;border:0;color:#bbb;font-size:22px;cursor:pointer;padding:0 4px}
+.imodal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.imodal .box{background:#fff;border-radius:24px 24px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom));width:100%;max-width:520px}
+.imodal h3{margin:0 0 12px;font-size:21px}
+.imodal ol{margin:0 0 16px;padding-left:22px;font-size:18px;line-height:1.9}
+.imodal .note{background:#FFF3D6;border-radius:12px;padding:10px 12px;font-size:15px;margin-bottom:14px}
+.arrowdown{text-align:center;font-size:40px;animation:bob 1s infinite}
+@keyframes bob{50%{transform:translateY(8px)}}
+.daily{background:#fff;border:2px solid var(--line);border-radius:20px;padding:12px 16px;margin-bottom:16px}
+.dhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:15px;flex-wrap:wrap;gap:4px}
+.dhead span{color:var(--muted);font-weight:700}
+.drow{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:15px}
+.drow .dt{width:118px;flex-shrink:0}.drow.ok .dt{color:var(--muted);text-decoration:line-through}
+.dbar{flex:1;height:10px;background:var(--line);border-radius:99px;overflow:hidden}.dbar i{display:block;height:100%;background:var(--ok)}
+.dn{width:44px;text-align:right;color:var(--muted);font-weight:700;font-size:13px}
+.dok{margin-top:6px;background:#E7F8EE;border-radius:10px;padding:6px 10px;font-size:14px;font-weight:700;color:#1E8A4C}
+.srsrow{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-bottom:1px dashed var(--line);font-size:15px}
+.srsmeta{color:var(--muted);font-size:13px;white-space:nowrap}
+.mcard.locked{opacity:.45;cursor:not-allowed}
+.arena{position:relative;text-align:center;background:linear-gradient(180deg,#EEF4FF,#fff);border-radius:20px;padding:12px 10px 10px;margin-bottom:10px}
+.arena.hurt{animation:hurt .45s}@keyframes hurt{0%,100%{background:#EEF4FF}40%{background:#FFD6D6;transform:translateX(-6px)}70%{transform:translateX(6px)}}
+.mon{font-size:76px;line-height:1.1;display:inline-block;animation:idle 1.6s infinite ease-in-out}
+@keyframes idle{50%{transform:translateY(-6px)}}
+.mon.hit{animation:hit .4s}@keyframes hit{0%{transform:scale(1)}30%{transform:scale(.8) rotate(-10deg);filter:brightness(2)}100%{transform:scale(1)}}
+.mon.dead{animation:dead .9s forwards}@keyframes dead{to{transform:scale(0) rotate(360deg);opacity:0}}
+.mname{font-weight:900;font-size:17px;margin:2px 0 6px}
+.hpbar{position:relative;height:18px;background:#FFE0E0;border-radius:99px;overflow:hidden;margin:0 auto;max-width:360px}
+.hpbar i{display:block;height:100%;background:linear-gradient(90deg,#F2545B,#FF8A5B);transition:width .35s}
+.hpbar span{position:absolute;inset:0;font-size:12px;font-weight:700;line-height:18px;color:#5a1a1a}
+.arow{display:flex;justify-content:space-between;max-width:360px;margin:8px auto 0;font-size:18px;min-height:24px}
+.combo{color:#E8590C;font-weight:900;font-size:16px}
+.dmg{position:absolute;left:0;right:0;top:34%;font-size:26px;font-weight:900;color:#2F6FE0;opacity:0;pointer-events:none}
+.dmg.show{animation:dmg .8s}.dmg.crit{color:#E8590C;font-size:32px}.dmg.bad{color:var(--bad)}
+@keyframes dmg{0%{opacity:0;transform:translateY(10px)}20%{opacity:1}100%{opacity:0;transform:translateY(-30px)}}
+</style>
+</head>
+<body>
+<header>
+  <h1 onclick="go('home')">🏝️ 小小英語<span>冒險島</span></h1>
+  <div class="starbox">🔥 <span id="streakN">0</span></div><div class="starbox">⭐ <span id="totalStars">0</span></div>
+</header>
+<main id="app"></main>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== 隨機工具（可設定種子，讓模擬考每回題目固定） ===================== */
+let R=Math.random;
+function seeded(s){return function(){s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=R()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=(a,n)=>shuffle(a).slice(0,n);
+const one=a=>a[R()*a.length|0];
+const $=s=>document.querySelector(s);
+const app=$('#app');
+
+/* ===================== 單字資料：依「臺北市國民小學英語聽說評量手冊」應用字詞分年 ===================== */
+const COLORS_G=['','#FF7A59','#FFB23F','#3CC79A','#2FA9E0','#7B6CF6','#E85BB3'];
+const BAND=['','低年段','低年段','中年段','中年段','高年段','高年段'];
+const RAW={
+1:"girl|女孩|👧;boy|男孩|👦;teacher|老師|👩‍🏫;friend|朋友|🤝;mom|媽媽|👩;dad|爸爸|👨;sister|姊妹|👧;brother|兄弟|👦;apple|蘋果|🍎;banana|香蕉|🍌;egg|蛋|🥚;milk|牛奶|🥛;cake|蛋糕|🍰;cat|貓|🐱;dog|狗|🐶;fish|魚|🐟;one|一|1️⃣;two|二|2️⃣;three|三|3️⃣;four|四|4️⃣;five|五|5️⃣;hat|帽子|👒;happy|快樂的|😊;good|好的|👍;book|書|📕;yes|是|⭕;no|不|❌",
+2:"ball|球|⚽;box|盒子|📦;bag|袋子；書包|🎒;class|班級|🏫;cow|母牛|🐄;pig|豬|🐷;bird|鳥|🐦;home|家|🏠;school|學校|🏫;zoo|動物園|🦒;name|名字|📛;look|看|👀;go|去|🚶;English|英語|🔤;Taiwan|台灣|🇹🇼;Taipei|台北|🏙️;mother|母親|👩;father|父親|👨;who|誰|❓;what|什麼|❓;this|這個|👉;that|那個|👈",
+3:"doctor|醫生|👨‍⚕️;student|學生|🧑‍🎓;kid|小孩|🧒;grandma|奶奶；外婆|👵;grandpa|爺爺；外公|👴;rice|米飯|🍚;tea|茶|🍵;water|水|💧;juice|果汁|🧃;hamburger|漢堡|🍔;pizza|披薩|🍕;ice cream|冰淇淋|🍦;desk|書桌|🪑;door|門|🚪;pen|原子筆|🖊️;pencil|鉛筆|✏️;eraser|橡皮擦|🧽;ruler|尺|📏;chair|椅子|🪑;table|桌子|🪵;window|窗戶|🪟;bear|熊|🐻;monkey|猴子|🐵;lion|獅子|🦁;rabbit|兔子|🐰;tiger|老虎|🐯;six|六|6️⃣;seven|七|7️⃣;eight|八|8️⃣;nine|九|9️⃣;ten|十|🔟;red|紅色|🔴;blue|藍色|🔵;green|綠色|🟢;yellow|黃色|🟡;black|黑色|⚫;white|白色|⚪;brown|棕色|🟤;head|頭|🙂;eye|眼睛|👁️;nose|鼻子|👃;ear|耳朵|👂;mouth|嘴巴|👄;hand|手|✋;arm|手臂|💪;leg|腿|🦵;foot|腳|🦶;face|臉|😀",
+4:"breakfast|早餐|🍳;lunch|午餐|🍱;dinner|晚餐|🍽️;orange|柳橙|🍊;cup|杯子|☕;fan|電扇|🌀;key|鑰匙|🔑;park|公園|🌳;bookstore|書店|📚;eleven|十一|🕚;twelve|十二|🕛;big|大的|🐘;small|小的|🐭;tall|高的|🦒;short|矮的；短的|📏;long|長的|🐍;old|老的；舊的|👴;thin|瘦的|🥢;hot|熱的|🔥;cold|冷的|🥶;warm|溫暖的|☀️;cool|涼爽的|🍃;sunny|晴朗的|🌞;rainy|下雨的|🌧️;cloudy|多雲的|☁️;windy|颳風的|🌬️;Sunday|星期日|📅;Monday|星期一|📅;Friday|星期五|📅;Saturday|星期六|📅;morning|早上|🌅;night|晚上|🌙;today|今天|📆;bike|腳踏車|🚲;bus|公車|🚌;car|汽車|🚗;sad|難過的|😢;great|很棒的|🌟;cap|棒球帽|🧢;jacket|夾克|🧥;shoes|鞋子|👟;art|美術|🎨;math|數學|➗;music|音樂|🎵;dance|跳舞|💃;jump|跳|🦘;sing|唱歌|🎤;read|閱讀|📖;swim|游泳|🏊;run|跑|🏃;draw|畫畫|🖍️;write|寫|✍️;cook|煮飯|👩‍🍳;sleep|睡覺|😴;kite|風箏|🪁",
+5:"baby|嬰兒|👶;nurse|護理師|👩‍⚕️;singer|歌手|🎤;man|男人|👨;woman|女人|👩;mailman|郵差|📮;aunt|阿姨；姑姑|👩;uncle|叔叔；舅舅|👨;son|兒子|👦;daughter|女兒|👧;candy|糖果|🍬;bread|麵包|🍞;coffee|咖啡|☕;cookies|餅乾|🍪;noodles|麵|🍜;sandwich|三明治|🥪;soup|湯|🍲;fruit|水果|🍇;computer|電腦|💻;classroom|教室|🏫;clock|時鐘|⏰;bee|蜜蜂|🐝;duck|鴨子|🦆;chicken|雞|🐔;elephant|大象|🐘;supermarket|超市|🛒;gym|體育館|🏋️;hospital|醫院|🏥;library|圖書館|📚;post office|郵局|🏤;restaurant|餐廳|🍴;thirteen|十三|1️⃣;twenty|二十|2️⃣;thirty|三十|3️⃣;fifty|五十|5️⃣;hundred|一百|💯;pink|粉紅色|🩷;purple|紫色|🟣;gray|灰色|🩶;bathroom|浴室|🛁;bedroom|臥室|🛏️;kitchen|廚房|🍳;living room|客廳|🛋️;sofa|沙發|🛋️;TV|電視|📺",
+6:"hair|頭髮|💇;tooth|牙齒|🦷;busy|忙碌的|🏃;clean|乾淨的|✨;dirty|髒的|🟫;heavy|重的|🏋️;kind|親切的|💗;sick|生病的|🤒;smart|聰明的|🧠;strong|強壯的|💪;young|年輕的|🧒;cute|可愛的|🥰;moon|月亮|🌙;star|星星|⭐;sun|太陽|☀️;sky|天空|🌌;spring|春天|🌸;summer|夏天|🏖️;fall|秋天|🍂;winter|冬天|⛄;MRT|捷運|🚇;plane|飛機|✈️;ship|船|🚢;taxi|計程車|🚕;train|火車|🚆;angry|生氣的|😠;excited|興奮的|🤩;hungry|飢餓的|😋;tired|疲累的|🥱;coat|外套|🧥;dress|洋裝|👗;glasses|眼鏡|👓;pants|長褲|👖;skirt|裙子|👗;socks|襪子|🧦;sweater|毛衣|🧶;baseball|棒球|⚾;basketball|籃球|🏀;camping|露營|🏕️;jogging|慢跑|🏃;science|自然科學|🔬;drink|喝|🥤;eat|吃|🍽️;drive|開車|🚗;fly|飛|🕊️;ride|騎|🚴;speak|說|🗣️;study|讀書|📚;wash|洗|🧼;watch|觀看|📺;wear|穿戴|👕;work|工作|💼;early|早的|🐓;late|晚的；遲的|⏰;money|錢|💰;flower|花|🌸;tree|樹|🌳"
+};
+const WORDS={};
+for(const g in RAW){WORDS[g]=RAW[g].split(';').map(s=>{const[e,z,m]=s.split('|');return{e,z,m:m||'🔤'}})}
+function wordsUpTo(g){let a=[];for(let i=1;i<=g;i++)a=a.concat(WORDS[i]);return a}
+
+/* ===================== 出題用字庫（g = 最早出現的年級） ===================== */
+const P=(s,k)=>s.split(';').map(r=>{const v=r.split('|'),o={};k.forEach((n,i)=>o[n]=n=='g'?+v[i]:v[i]);return o});
+const THINGS=P("book|books|書|1;apple|apples|蘋果|1;banana|bananas|香蕉|1;egg|eggs|蛋|1;cake|cakes|蛋糕|1;hat|hats|帽子|1;ball|balls|球|2;box|boxes|盒子|2;bag|bags|書包|2;pen|pens|原子筆|3;pencil|pencils|鉛筆|3;eraser|erasers|橡皮擦|3;ruler|rulers|尺|3;marker|markers|麥克筆|3;cup|cups|杯子|4;key|keys|鑰匙|4;kite|kites|風箏|4;orange|oranges|柳橙|4;cap|caps|棒球帽|4;jacket|jackets|夾克|4;computer|computers|電腦|5;clock|clocks|時鐘|5;card|cards|卡片|5;sandwich|sandwiches|三明治|5;cookie|cookies|餅乾|5;flower|flowers|花|6;coat|coats|外套|6;dress|dresses|洋裝|6;sweater|sweaters|毛衣|6",['e','p','z','g']);
+const ANIMALS=P("cat|cats|貓|1;dog|dogs|狗|1;pig|pigs|豬|2;bird|birds|鳥|2;cow|cows|牛|2;bear|bears|熊|3;monkey|monkeys|猴子|3;lion|lions|獅子|3;rabbit|rabbits|兔子|3;tiger|tigers|老虎|3;duck|ducks|鴨子|5;bee|bees|蜜蜂|5;elephant|elephants|大象|5;chicken|chickens|雞|5",['e','p','z','g']);
+const PEOPLE=P("mom|媽媽|f|1;dad|爸爸|m|1;sister|姊姊|f|1;brother|哥哥|m|1;grandma|奶奶|f|3;grandpa|爺爺|m|3;aunt|阿姨|f|5;uncle|叔叔|m|5",['e','z','s','g']);
+const ROLES=P("teacher|老師|1;student|學生|3;doctor|醫生|3;nurse|護理師|5;singer|歌手|5;cook|廚師|5",['e','z','g']);
+const FEEL=P("happy|快樂|1;good|好|1;sad|難過|4;fine|好|4;great|棒|4;tired|累|6;hungry|餓|6;busy|忙|6;sick|不舒服|6;excited|興奮|6;angry|生氣|6",['e','z','g']);
+const VERBS=P("dance|dancing|dances|danced|跳舞|3;sing|singing|sings|sang|唱歌|3;jump|jumping|jumps|jumped|跳|3;read|reading|reads|read|看書|3;swim|swimming|swims|swam|游泳|3;run|running|runs|ran|跑步|3;draw|drawing|draws|drew|畫畫|3;write|writing|writes|wrote|寫字|3;cook|cooking|cooks|cooked|煮飯|3;sleep|sleeping|sleeps|slept|睡覺|3;walk|walking|walks|walked|走路|3;play basketball|playing basketball|plays basketball|played basketball|打籃球|6;watch TV|watching TV|watches TV|watched TV|看電視|6;eat breakfast|eating breakfast|eats breakfast|ate breakfast|吃早餐|6;ride a bike|riding a bike|rides a bike|rode a bike|騎腳踏車|6;study English|studying English|studies English|studied English|讀英文|6;clean the room|cleaning the room|cleans the room|cleaned the room|打掃房間|6;fly a kite|flying a kite|flies a kite|flew a kite|放風箏|6;drink milk|drinking milk|drinks milk|drank milk|喝牛奶|6",['b','i','s','p','z','g']);
+const FOODS=P("milk|牛奶|1;cake|蛋糕|1;apples|蘋果|1;bananas|香蕉|1;pizza|披薩|3;rice|飯|3;juice|果汁|3;tea|茶|3;ice cream|冰淇淋|3;hamburgers|漢堡|3;noodles|麵|5;bread|麵包|5;candy|糖果|5;soup|湯|5;cookies|餅乾|5",['e','z','g']);
+const COLORS=P("red|紅色|3;blue|藍色|3;green|綠色|3;yellow|黃色|3;black|黑色|3;white|白色|3;brown|棕色|3;pink|粉紅色|5;purple|紫色|5;gray|灰色|5",['e','z','g']);
+const BODY=P("nose|鼻子|3;mouth|嘴巴|3;head|頭|3;face|臉|3;eyes|眼睛|3;ears|耳朵|3;hands|手|3",['e','z','g']);
+const PLACES=P("school|學校|0|2;zoo|動物園|1|2;park|公園|1|4;bookstore|書店|1|4;library|圖書館|1|5;hospital|醫院|1|5;supermarket|超市|1|5;gym|體育館|1|5;restaurant|餐廳|1|5;post office|郵局|1|5",['e','z','a','g']);
+const TRANSP=P("bus|公車|4;bike|腳踏車|4;car|汽車|4;MRT|捷運|6;taxi|計程車|6;train|火車|6",['e','z','g']);
+const WEATHER=P("hot|熱|4;cold|冷|4;warm|溫暖|4;cool|涼爽|4;sunny|晴朗|4;rainy|多雨|4;cloudy|多雲|4;windy|多風|4",['e','z','g']);
+const NUMS=P("one|一|1;two|二|1;three|三|1;four|四|1;five|五|1;six|六|3;seven|七|3;eight|八|3;nine|九|3;ten|十|3;eleven|十一|4;twelve|十二|4",['e','z','g']);
+const COUNTRIES=P("Taiwan|台灣|1;Japan|日本|3;the USA|美國|3;the UK|英國|3",['e','z','g']);
+const NAMES=[['Amy','f'],['Lily','f'],['Mia','f'],['Jenny','f'],['Tom','m'],['Ben','m'],['Andy','m'],['Sam','m']];
+let state={grade:1};
+function L(list){const r=list.filter(x=>x.g<=state.grade);if(r.length)return r;const m=Math.min(...list.map(x=>x.g));return list.filter(x=>x.g==m)}
+const art=e=>/^[aeiou]/i.test(e)?'an':'a';
+const aN=e=>art(e)+' '+e;
+const toP=pl=>pl.a=='0'?pl.e:'the '+pl.e;
+const fill=(q,a)=>q.replace('___',a);
+function MC(q,ans,wr,tip){const o=[ans];for(const w of wr)if(!o.includes(w))o.push(w);return{type:'mc',q,ans,opts:shuffle(o),tip,speak:true}}
+
+/* ===================== 文法／時態 題目產生器 ===================== */
+const BE_TIP={am:'I 搭配 am',are:'you / we / they（複數）搭配 are',is:'he / she / it、一個人或一樣東西搭配 is'};
+const SUBJ=[['I','am','我'],['You','are','你'],['He','is','他'],['She','is','她'],['We','are','我們'],['They','are','他們']];
+const GEN={
+be(){const r=R();if(r<.6){const s=one(SUBJ),a=one(L(FEEL));return MC(`${s[0]} ___ ${a.e}. (${s[2]}很${a.z})`,s[1],['am','is','are'],BE_TIP[s[1]])}
+ if(r<.8){const a=one(L(ANIMALS));return MC(`It ___ ${aN(a.e)}.`,'is',['am','are'],BE_TIP.is)}
+ const p=one(L(PEOPLE));return MC(`My ${p.e} ___ at home.`,'is',['am','are'],BE_TIP.is)},
+a_an(){const x=one(L(THINGS).concat(L(ANIMALS))),a=art(x.e);return MC(`This is ___ ${x.e}. (${x.z})`,a,[a=='a'?'an':'a','two'],a=='an'?`${x.e} 是母音 a e i o u 開頭，要用 an`:`${x.e} 是子音開頭，用 a`)},
+wh1(){if(R()<.5){const p=one(L(PEOPLE).filter(x=>x.s=='m'));return MC(`___ is he? He is my ${p.e}.`,'Who',['What','Where'],'問「人是誰」用 Who')}
+ const t=one(L(THINGS));return MC(`___ is this? It's ${aN(t.e)}.`,'What',['Who','Where'],'問「這是什麼東西」用 What')},
+poss(){const r=R(),n=one(NAMES)[0],t=one(L(THINGS));
+ if(r<.25)return MC(`___ name is ${n}. (我的)`,'My',['I','Me'],'「我的」→ My，後面接名詞');
+ if(r<.5)return MC(`What's ___ name? (你的)`,'your',['you','yours'],'「你的」名字 → your name');
+ if(r<.75)return MC(`This is ___ ${t.e}. (我的)`,'my',['I','me'],'「我的」→ my + 名詞');
+ return MC(`Is this ___ ${t.e}? (你的)`,'your',['you','yours'],'「你的」→ your + 名詞')},
+yes_be(){const r=R(),t=one(L(THINGS));
+ if(r<.3)return MC(`Is this ${aN(t.e)}? Yes, it ___.`,'is',['am','are'],'Is this...? → Yes, it is.');
+ if(r<.55){const p=one(L(PEOPLE).filter(x=>x.s=='f'));return MC(`Is she your ${p.e}? Yes, she ___.`,'is',['am','are'],'Is she...? → Yes, she is.')}
+ if(r<.8){const n=one(NAMES)[0];return MC(`Are you ${n}? Yes, I ___.`,'am',['is','are'],'Are you...? → Yes, I am.')}
+ return MC(`Is this ${aN(t.e)}? No, it ___.`,"isn't",["aren't",'not'],"否定回答：No, it isn't.（= is not）")},
+this_these(){const t=one(L(THINGS));if(R()<.5)return MC(`___ is my ${t.e}.`,'This',['These','Those'],'一個東西用 This（這個）');
+ return MC(`___ are my ${t.p}.`,'These',['This','That'],`${t.p} 是複數，用 These（這些）`)},
+neg_be(){const r=R();if(r<.4){const ro=one(L(ROLES));return MC(`Are you ${aN(ro.e)}? No, I'm ___.`,'not',['no',"don't"],"No, I'm not.（I am not）")}
+ const a=one(L(ANIMALS));if(r<.7)return MC(`Is it ${aN(a.e)}? No, it ___.`,"isn't",["aren't",'not'],"No, it isn't.");
+ return MC(`Are they ${a.p}? No, they ___.`,"aren't",["isn't",'not'],"they 用 are → No, they aren't.")},
+can_ans(){const v=one(L(VERBS));if(R()<.5)return MC(`Can you ${v.b}? Yes, I ___.`,'can',['do','am'],'用 Can 問，就用 can 回答');
+ const[n,s]=one(NAMES);return MC(`Can ${n} ${v.b}? No, ${s=='f'?'she':'he'} ___.`,"can't",["doesn't","isn't"],"否定回答：can't（= cannot）")},
+can_base(){const v=one(L(VERBS)),s=one([['I','我'],['She','她'],['He','他'],['They','他們']]);return MC(`${s[0]} can ___. (${s[1]}會${v.z})`,v.b,[v.s,v.i],'can 後面一定接原形動詞')},
+prep(){const PL=[['desk','書桌',['on','under']],['table','桌子',['on','under']],['chair','椅子',['on','under']],['box','盒子',['in','on','under']],['bag','書包',['in']]];
+ const pl=one(PL),pr=one(pl[2]),t=one(L(THINGS).filter(x=>!['desk','box','bag'].includes(x.e))),zh={in:'裡面',on:'上面',under:'下面'};
+ return MC(`The ${t.e} is ___ the ${pl[0]}. (在${pl[1]}${zh[pr]})`,pr,['in','on','under'],'in 在裡面、on 在上面、under 在下面')},
+how_many(){const x=one(L(THINGS).concat(L(ANIMALS)));return MC(`How ___ ${x.p} are there? (有幾個${x.z})`,'many',['much','old'],'可以一個一個數的東西：How many + 複數')},
+plural(){const n=one(L(NUMS).filter(x=>x.e!='one')),t=one(L(THINGS));return MC(`I have ${n.e} ___. (我有${n.z}個${t.z})`,t.p,[t.e,aN(t.e)],'兩個以上要用複數'+(t.p.endsWith('es')?'，s / x / ch 結尾加 es':'，字尾加 s'))},
+oclock(){const n=one(L(NUMS));return MC(`What time is it? It's ${n.e} ___. (${n.z}點)`,"o'clock",['time','clock'],"整點的說法：___ o'clock")},
+like_pl(){const a=one(L(ANIMALS));return MC(`I like ___. (我喜歡${a.z})`,a.p,[a.e,'a '+a.p],'說喜歡某一種動物，要用複數')},
+do_ans(){const f=one(L(FOODS));if(R()<.5)return MC(`Do you like ${f.e}? Yes, I ___.`,'do',['am','can'],'用 Do 問，就用 do 回答');
+ return MC(`Do you like ${f.e}? No, I ___.`,"don't",['not','am not'],"否定回答：No, I don't.")},
+where_q(){const t=one(L(THINGS)),w=one(['under the chair','on the desk','in the bag']);return MC(`___ is my ${t.e}? It's ${w}.`,'Where',['What','Who'],'問「在哪裡」用 Where')},
+have_neg(){const t=one(L(THINGS));if(R()<.5)return MC(`Do you have ${aN(t.e)}? No, I ___.`,"don't",['not','am not'],"Do you have...? → No, I don't.");
+ const[n,s]=one(NAMES);return MC(`Does ${n} have ${aN(t.e)}? Yes, ${s=='f'?'she':'he'} ___.`,'does',['do','has'],'用 Does 問，就用 does 回答')},
+by(){const pl=one(L(PLACES));if(R()<.25)return MC(`I go to ${toP(pl)} ___ foot. (走路去)`,'on',['by','in'],'走路去是固定說法：on foot');
+ const t=one(L(TRANSP));return MC(`I go to ${toP(pl)} ___ ${t.e}. (搭${t.z})`,'by',['on','in'],'搭交通工具用 by：by bus / by MRT')},
+whose(){const t=one(L(THINGS)),w=one(['his','her','my']);return MC(`___ ${t.e} is it? It's ${w} ${t.e}.`,'Whose',['Who','What'],'問「誰的」東西用 Whose')},
+his_her(){const[n,s]=one(NAMES),t=one(L(THINGS)),c=one(L(COLORS)),f=s=='f';return MC(`This is ${n}. ___ ${t.e} is ${c.e}.`,f?'Her':'His',f?['His','She']:['Her','He'],`${n} 是${f?'女生，「她的」→ Her':'男生，「他的」→ His'}`)},
+at_time(){const a=one([['get up','起床'],['go to school','上學'],['eat breakfast','吃早餐'],['go to bed','睡覺']]),n=one(L(NUMS));return MC(`I ${a[0]} ___ ${n.e}. (我${n.z}點${a[1]})`,'at',['in','on'],'幾點鐘前面用 at')},
+has_have(){const r=R();if(r<.4){const p=one(L(PEOPLE)),t=one(L(THINGS));return MC(`My ${p.e} ___ ${aN(t.e)}.`,'has',['have','is'],'he / she / 一個人 → has')}
+ if(r<.7){const t=one(L(THINGS));return MC(`I ___ two ${t.p}.`,'have',['has','am'],'I / you / we / they → have')}
+ const a=one(L(ANIMALS));return MC(`They ___ ${aN(a.e)}.`,'have',['has','are'],'they → have')},
+from(){const c=one(L(COUNTRIES));if(R()<.5)return MC(`Where are you ___? I'm from ${c.e}.`,'from',['to','at'],'問「來自哪裡」：Where are you from?');
+ const[n,s]=one(NAMES);return MC(`Where ___ ${n} from? ${s=='f'?'She':'He'} is from ${c.e}.`,'is',['are','do'],`${n} 是一個人 → is`)},
+prog_ing(){const s=one([['I','am','我'],['She','is','她'],['He','is','他'],['We','are','我們'],['They','are','他們']]),v=one(L(VERBS));return MC(`${s[0]} ${s[1]} ___ now. (${s[2]}正在${v.z})`,v.i,[v.b,v.s],'現在進行式：be 動詞 + V-ing')},
+prog_be(){const v=one(L(VERBS)),r=R();if(r<.4){const n=one(NAMES)[0];return MC(`Look! ${n} ___ ${v.i}.`,'is',['am','are'],'一個人正在做 → is + V-ing')}
+ if(r<.7)return MC(`Look! The kids ___ ${v.i}.`,'are',['is','am'],'kids 是複數 → are + V-ing');
+ return MC(`I ___ ${v.i} now.`,'am',['is','are'],'I am + V-ing')},
+habit(){const s=one([['I','我'],['We','我們'],['They','他們'],['You','你']]),v=one(L(VERBS));return MC(`${s[0]} ___ every day. (${s[1]}每天${v.z})`,v.b,[v.i,v.s],'every day 是習慣 → 現在簡單式，用原形動詞')},
+third_s(){const s=one([['He','他'],['She','她'],['My mom','我媽媽'],['My dad','我爸爸'],...NAMES.map(x=>[x[0],x[0]])]),v=one(L(VERBS));
+ return MC(`${s[0]} ___ every day. (${s[1]}每天${v.z})`,v.s,[v.b,v.i],`第三人稱單數的習慣 → 動詞加 s / es：${v.s}`)},
+does_q(){const r=R(),[n,s]=one(NAMES),f=one(L(FOODS));if(r<.33){const p=one(L(PEOPLE));return MC(`What ___ your ${p.e} do?`,'does',['do','is'],`your ${p.e} 是第三人稱單數 → does`)}
+ if(r<.66)return MC(`___ ${n} like ${f.e}?`,'Does',['Do','Is'],'第三人稱單數的問句用 Does');
+ return MC(`Does ${n} like ${f.e}? Yes, ${s=='f'?'she':'he'} ___.`,'does',['do','is'],'Does 問 → does 答')},
+prog_simple(){const n=one(NAMES)[0],v=one(L(VERBS));if(R()<.5)return MC(`Look! ${n} ___.`,'is '+v.i,[v.s,v.b],'Look! 表示「正在發生」→ 現在進行式');
+ return MC(`Every Sunday, ${n} ___.`,v.s,['is '+v.i,v.b],'Every Sunday 是習慣 → 現在簡單式，第三人稱加 s')},
+past_be(){const r=R(),a=one(L(FEEL));if(r<.4)return MC(`I ___ ${a.e} yesterday. (我昨天很${a.z})`,'was',['am','were'],'yesterday 昨天 → 過去式；I 的過去式是 was');
+ if(r<.7){const pl=one(L(PLACES));return MC(`They ___ at ${toP(pl)} yesterday.`,'were',['was','are'],'they / we / you 的過去式是 were')}
+ const n=one(NAMES)[0];return MC(`${n} ___ ${a.e} last night.`,'was',['were','is'],'last night 昨晚 → 過去式；一個人用 was')},
+past_verb(){const v=one(L(VERBS).filter(x=>x.p!==x.b));if(R()<.5)return MC(`I ___ yesterday. (我昨天${v.z})`,v.p,[v.b,v.s],`yesterday → 過去式：${v.b} → ${v.p}`);
+ return MC(`What did you do yesterday? I ___.`,v.p,[v.b,v.i],`What did you do? 要用過去式回答：${v.p}`)}
+};
+/* [規則, 文法城堡年級起訖, 時光列車年級起訖, 名稱] */
+const RULES=[['be',1,2,1,3,'be 動詞 am/is/are'],['a_an',1,3,0,0,'a / an'],['wh1',1,2,0,0,'Who / What'],['poss',1,3,0,0,'my / your'],['yes_be',1,2,1,2,'Yes, it is.'],
+['this_these',3,4,0,0,'This / These'],['neg_be',3,4,0,0,"否定 isn't / aren't"],['can_ans',3,4,3,4,'Can 問答'],['can_base',3,5,0,0,'can + 原形'],['prep',3,4,0,0,'in / on / under'],['how_many',3,4,0,0,'How many'],['plural',3,5,0,0,'複數'],['oclock',3,4,0,0,"o'clock"],['like_pl',3,4,0,0,'I like + 複數'],['do_ans',3,5,0,0,'Do 問答'],['where_q',3,4,0,0,'Where'],
+['have_neg',5,6,0,0,'Do / Does have'],['by',5,6,0,0,'by bus / on foot'],['whose',5,6,0,0,'Whose'],['his_her',5,6,0,0,'his / her'],['at_time',5,6,0,0,'at + 時間'],['has_have',5,6,5,6,'has / have'],['from',5,6,0,0,'be from'],
+['prog_ing',0,0,3,6,'現在進行式 V-ing'],['prog_be',0,0,3,6,'進行式 be 動詞'],['habit',0,0,3,4,'現在簡單式'],['third_s',0,0,5,6,'第三人稱 -s'],['does_q',0,0,5,6,'Does 問句'],['prog_simple',0,0,5,6,'進行式 vs 簡單式'],['past_be',0,0,6,6,'過去式 was/were'],['past_verb',0,0,6,6,'過去式動詞']];
+function rulesFor(ch,g){return RULES.filter(r=>ch=='grammar'?(r[1]&&r[1]<=g&&g<=r[2]):ch=='tense'?(r[3]&&r[3]<=g&&g<=r[4]):((r[1]&&r[1]<=g&&g<=r[2])||(r[3]&&r[3]<=g&&g<=r[4])))}
+
+/* ===================== 中翻英句型模板 ===================== */
+const TPL=[
+[1,()=>{const t=one(L(THINGS));return[`這是我的${t.z}。`,`This is my ${t.e}.`]}],
+[1,()=>{const a=one(L(FEEL));return[`我很${a.z}。`,`I am ${a.e}.`]}],
+[1,()=>{const p=one(L(PEOPLE).filter(x=>x.s=='f'));return[`她是我的${p.z}。`,`She is my ${p.e}.`]}],
+[1,()=>{const p=one(L(PEOPLE).filter(x=>x.s=='m'));return[`他是我的${p.z}。`,`He is my ${p.e}.`]}],
+[1,()=>{const a=one(L(ANIMALS));return[`那是一隻${a.z}。`,`That is ${aN(a.e)}.`]}],
+[2,()=>{const t=one(L(THINGS));return[`這是${t.z}嗎？`,`Is this ${aN(t.e)}?`]}],
+[2,()=>one([['你叫什麼名字？','What is your name?'],['他是誰？','Who is he?'],['她是誰？','Who is she?'],['這是什麼？','What is this?']])],
+[2,()=>{const a=one(L(ANIMALS));return[`那是我的${a.z}。`,`That is my ${a.e}.`]}],
+[2,()=>{const n=one(NAMES)[0];return[`我的名字是${n}。`,`My name is ${n}.`]}],
+[3,()=>{const r=one(L(ROLES));return[`你是${r.z}嗎？`,`Are you ${aN(r.e)}?`]}],
+[3,()=>{const pl=one([['desk','書桌'],['table','桌子'],['chair','椅子']]),t=one(L(THINGS).filter(x=>!['box','bag'].includes(x.e)));return[`${t.z}在${pl[1]}上面。`,`The ${t.e} is on the ${pl[0]}.`]}],
+[3,()=>{const x=one(L(THINGS).concat(L(ANIMALS)));return[`有幾個${x.z}？`,`How many ${x.p} are there?`]}],
+[3,()=>{const c=one(L(COLORS));return[`我喜歡${c.z}。`,`I like ${c.e}.`]}],
+[3,()=>{const b=one(L(BODY));return[`摸你的${b.z}。`,`Touch your ${b.e}.`]}],
+[4,()=>{const v=one(L(VERBS));return[`我正在${v.z}。`,`I am ${v.i}.`]}],
+[4,()=>{const w=one(L(WEATHER));return[`今天很${w.z}。`,`It is ${w.e} today.`]}],
+[4,()=>{const v=one(L(VERBS));return[`你會${v.z}嗎？`,`Can you ${v.b}?`]}],
+[4,()=>{const n=one(L(NUMS));return[`現在${n.z}點。`,`It is ${n.e} o'clock.`]}],
+[4,()=>{const n=one(NAMES)[0],v=one(L(VERBS));return[`${n}正在${v.z}。`,`${n} is ${v.i}.`]}],
+[5,()=>{const t=one(L(THINGS));return[`你有${t.z}嗎？`,`Do you have ${aN(t.e)}?`]}],
+[5,()=>{const t=one(L(TRANSP)),pl=one(L(PLACES));return[`我搭${t.z}去${pl.z}。`,`I go to ${toP(pl)} by ${t.e}.`]}],
+[5,()=>{const pl=one(L(PLACES).filter(x=>x.a=='1'));return[`${pl.z}在哪裡？`,`Where is the ${pl.e}?`]}],
+[5,()=>{const p=one(L(PEOPLE)),r=one(L(ROLES));return[`我的${p.z}是${r.z}。`,`My ${p.e} is ${aN(r.e)}.`]}],
+[5,()=>{const n=one(NAMES)[0],c=one(L(COUNTRIES));return[`${n}來自${c.z}。`,`${n} is from ${c.e}.`]}],
+[6,()=>{const s=one([['She','她'],['He','他'],...NAMES.map(x=>[x[0],x[0]])]),v=one(L(VERBS));return[`${s[1]}每天${v.z}。`,`${s[0]} ${v.s} every day.`]}],
+[6,()=>{const a=one(L(FEEL));return[`我昨天很${a.z}。`,`I was ${a.e} yesterday.`]}],
+[6,()=>{const t=one(L(THINGS));return[`這是誰的${t.z}？`,`Whose ${t.e} is it?`]}],
+[6,()=>{const v=one(L(VERBS));return[`我昨天${v.z}。`,`I ${v.p} yesterday.`]}],
+[6,()=>{const pl=one(L(PLACES));return[`他們上週日在${pl.z}。`,`They were at ${toP(pl)} last Sunday.`]}]
+];
+
+/* ===================== 題目物件 ===================== */
+function misspell(w){const out=new Set(),L2=w.length;for(let n=0;n<40&&out.size<2;n++){const k=1+(R()*(L2-2)|0),r=R();let v;
+ if(r<.33)v=w.slice(0,k)+w[k+1]+w[k]+w.slice(k+2);else if(r<.66)v=w.slice(0,k)+w.slice(k+1);else v=w.slice(0,k)+w[k]+w.slice(k);
+ if(v&&v!==w)out.add(v)}return[...out]}
+const spellable=w=>/^[A-Za-z ]+$/.test(w.e)&&w.e.replace(/ /g,'').length>=3;
+function wordFmts(w,withSpell){const f=['enzh','zhen','listen'];if(/^[A-Za-z]{4,}$/.test(w.e))f.push('spellc');if(withSpell&&spellable(w))f.push('spell');return f}
+function wordItem(w,f){
+ const all=wordsUpTo(state.grade),dz=()=>pick(all.filter(x=>x.z!==w.z),6).map(x=>x.z),de=()=>pick(all.filter(x=>x.e!==w.e),6).map(x=>x.e);
+ const base={fam:{k:'word',w},review:`${w.m} ${w.e}＝${w.z}`};
+ const mk=(o,ans,wr)=>{const op=[ans];for(const x of wr){if(op.length>=3)break;if(!op.includes(x))op.push(x)}return Object.assign({type:'mc',ans,opts:shuffle(op)},o,base)};
+ if(f=='spell')return Object.assign({type:'spell',w},base);
+ if(f=='enzh')return mk({pre:w.m+' ',q:w.e,sub:'這個單字是什麼意思？',sayFirst:w.e,sayAfter:w.e},w.z,dz());
+ if(f=='zhen')return mk({pre:w.m+' ',q:w.z,sub:'英文怎麼說？',sayAfter:w.e},w.e,de());
+ if(f=='listen')return mk({q:'🎧 聽一聽，是哪個單字？',sub:'按「再聽一次」可以重聽',listen:w.e},w.e,de());
+ const ms=misspell(w.e);if(ms.length<2)return wordItem(w,'zhen');
+ return mk({pre:w.m+' ',q:w.z,sub:'哪一個拼字是正確的？',sayAfter:w.e},w.e,ms);
+}
+function ruleItem(id){const it=GEN[id]();it.fam={k:'rule',id};it.review=fill(it.q,it.ans);return it}
+function tplItem(t){const[zh,en]=t[1]();return{type:'arrange',zh,en,fam:{k:'tpl',t},review:`${zh} → ${en}`}}
+function distinct(make,n,key,tries){const out=[],seen=new Set();for(let k=0;k<(tries||n*12)&&out.length<n;k++){const it=make();const s=key(it);if(!seen.has(s)){seen.add(s);out.push(it)}}return out}
+/* 錯一題 → 產生 3 題類似題 */
+function makeLike(fam,n){
+ if(fam.k=='word'){const f=shuffle(wordFmts(fam.w,true));const out=[];for(let k=0;k<n;k++)out.push(wordItem(fam.w,f[k%f.length]));return out}
+ if(fam.k=='rule'){const out=distinct(()=>ruleItem(fam.id),n,x=>x.q);while(out.length<n)out.push(ruleItem(fam.id));return out}
+ let out=distinct(()=>tplItem(fam.t),n,x=>x.zh);
+ const same=TPL.filter(t=>t[0]==fam.t[0]&&t!==fam.t);while(out.length<n)out.push(tplItem(one(same.length?same:TPL)));return out;
+}
+
+/* ===================== 儲存、音效 ===================== */
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let best=store.get('kidsEN_best',{});
+state.grade=store.get('kidsEN_grade',1);
+function saveBest(ch,stars){const k=state.grade+'_'+ch;if(!best[k]||stars>best[k]){best[k]=stars;store.set('kidsEN_best',best)}updateStars()}
+function updateStars(){$('#totalStars').textContent=Object.values(best).reduce((a,b)=>a+b,0);try{$('#streakN').textContent=streakNow()}catch(e){}}
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.8;speechSynthesis.speak(u)}catch(e){}}
+let actx;function beep(ok){try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.type='triangle';const t=actx.currentTime;if(ok){o.frequency.setValueAtTime(660,t);o.frequency.setValueAtTime(880,t+.1)}else{o.frequency.setValueAtTime(220,t)}g.gain.setValueAtTime(.15,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.start(t);o.stop(t+.3)}catch(e){}}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1200)}
+const starsFor=p=>p>=.9?3:p>=.7?2:p>=.4?1:0;
+const starStr=n=>'⭐'.repeat(n)+'☆'.repeat(3-n);
+function setAccent(){document.documentElement.style.setProperty('--accent',COLORS_G[state.grade])}
+function topBar(title){return `<div class="topbar"><button class="back" onclick="go('home')">← 回島上</button><h3>${title}</h3><span style="color:var(--muted);font-weight:700">${state.grade}年級</span></div>`}
+const praise=['太棒了！','好厲害！','答對了！','Great!','Good job!','你是英文小天才！'];
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+
+/* ===================== 首頁 ===================== */
+const SESSION={grammar:24,tense:24,spell:24,trans:15};
+const CHAPTERS=[
+ ['learn','🃏','單字卡','看圖、聽發音、認識單字'],
+ ['battle','👾','打怪練習','答對攻擊、連對暴擊'],
+ ['review','📒','錯題本','1、3、7 天間隔複習'],
+ ['spell','🧩','填空單字','每回 24 個單字'],
+ ['grammar','🧱','文法城堡','每回 24 題'],
+ ['tense','⏰','時光列車','時態練習，每回 24 題'],
+ ['trans','🌉','中翻英拼橋','每回 15 句'],
+ ['match','🎴','翻牌配對','英文和中文配成一對'],
+ ['mock','📝','模擬考','學習內容 × 3 倍題量'],
+ ['info','📚','單字來源與教材','給家長和老師看']
+];
+function home(){
+ setAccent();const g=state.grade;const ex=examInfo(g);
+ const doneP=ex.papers.filter((_,k)=>best[g+'_mock'+k]).length,due=srsDue().length,beat=Math.min(MONP[g]||0,6);
+ const extra=k=>k=='mock'?`<div class="stars">完成 ${doneP} / ${ex.papers.length} 回</div>`:k=='battle'?`<div class="stars">打倒 ${beat} / 6 隻</div>`:k=='review'?`<div class="stars" style="${due?'color:var(--bad);font-weight:700':''}">${due?'今天要複習 '+due+' 題':'今天沒有要複習的'}</div>`:(k!='info'&&k!='learn'?`<div class="stars">${starStr(best[g+'_'+k]||0)}</div>`:'');
+ app.innerHTML=`
+ <div class="grades">${[1,2,3,4,5,6].map(i=>`<button class="gbtn ${i==g?'on':''}" style="background:${COLORS_G[i]}" onclick="setGrade(${i})">${i}年級<small>${BAND[i]}</small></button>`).join('')}</div>
+ ${dailyPanel()}
+ <div class="hero"><div class="big">${['','🐣','🐥','🦊','🐯','🦁','🦅'][g]}</div>
+  <h2>${g} 年級的冒險</h2>
+  <p>本年級新單字 ${WORDS[g].length} 個・句型文法 ${ex.rules.length+ex.tpls.length} 項・模擬考 ${ex.total} 題<br>答錯的題目自動加 3 題補充習題，並放進錯題本</p></div>
+ <div class="chapters">${CHAPTERS.map(([k,i,t,d])=>`<button class="ch" onclick="go('${k}')"><div class="ico">${i}</div><b>${t}</b><span>${d}</span>${extra(k)}</button>`).join('')}</div>`;
+}
+function setGrade(g){state.grade=g;store.set('kidsEN_grade',g);home()}
+function go(v){try{speechSynthesis.cancel()}catch(e){}window.scrollTo(0,0);
+ ({home,learn,match,mock:mockMenu,info,battle:battleMenu,review:reviewMenu,
+   spell:startSpell,grammar:()=>startRules('grammar','🧱 文法城堡'),tense:()=>startRules('tense','⏰ 時光列車'),trans:startTrans})[v]()}
+
+/* ===================== 各章節開始 ===================== */
+function startRules(ch,title){
+ const rs=shuffle(rulesFor(ch,state.grade));let k=0;
+ const items=distinct(()=>ruleItem(rs[k++%rs.length][0]),SESSION[ch],x=>x.q,SESSION[ch]*15);
+ runQuiz({title,items:shuffle(items),saveKey:ch,replay:()=>go(ch)});
+}
+function startSpell(){
+ const g=state.grade;let pool=shuffle(WORDS[g].filter(spellable));
+ if(pool.length<SESSION.spell)pool=pool.concat(shuffle(wordsUpTo(g-1).filter(spellable)).slice(0,SESSION.spell-pool.length));
+ runQuiz({title:'🧩 填空單字',items:pool.slice(0,SESSION.spell).map(w=>wordItem(w,'spell')),saveKey:'spell',replay:()=>go('spell')});
+}
+function startTrans(){
+ const g=state.grade,cur=TPL.filter(t=>t[0]==g),prev=TPL.filter(t=>t[0]==g-1);
+ const items=distinct(()=>tplItem(prev.length&&R()<.3?one(prev):one(cur)),SESSION.trans,x=>x.zh,300);
+ runQuiz({title:'🌉 中翻英拼橋',items,saveKey:'trans',replay:()=>go('trans')});
+}
+
+/* ===================== 模擬考：學習內容 × 3 ===================== */
+const EXAM={};
+function examInfo(g){
+ if(EXAM[g])return EXAM[g];
+ const old=R,oldG=state.grade;R=seeded(g*9973+7);state.grade=g;
+ try{
+  const words=WORDS[g],rules=rulesFor('all',g),tpls=TPL.filter(t=>t[0]==g);let items=[];
+  words.forEach(w=>{shuffle(wordFmts(w,false)).slice(0,3).forEach(f=>items.push(wordItem(w,f)))});
+  rules.forEach(r=>{items=items.concat(makeLike({k:'rule',id:r[0]},3))});
+  tpls.forEach(t=>{items=items.concat(makeLike({k:'tpl',t},3))});
+  items=shuffle(items);const papers=[];for(let k=0;k<items.length;k+=20)papers.push(items.slice(k,k+20));
+  if(papers.length>1&&papers[papers.length-1].length<8){const last=papers.pop();papers[papers.length-1]=papers[papers.length-1].concat(last)}
+  return EXAM[g]={total:items.length,papers,rules,tpls,words:words.length};
+ }finally{R=old;state.grade=oldG}
+}
+function mockMenu(){
+ const g=state.grade,ex=examInfo(g);
+ app.innerHTML=topBar('📝 模擬考')+`<div class="panel">
+  <div class="remedy-box">📖 ${g} 年級學習內容：單字 <b>${ex.words}</b> 個 ＋ 文法時態 <b>${ex.rules.length}</b> 項 ＋ 中翻英句型 <b>${ex.tpls.length}</b> 項<br>
+  每一項出 3 題 → 共 <b>${ex.total}</b> 題，分成 ${ex.papers.length} 回。<br>答錯的題目，每題會再加 3 題補充習題。</div>
+  <div class="papers">${ex.papers.map((p,k)=>`<button class="ch" onclick="startPaper(${k})"><b>第 ${k+1} 回</b><span>${p.length} 題</span><div class="stars">${starStr(best[g+'_mock'+k]||0)}</div></button>`).join('')}</div>
+  <div class="row"><button class="btn" onclick="startPaper(${ex.papers.findIndex((_,k)=>!best[g+'_mock'+k])<0?0:ex.papers.findIndex((_,k)=>!best[g+'_mock'+k])})">從還沒寫的那回開始 ▶</button></div></div>`;
+}
+function startPaper(k){const ex=examInfo(state.grade);runQuiz({title:`📝 模擬考 第 ${k+1} 回`,items:ex.papers[k],saveKey:'mock'+k,replay:()=>startPaper(k),back:'mock'})}
+
+/* ===================== 通用作答引擎 ===================== */
+function runQuiz(o){
+ let i=0,score=0;const wrong=[];o.items=o.items.slice();const B=o.battle;
+ function next(){
+  if(B&&B.over)return result(o,score,wrong);
+  i++;if(B&&i>=o.items.length-2)o.items=o.items.concat(B.more());
+  i<o.items.length?draw():result(o,score,wrong)}
+ function done(ok){
+  const it=o.items[i];
+  if(!it.retry){if(ok){score++;dayInc('correct')}else{wrong.push(it);if(!it.srsKey)srsAdd(it)}}
+  if(it.srsKey&&!it.retry)srsUpdate(it.srsKey,ok);
+  /* 填空單字錯了：3 題後再出一次，空格換位置、多一個空格（最多重考 3 次） */
+  if(!ok&&it.type=='spell'&&(it.retry||0)<3){
+   const again=Object.assign({},it,{retry:(it.retry||0)+1,extra:(it.extra||0)+1,prevHoles:it.holesUsed,srsKey:null});
+   o.items.splice(Math.min(i+4,o.items.length),0,again);
+  }
+  if(B){battleHit(B,ok);setTimeout(next,B.over?1100:750);return}
+  next()}
+ function draw(){
+  const it=o.items[i];window.scrollTo(0,0);
+  const head=B?battleHeader(B):`<div class="prog"><i style="width:${i/o.items.length*100}%"></i></div>
+   <div style="display:flex;justify-content:space-between;color:var(--muted);font-weight:700"><span>答對 ${score}</span><span>${i+1} / ${o.items.length}</span></div>`;
+  app.innerHTML=topBar(o.title+(o.remedial?'<span class="badge">補充習題</span>':'')+(o.review?'<span class="badge">間隔複習</span>':''))+`<div class="panel">${head}<div id="body"></div></div>`;
+  ({mc:drawMC,spell:drawSpell,arrange:drawArrange})[it.type](it,$('#body'),done,!B&&i+1==o.items.length);
+ }
+ draw();
+}
+function drawMC(it,el,done,last){
+ el.innerHTML=`<div class="q en">${it.pre||''}${esc(it.q).replace('___','<span class="blank">　?　</span>')}</div>${it.sub?`<div class="qsub">${it.sub}</div>`:''}
+  ${it.listen?`<div class="row" style="margin:-4px 0 14px"><button class="btn" id="ls">🔊 再聽一次</button></div>`:''}
+  ${it.sayFirst?`<div class="row" style="margin:-4px 0 14px"><button class="speak" id="ls">🔊</button></div>`:''}
+  <div class="opts">${it.opts.map(o=>`<button class="opt en" data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>
+  <div class="tip" id="tip"></div><div class="row" id="nextRow" style="display:none"><button class="btn" id="nx">${last?'看成績 🎉':'下一題 →'}</button></div>`;
+ const sp=it.listen||it.sayFirst;if(sp){$('#ls').onclick=()=>say(sp);setTimeout(()=>say(sp),300)}
+ let ok=false;
+ el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+  ok=b.dataset.o===it.ans;
+  el.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.dataset.o===it.ans)x.classList.add('ok')});
+  if(!ok)b.classList.add('bad');beep(ok);
+  const s=it.sayAfter||(it.speak?fill(it.q,it.ans).replace(/\s*\(.*?\)/g,''):'');if(s)say(s);
+  const tip=$('#tip');tip.innerHTML=(ok?'✅ '+one(praise):'💡 正確答案是 <b class="en">'+esc(it.ans)+'</b>')+(it.tip?'<br>'+it.tip:'')+(!ok&&it.fam?'<br><small>📘 這題會加 3 題補充習題</small>':'');tip.classList.add('show');
+  $('#nextRow').style.display='flex';
+ });
+ $('#nx').onclick=()=>done(ok);
+}
+function drawSpell(it,el,done){
+ const g=state.grade,w=it.w,letters=w.e.split('');
+ const idx=letters.map((c,k)=>c!==' '?k:-1).filter(k=>k>=0);
+ const nh=Math.min(idx.length,(g<=2?1:g<=4?2:Math.max(2,Math.ceil(idx.length*.5)))+(it.extra||0));
+ /* 重考時：優先挑「上次沒挖空」的位置，讓空格換地方 */
+ const prev=it.prevHoles||[],fresh=shuffle(idx.filter(k=>!prev.includes(k))),old=shuffle(idx.filter(k=>prev.includes(k)));
+ const holes=fresh.concat(old).slice(0,nh).sort((a,b)=>a-b);
+ it.holesUsed=holes;
+ let filled=0,over=false;
+ const decoys=pick('abcdefghijklmnoprstuwy'.split('').filter(c=>!holes.some(h=>letters[h].toLowerCase()==c)),g<=2?2:3);
+ const tiles=shuffle(holes.map(h=>letters[h]).concat(decoys));
+ el.innerHTML=`${it.retry?`<div class="retry">🔁 再挑戰第 ${it.retry} 次：空格換位置了，有 ${holes.length} 個空格！</div>`:''}<div class="flash" style="padding:0"><div class="emo">${w.m}</div><div class="z" style="font-size:24px;color:var(--ink);font-weight:700">${w.z}</div></div>
+  <div class="row" style="margin:6px 0"><button class="speak" id="sp">🔊</button></div>
+  <div class="slots">${letters.map((c,k)=>c===' '?'<div class="slot sp"></div>':holes.includes(k)?`<div class="slot hole" data-k="${k}">_</div>`:`<div class="slot en">${c}</div>`).join('')}</div>
+  <div class="tiles">${tiles.map(c=>`<button class="tile" data-c="${c}">${c}</button>`).join('')}</div>
+  <p class="qsub" style="margin-top:14px">依照順序點出缺少的字母（點錯一次就換下一題）</p><div class="tip" id="spmsg"></div>`;
+ $('#sp').onclick=()=>say(w.e);
+ const mark=()=>el.querySelectorAll('.slot.hole').forEach(s=>s.classList.toggle('cur',+s.dataset.k===holes[filled]));mark();
+ el.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{
+  if(over||filled>=holes.length)return;const need=letters[holes[filled]];
+  if(t.dataset.c===need){const s=el.querySelector(`.slot[data-k="${holes[filled]}"]`);s.textContent=need;s.classList.remove('hole','cur');s.classList.add('pop','en');
+   t.classList.add('used');filled++;beep(true);mark();
+   if(filled===holes.length){over=true;say(w.e);toast(one(praise));setTimeout(()=>done(true),1100)}}
+  else{
+   /* 填錯：顯示正確答案，直接進下一題，這個字稍後換空格重考 */
+   over=true;t.classList.add('wrongtile','shake');beep(false);
+   el.querySelectorAll('.slot.hole').forEach(s=>{s.textContent=letters[+s.dataset.k];s.classList.remove('hole','cur');s.classList.add('reveal','en')});
+   el.querySelectorAll('.tile').forEach(x=>x.disabled=true);
+   $('#spmsg').innerHTML=`❌ 正確拼法是 <b class="en">${w.e}</b><br>等一下會換空格位置再考一次！`;$('#spmsg').classList.add('show');
+   say(w.e);setTimeout(()=>done(false),2200);
+  }
+ });
+ setTimeout(()=>say(w.e),300);
+}
+function drawArrange(it,el,done,last){
+ const tokens=it.en.split(' ');let chosen=[],tries=0,finished=false;
+ let bank=shuffle(tokens.map(t=>({t})));if(bank.map(b=>b.t).join(' ')===it.en&&tokens.length>1)bank=bank.reverse();
+ function paint(msg){
+  el.innerHTML=`<div class="zh">${it.zh}</div>
+   <div class="ansline">${chosen.length?chosen.map((c,k)=>`<button class="wt" data-a="${k}">${esc(c.t)}</button>`).join(''):'<span style="color:var(--muted)">點下面的單字，排成英文句子</span>'}</div>
+   <div class="tiles">${bank.map((b,k)=>`<button class="wt" data-b="${k}">${esc(b.t)}</button>`).join('')}</div>
+   <div class="tip ${msg?'show':''}" id="tip">${msg||''}</div>
+   <div class="row">${finished?`<button class="btn" id="nx">${last?'看成績 🎉':'下一題 →'}</button>`:`<button class="btn ghost" id="rs">重來</button><button class="btn" id="ck">檢查 ✔</button>`}</div>`;
+  if(finished){$('#nx').onclick=()=>done(tries==0);return}
+  el.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{chosen.push(bank.splice(+b.dataset.b,1)[0]);paint()});
+  el.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{bank.push(chosen.splice(+b.dataset.a,1)[0]);paint()});
+  $('#rs').onclick=()=>{bank=bank.concat(chosen);chosen=[];paint()};
+  $('#ck').onclick=()=>{
+   if(bank.length){toast('還有單字沒用到喔');return}
+   if(chosen.map(c=>c.t).join(' ')===it.en){beep(true);say(it.en);finished=true;paint((tries?'✅ 這次對了！':'✅ '+one(praise))+' <b class="en">'+esc(it.en)+'</b>'+(tries?'<br><small>📘 這句會加 3 題補充習題</small>':''))}
+   else{beep(false);tries++;if(tries==1){bank=bank.concat(chosen);chosen=[];paint('🤔 順序不太對，再試一次！提示：第一個字是 <b class="en">'+esc(tokens[0])+'</b>')}
+    else{say(it.en);finished=true;paint('💡 正確句子：<b class="en">'+esc(it.en)+'</b><br><small>📘 這句會加 3 題補充習題</small>')}}
+  };
+ }
+ paint();
+}
+function result(o,score,wrong){
+ const B=o.battle,total=B?score+wrong.length:o.items.filter(x=>!x.retry).length;
+ let s=starsFor(score/Math.max(1,total)),head,msg;
+ if(B){
+  s=B.win?B.hearts:0;
+  if(B.win){saveBest('battle'+B.k,s);const g=state.grade;MONP[g]=Math.max(MONP[g]||0,B.k+1);store.set('kidsEN_mon',MONP)}
+  head=B.win?`<div style="font-size:80px">🏆</div><h2>打倒了${B.name}！</h2>`:`<div style="font-size:80px">${B.emo}</div><h2>被${B.name}打敗了…</h2>`;
+  msg=B.win?(B.boss?'你打倒了魔王！這個年級的單字你都很熟了 👑':'下一隻怪獸已經解鎖！')+`<br><small>答對 ${score} 題・最高連擊 ${B.maxCombo}</small>`:'沒關係，複習一下再來挑戰！💪';
+ }else{
+  if(!o.remedial&&o.saveKey)saveBest(o.saveKey,s);
+  head=`<h2>${score} / ${total}</h2>`;
+  msg=wrong.length?(s==3?'超級厲害！🏆':s==2?'很不錯喔！再一次就滿分！':s==1?'有進步！多練幾次會更棒':'沒關係，再試一次！💪'):(o.remedial?'補充習題全對！觀念都弄懂了 🎉':o.review?'今天的錯題全部答對！🎓':'全部答對！超級厲害！🏆');
+ }
+ const backName={mock:'回模擬考目錄',battle:'回怪獸列表',review:'回錯題本'}[o.back]||'回島上';
+ window.scrollTo(0,0);
+ app.innerHTML=topBar(o.remedial?'補充習題成績':B?'戰鬥結果':o.review?'複習成績':'成績單')+`<div class="panel result">
+  <div class="s">${starStr(s)}</div>${head}<p style="font-size:18px">${msg}</p>
+  ${wrong.length?`<div class="remedy-box" style="text-align:left">📘 答錯 <b>${wrong.length}</b> 題，每題再練 3 題類似題，共 <b>${wrong.length*3}</b> 題補充習題。<br><small>📒 答錯的題目也已經放進錯題本，明天會再複習。</small>
+   <div class="row" style="justify-content:flex-start"><button class="btn" id="rem">開始補充習題 ▶</button></div></div>
+   <div class="review"><b>答錯的題目：</b>${wrong.map(w=>`<div class="en">${esc(w.review||'')}${w.tip?'<br><small>'+w.tip+'</small>':''}</div>`).join('')}</div>`:''}
+  <div class="row"><button class="btn ${wrong.length?'ghost':''}" id="again">${o.remedial?'回到原本的練習':B?(B.win?'再打一次':'重新挑戰'):'再玩一次'}</button><button class="btn ghost" onclick="go('${o.back||'home'}')">${backName}</button></div></div>`;
+ if(wrong.length)$('#rem').onclick=()=>{const items=shuffle(wrong.flatMap(w=>makeLike(w.fam,3)));runQuiz({title:o.title,items,remedial:true,replay:o.replay,back:o.back})};
+ $('#again').onclick=()=>o.replay();
+ if(s>=2)beep(true);
+ if(B&&B.win)dayInc('monsters');
+ if(o.onFinish&&!o.remedial)o.onFinish();
+}
+
+/* ===================== 單字卡 ===================== */
+function learn(){
+ const list=WORDS[state.grade];let i=0;
+ function draw(){const w=list[i];
+  app.innerHTML=topBar('🃏 單字卡')+`<div class="panel"><div class="prog"><i style="width:${(i+1)/list.length*100}%"></i></div>
+  <div class="flash"><div class="emo pop">${w.m}</div><div class="w en">${w.e}</div><div class="z">${w.z}</div><div class="row"><button class="speak" id="sp">🔊</button></div></div>
+  <div class="row"><button class="btn ghost" id="pv">← 上一個</button><span style="align-self:center;font-weight:700">${i+1} / ${list.length}</span><button class="btn" id="nx">下一個 →</button></div>
+  <h4 style="margin-top:24px">本年級全部單字（點一下聽發音）</h4>
+  <div class="wlist">${list.map((x,k)=>`<button class="wl" data-k="${k}"><b>${x.m} ${x.e}</b><small>${x.z}</small></button>`).join('')}</div></div>`;
+  $('#sp').onclick=()=>say(w.e);$('#pv').onclick=()=>{i=(i-1+list.length)%list.length;dayInc('cards');draw()};
+  $('#nx').onclick=()=>{i=(i+1)%list.length;dayInc('cards');draw();say(list[i].e)};
+  app.querySelectorAll('.wl').forEach(b=>b.onclick=()=>{i=+b.dataset.k;draw();say(list[i].e);window.scrollTo(0,0)});
+ }
+ draw();
+}
+
+/* ===================== 翻牌配對 ===================== */
+function match(){
+ const ws=pick(WORDS[state.grade],6);
+ const cards=shuffle(ws.flatMap((w,k)=>[{k,html:`<span class="en">${w.e}</span>`,say:w.e},{k,html:`<span class="e">${w.m}</span>${w.z}`}]));
+ let open=[],done=0,moves=0,t0=Date.now(),lock=false;
+ app.innerHTML=topBar('🎴 翻牌配對')+`<div class="panel"><div class="stat"><span>步數：<b id="mv">0</b></span><span>時間：<b id="tm">0</b> 秒</span></div>
+ <div class="mgrid">${cards.map((c,i)=>`<button class="mc" data-i="${i}">?</button>`).join('')}</div><p class="qsub" style="margin-top:14px">翻開兩張，英文和中文意思一樣就配對成功！</p></div>`;
+ const timer=setInterval(()=>{const e=$('#tm');if(!e){clearInterval(timer);return}e.textContent=((Date.now()-t0)/1000|0)},500);
+ app.querySelectorAll('.mc').forEach(b=>b.onclick=()=>{
+  const c=cards[+b.dataset.i];if(lock||b.classList.contains('open')||b.classList.contains('done'))return;
+  b.classList.add('open');b.innerHTML=c.html;if(c.say)say(c.say);open.push(b);
+  if(open.length==2){moves++;$('#mv').textContent=moves;const[a,d]=open;
+   if(cards[+a.dataset.i].k===cards[+d.dataset.i].k){beep(true);a.classList.add('done');d.classList.add('done');open=[];done++;
+    if(done==6){clearInterval(timer);const s=moves<=9?3:moves<=13?2:1;saveBest('match',s);
+     setTimeout(()=>{app.innerHTML=topBar('🎴 翻牌配對')+`<div class="panel result"><div class="s">${starStr(s)}</div><h2>全部配對成功！</h2><p>用了 ${moves} 步、${((Date.now()-t0)/1000|0)} 秒</p><div class="row"><button class="btn" onclick="go('match')">再玩一次</button><button class="btn ghost" onclick="go('home')">回島上</button></div></div>`},600)}}
+   else{lock=true;beep(false);setTimeout(()=>{a.classList.remove('open');d.classList.remove('open');a.textContent='?';d.textContent='?';open=[];lock=false},900)}}
+ });
+}
+
+/* ===================== 家長／老師資訊 ===================== */
+function info(){
+ const rows=[1,2,3,4,5,6].map(g=>{const e=examInfo(g);return`<tr><td>${g} 年級</td><td>${e.words}</td><td>${e.rules.length+e.tpls.length}</td><td>${e.total} 題（${e.papers.length} 回）</td></tr>`}).join('');
+ app.innerHTML=topBar('📚 單字來源與教材')+`<div class="panel info">
+ <h4>讓孩子每天回來練習的設計</h4>
+ <p><b>📒 錯題本＋間隔複習：</b>答錯的題目自動收進錯題本，隔 1 天、3 天、7 天再出現；複習答對 3 次就畢業，又錯就從頭開始。這是記憶效果最好的複習方法。</p>
+ <p><b>📅 每日任務＋🔥 連續天數：</b>每天 3 個小任務（約 5–10 分鐘）。全部完成，連續天數 +1。每連續 7 天送 1 張冰凍卡（最多 2 張），漏掉一天也不會斷。</p>
+ <p><b>👾 打怪練習：</b>每個年級 6 隻怪獸（最後是魔王）。答對攻擊、連對 3 題暴擊、答錯掉一顆心。打倒才會解鎖下一隻。</p>
+ <h4>題量設計</h4>
+ <p>模擬考題量 = 學習內容 × 3：每個單字出 3 種題型（英翻中、中翻英、聽力、拼字中的 3 種），每個文法／時態重點與中翻英句型也各出 3 題。</p>
+ <table><tr><th>年級</th><th>新單字</th><th>文法・時態・句型</th><th>模擬考</th></tr>${rows}</table>
+ <p>文法城堡、時光列車、填空單字每回 24 題，中翻英每回 15 句，都是原本的 3 倍。</p>
+ <p><b>補充習題：</b>任何一題答錯（或填字時點錯字母、排句子第一次排錯），做完那一回後會自動出 3 倍的類似題：單字換成其他題型再考 3 次，文法換成同一個觀念的新句子 3 題，中翻英換成同句型的新句子 3 句。補充習題又錯，可以再接著補。</p>
+ <h4>單字從哪裡來？</h4>
+ <p>主要依據臺北市政府教育局發行的<b>《臺北市國民小學英語聽說評量手冊》</b>：應用字詞 391 字、生活用語 87 句、簡易句型 54 組，分為低、中、高年段。App 再把每個年段拆成兩個年級。教育部課綱的國小目標是能聽、說、讀 300 字，其中會拼寫 180 字。</p>
+ <h4>臺北市的考試怎麼考？</h4>
+ <p>臺北市自 102 年度起每年 10 月對五年級學生辦理「基本學力檢測」，英語範圍是一到四年級的聽、讀、說、寫內容（含低、中年段生活用語與簡易句型），另抽測口說。</p>
+ <h4>臺北市國小常見的英語課本</h4>
+ <table><tr><th>出版社</th><th>系列（常見年級）</th></tr><tr><td>康軒</td><td>Cool ABC（低年級）、Wonder World（中高年級）</td></tr>
+ <tr><td>何嘉仁</td><td>Fun World（低年級）、Super Fun（中高年級）</td></tr><tr><td>翰林</td><td>Here We Go（中年級）、Dino on the Go（高年級）</td></tr></table>
+ <p>各校每學年自行選版本，請以孩子學校公告的「教科書選用版本一覽表」為準。</p>
+ <h4>常見的輔助教材與檢定</h4>
+ <ul><li>單字練習簿：例如世一《國小必背300英語單字練習簿》、遠東《國中小2300英語必備單字》。</li>
+ <li>課本版本的配套習作、CD 與評量卷。</li>
+ <li>兒童英檢：劍橋 YLE（Starters / Movers / Flyers）、GEPT Kids、TOEFL Primary、師德 KITE / STYLE / JET。</li></ul>
+ <h4>使用建議</h4>
+ <ul><li>每天 10–15 分鐘：單字卡 → 一個練習章節 → 模擬考一回。</li><li>6 年級的過去式是銜接國中的內容。</li>
+ <li>發音使用裝置內建的英文語音；星星記錄只存在這台裝置的瀏覽器裡。</li></ul></div>`;
+}
+
+/* ===================== 日期工具 ===================== */
+function dstr(off){const d=new Date(Date.now()+(off||0)*864e5);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function popup(html,btn){const m=document.createElement('div');m.className='imodal';m.innerHTML='<div class="box" style="text-align:center">'+html+'<button class="btn" style="width:100%;margin-top:14px">'+(btn||'太好了！')+'</button></div>';m.onclick=e=>{if(e.target===m||e.target.tagName==='BUTTON')m.remove()};document.body.appendChild(m)}
+
+/* ===================== 錯題本＋間隔複習（1 天 → 3 天 → 7 天，答對 3 次畢業） ===================== */
+const WG={};for(let g=6;g>=1;g--)WORDS[g].forEach(w=>WG[w.e]=g);
+let SRS=store.get('kidsEN_srs',{}),SRSSTAT=store.get('kidsEN_srsstat',{grad:0});
+const SRS_GAP=[1,3,7];
+function srsKeyOf(it){const f=it.fam;if(!f)return null;
+ if(f.k=='word')return{key:'w|'+f.w.e,e:{k:'w',g:WG[f.w.e]||state.grade,e:f.w.e}};
+ if(f.k=='rule')return{key:'r|'+state.grade+'|'+f.id,e:{k:'r',g:state.grade,id:f.id}};
+ const ti=TPL.indexOf(f.t);return{key:'t|'+ti,e:{k:'t',g:f.t[0],ti}}}
+function srsSave(){store.set('kidsEN_srs',SRS);store.set('kidsEN_srsstat',SRSSTAT)}
+function srsAdd(it){const s=srsKeyOf(it);if(!s)return;SRS[s.key]=Object.assign(s.e,{box:0,due:dstr(1),r:it.review||'',n:(SRS[s.key]&&SRS[s.key].n||0)+1});srsSave()}
+function srsUpdate(key,ok){const e=SRS[key];if(!e)return;
+ if(ok){e.box++;if(e.box>=3){delete SRS[key];SRSSTAT.grad++;toast('🎓 這題從錯題本畢業了！')}else e.due=dstr(SRS_GAP[e.box])}
+ else{e.box=0;e.due=dstr(1)}srsSave()}
+function srsDue(){const t=dstr(0);return Object.keys(SRS).filter(k=>SRS[k].due<=t)}
+function srsMake(key){const e=SRS[key],og=state.grade;state.grade=e.g;let it=null;
+ try{if(e.k=='w'){const w=(WORDS[e.g]||[]).find(x=>x.e==e.e);if(w)it=wordItem(w,one(wordFmts(w,true)))}
+  else if(e.k=='r'){if(GEN[e.id])it=ruleItem(e.id)}else if(TPL[e.ti])it=tplItem(TPL[e.ti])}finally{state.grade=og}
+ if(it)it.srsKey=key;return it}
+function reviewMenu(){
+ const due=srsDue(),all=Object.keys(SRS),t=dstr(0);
+ const dots=b=>'●'.repeat(b)+'○'.repeat(3-b);
+ const list=all.sort((a,b)=>SRS[a].due<SRS[b].due?-1:1).map(k=>{const e=SRS[k];const d=e.due<=t?'<b style="color:var(--bad)">今天複習</b>':e.due==dstr(1)?'明天':e.due.slice(5).replace('-','/');
+  return `<div class="srsrow"><span class="en">${esc(e.r)}</span><span class="srsmeta">${e.g}年級・${dots(e.box)}・${d}</span></div>`}).join('');
+ app.innerHTML=topBar('📒 錯題本')+`<div class="panel">
+  <div class="remedy-box">答錯的題目會自動收進錯題本，在 <b>1 天、3 天、7 天</b>後再出現。<br>複習答對 3 次（●●●）就畢業 🎓；又答錯就從頭開始。</div>
+  <div class="stat" style="margin-top:14px"><span>今天要複習：<b style="color:var(--bad)">${due.length}</b></span><span>錯題本：<b>${all.length}</b></span><span>已畢業：<b>${SRSSTAT.grad}</b></span></div>
+  <div class="row"><button class="btn" id="go" ${due.length?'':'disabled style="opacity:.5"'}>${due.length?`開始今日複習（${due.length} 題）▶`:'今天沒有要複習的題目 👍'}</button></div>
+  ${all.length?`<h4 style="margin:20px 0 8px">錯題清單</h4><div>${list}</div>`:'<p class="qsub" style="margin-top:20px">錯題本是空的！去練習吧，答錯的題目會自動出現在這裡。</p>'}</div>`;
+ if(due.length)$('#go').onclick=()=>{const items=shuffle(due.map(srsMake).filter(Boolean));
+  runQuiz({title:'📒 錯題複習',items,review:true,replay:()=>go('review'),back:'review',onFinish:()=>dayFlag('reviewDone')})};
+}
+
+/* ===================== 每日任務＋連續天數 ===================== */
+let DAY=null,STREAK=store.get('kidsEN_streak',{count:0,last:'',freeze:1});
+function ensureDay(){if(!DAY)DAY=store.get('kidsEN_day',null);if(!DAY||DAY.date!==dstr(0)){DAY={date:dstr(0),correct:0,monsters:0,cards:0,reviewDone:false,rewarded:false,t3:srsDue().length?'review':'cards'};store.set('kidsEN_day',DAY)}return DAY}
+function tasks(){const d=ensureDay();return[
+ {ico:'✅',t:'答對 15 題',v:Math.min(d.correct,15),n:15},
+ {ico:'👾',t:'打倒 1 隻怪獸',v:Math.min(d.monsters,1),n:1},
+ d.t3=='review'?{ico:'📒',t:'完成錯題本複習',v:d.reviewDone?1:0,n:1}:{ico:'🃏',t:'看 10 張單字卡',v:Math.min(d.cards,10),n:10}]}
+function dayInc(k,n){ensureDay();DAY[k]+=(n||1);store.set('kidsEN_day',DAY);checkDaily()}
+function dayFlag(k){ensureDay();DAY[k]=true;store.set('kidsEN_day',DAY);checkDaily()}
+function streakNow(){const s=STREAK;if(s.last==dstr(0)||s.last==dstr(-1))return s.count;if(s.last==dstr(-2)&&s.freeze>0)return s.count;return 0}
+function checkDaily(){
+ if(DAY.rewarded||!tasks().every(t=>t.v>=t.n))return;
+ DAY.rewarded=true;store.set('kidsEN_day',DAY);
+ const s=STREAK;let note='';
+ if(s.last==dstr(-1))s.count++;
+ else if(s.last==dstr(-2)&&s.freeze>0){s.freeze--;s.count++;note='<p>🧊 用掉 1 張冰凍卡，保住了連續紀錄！</p>'}
+ else if(s.last!==dstr(0))s.count=1;
+ s.last=dstr(0);if(s.count%7==0&&s.freeze<2){s.freeze++;note+='<p>🧊 連續 7 天！獲得 1 張冰凍卡（漏掉一天也不會斷）</p>'}
+ store.set('kidsEN_streak',s);updateStars();
+ setTimeout(()=>{popup(`<div style="font-size:70px">🔥</div><h2 style="margin:6px 0">連續 ${s.count} 天！</h2><p>今天的 3 個任務全部完成，太厲害了！</p>${note}`);beep(true)},700);
+}
+function dailyPanel(){const ts=tasks(),done=ts.filter(t=>t.v>=t.n).length,sk=streakNow();
+ return `<div class="daily"><div class="dhead"><b>📅 今日任務 ${done}/3</b><span>🔥 連續 <b>${sk}</b> 天　🧊×${STREAK.freeze}</span></div>
+ ${ts.map(t=>`<div class="drow ${t.v>=t.n?'ok':''}"><span>${t.v>=t.n?'✔️':t.ico}</span><span class="dt">${t.t}</span><div class="dbar"><i style="width:${t.v/t.n*100}%"></i></div><span class="dn">${t.v}/${t.n}</span></div>`).join('')}
+ ${done==3?'<div class="dok">🎉 今天任務完成！明天再來保持連續紀錄</div>':''}</div>`}
+
+/* ===================== 打怪模式 ===================== */
+const MONS=[['🟢','字母史萊姆'],['🐙','拼字章魚'],['🦖','文法恐龍'],['👻','時態幽靈'],['🦂','句子毒蠍'],['🐉','單字魔王']];
+let MONP=store.get('kidsEN_mon',{});
+function battleMenu(){
+ const g=state.grade,beat=MONP[g]||0;
+ app.innerHTML=topBar('👾 打怪練習')+`<div class="panel">
+  <div class="remedy-box">答對就攻擊怪獸，<b>連續答對 3 題以上會暴擊（傷害 ×2）</b>！<br>答錯會被怪獸打掉一顆 ❤️，3 顆都沒了就要重新挑戰。打倒怪獸會解鎖下一隻，最後是魔王！</div>
+  <div class="papers">${MONS.map((m,k)=>{const lock=k>beat;return `<button class="ch mcard ${lock?'locked':''}" ${lock?'disabled':''} onclick="startBattle(${k})">
+   <div style="font-size:46px">${lock?'🔒':m[0]}</div><b>${k==5?'👑 ':''}${m[1]}</b><span>${k==5?'魔王・血量 160':'血量 100'}</span><div class="stars">${lock?'先打倒前一隻':starStr(best[g+'_battle'+k]||0)}</div></button>`}).join('')}</div>
+  <p class="qsub" style="margin-top:14px">${g} 年級已打倒 ${Math.min(beat,6)} / 6 隻</p></div>`;
+}
+function battleItems(n,boss){
+ const g=state.grade,ws=boss?wordsUpTo(g):WORDS[g],rs=rulesFor('all',g),out=[];
+ for(let k=0;k<n;k++){
+  if(R()<.6||!rs.length){const w=one(ws);let f=one(wordFmts(w,false));if(spellable(w)&&R()<.2)f='spell';out.push(wordItem(w,f))}
+  else out.push(ruleItem(one(rs)[0]));
+ }return out}
+function startBattle(k){
+ const boss=k==5,m=MONS[k],B={k,boss,emo:m[0],name:m[1],hp:boss?160:100,max:boss?160:100,hearts:3,combo:0,maxCombo:0,over:false,win:false,more:()=>battleItems(15,boss)};
+ runQuiz({title:(boss?'👑 ':'👾 ')+m[1],items:battleItems(25,boss),battle:B,replay:()=>startBattle(k),back:'battle'});
+}
+function battleHeader(B){
+ return `<div class="arena"><div class="mon" id="mon">${B.emo}</div><div class="mname">${B.boss?'👑 ':''}${B.name}</div>
+ <div class="hpbar"><i id="mhp" style="width:${B.hp/B.max*100}%"></i><span id="mhpn">${B.hp} / ${B.max}</span></div>
+ <div class="arow"><span id="hearts">${'❤️'.repeat(B.hearts)}${'🤍'.repeat(3-B.hearts)}</span><span id="combo" class="combo">${B.combo>=2?'🔥 連擊 ×'+B.combo:''}</span></div>
+ <div id="dmg" class="dmg"></div></div>`}
+function battleHit(B,ok){
+ const mon=$('#mon'),dmg=$('#dmg');
+ if(ok){B.combo++;B.maxCombo=Math.max(B.maxCombo,B.combo);const crit=B.combo>=3,d=crit?20:10;B.hp=Math.max(0,B.hp-d);
+  if(mon){mon.classList.remove('hit');void mon.offsetWidth;mon.classList.add('hit')}
+  if(dmg){dmg.textContent=(crit?'💥 暴擊！':'⚔️ ')+'-'+d;dmg.className='dmg show'+(crit?' crit':'')}
+  const bar=$('#mhp');if(bar)bar.style.width=(B.hp/B.max*100)+'%';const n=$('#mhpn');if(n)n.textContent=B.hp+' / '+B.max;
+  const c=$('#combo');if(c)c.textContent=B.combo>=2?'🔥 連擊 ×'+B.combo:'';
+  if(B.hp<=0){B.over=true;B.win=true;if(mon)mon.classList.add('dead')}}
+ else{B.combo=0;B.hearts--;const a=document.querySelector('.arena');if(a){a.classList.remove('hurt');void a.offsetWidth;a.classList.add('hurt')}
+  if(dmg){dmg.textContent='💔 被打到了！';dmg.className='dmg show bad'}
+  const h=$('#hearts');if(h)h.textContent='❤️'.repeat(Math.max(0,B.hearts))+'🤍'.repeat(3-Math.max(0,B.hearts));
+  if(B.hearts<=0){B.over=true;B.win=false}}
+}
+
+ensureDay();updateStars();home();
+
+</script>
+<script>
+/* ===== 安裝到主畫面：Android 一鍵安裝、iPhone 圖解 ===== */
+(function(){
+  const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+  if(standalone||!location.protocol.startsWith('http'))return;
+  const ua=navigator.userAgent,isIOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const inLine=/ Line\//i.test(ua),inFB=/FBAN|FBAV|Instagram/i.test(ua),isIOSChrome=/CriOS|FxiOS|EdgiOS/.test(ua),isAndroid=/Android/.test(ua);
+  let deferred=null;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;});
+  window.addEventListener('appinstalled',()=>{bar&&bar.remove();toast('安裝完成！到主畫面找「英語冒險島」圖示');});
+  let bar;
+  function showBar(){
+    try{if(sessionStorage.getItem('kidsEN_hideInstall'))return}catch(e){}
+    bar=document.createElement('div');bar.className='installbar';
+    bar.innerHTML='<b>📲 把英語冒險島裝到手機<br><small style="font-weight:400;opacity:.8">裝好後點圖示就能玩，不用網路</small></b><button class="btn" id="ib">裝到手機</button><button class="x" id="ix">×</button>';
+    document.body.appendChild(bar);
+    document.getElementById('ix').onclick=()=>{bar.remove();try{sessionStorage.setItem('kidsEN_hideInstall','1')}catch(e){}};
+    document.getElementById('ib').onclick=install;
+  }
+  function modal(html){const m=document.createElement('div');m.className='imodal';m.innerHTML='<div class="box">'+html+'<button class="btn" style="width:100%">知道了</button></div>';m.onclick=e=>{if(e.target===m||e.target.tagName==='BUTTON')m.remove()};document.body.appendChild(m)}
+  async function install(){
+    if(deferred){deferred.prompt();const r=await deferred.userChoice;deferred=null;if(r.outcome==='accepted')bar&&bar.remove();return}
+    if(inLine||inFB){
+      modal(isIOS?'<h3>請先用 Safari 打開</h3><div class="note">現在是在 LINE 裡面打開的，LINE 裡沒辦法安裝。</div><ol><li>按右下角（或右上角）的 <b>⋯</b> 或 <b>分享</b></li><li>選「<b>在 Safari 中開啟</b>」或「<b>以瀏覽器開啟</b>」</li><li>在 Safari 裡再按一次「裝到手機」</li></ol>'
+        :'<h3>請先用 Chrome 打開</h3><div class="note">現在是在 LINE 裡面打開的，LINE 裡沒辦法安裝。</div><ol><li>按右上角的 <b>⋮</b></li><li>選「<b>以其他應用程式開啟</b>」或「<b>以瀏覽器開啟</b>」→ <b>Chrome</b></li><li>在 Chrome 裡再按一次「裝到手機」</li></ol>');return}
+    if(isIOS&&isIOSChrome){modal('<h3>請改用 Safari 打開</h3><div class="note">iPhone 只有 Safari 能把網頁裝到主畫面。</div><ol><li>複製這個網址：<br><b style="word-break:break-all">'+location.href.split('#')[0]+'</b></li><li>打開 <b>Safari</b> 貼上網址</li><li>再按一次「裝到手機」</li></ol>');return}
+    if(isIOS){modal('<h3>iPhone 安裝 3 步驟</h3><ol><li>按畫面<b>最下面</b>中間的 <b>分享</b> 按鈕 <span style="font-size:22px">⬆️</span><br><small>（看不到的話，先往上滑一下畫面）</small></li><li>往下滑，選「<b>加入主畫面</b>」 <span style="font-size:22px">➕</span></li><li>右上角按「<b>新增</b>」</li></ol><div class="note">完成後回到手機桌面，就會看到「英語冒險島」圖示 🏝️</div><div class="arrowdown">👇</div>');return}
+    modal('<h3>Android 安裝步驟</h3><ol><li>按 Chrome 右上角的 <b>⋮</b></li><li>選「<b>安裝應用程式</b>」或「<b>加到主畫面</b>」</li><li>按「<b>安裝</b>」</li></ol><div class="note">完成後回到手機桌面，就會看到「英語冒險島」圖示 🏝️</div>');
+  }
+  window.addEventListener('load',()=>setTimeout(showBar,600));
+})();
+</script>
+<script>
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
