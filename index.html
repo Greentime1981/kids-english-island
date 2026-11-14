@@ -165,6 +165,26 @@ body{-webkit-user-select:none;user-select:none;overscroll-behavior:none}
 .dmg{position:absolute;left:0;right:0;top:34%;font-size:26px;font-weight:900;color:#2F6FE0;opacity:0;pointer-events:none}
 .dmg.show{animation:dmg .8s}.dmg.crit{color:#E8590C;font-size:32px}.dmg.bad{color:var(--bad)}
 @keyframes dmg{0%{opacity:0;transform:translateY(10px)}20%{opacity:1}100%{opacity:0;transform:translateY(-30px)}}
+.iosg{position:fixed;inset:0;z-index:40;background:rgba(20,16,40,.55)}
+.ioscard{position:absolute;left:12px;right:12px;bottom:calc(132px + env(safe-area-inset-bottom));background:#fff;border-radius:24px;padding:18px 18px 14px;box-shadow:0 10px 30px rgba(0,0,0,.3);max-width:520px;margin:0 auto}
+.iosg-ipad .ioscard{top:96px;bottom:auto}
+.iosh{font-size:21px;font-weight:900;margin-bottom:10px}.iosh small{display:block;font-size:14px;font-weight:500;color:var(--muted);margin-top:2px}
+.iossteps{list-style:none;margin:0;padding:0}
+.iossteps li{display:flex;gap:12px;align-items:flex-start;font-size:18px;line-height:1.5;padding:8px 0;border-bottom:1px dashed var(--line)}
+.iossteps li:last-child{border-bottom:0}
+.iossteps .n{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:17px}
+.iossteps small{color:var(--muted);font-size:13px}
+.ib{display:inline-block;border:2px solid #555;border-radius:6px;width:22px;height:22px;line-height:18px;text-align:center;font-weight:900;margin-left:4px}
+.iosfoot{font-size:13px;color:var(--muted);margin:6px 0 10px}
+.iosbtns{display:flex;flex-direction:column;gap:8px}.iosbtns .btn{width:100%}
+.iosno{background:none;border:0;color:var(--muted);font-size:14px;text-decoration:underline;cursor:pointer;font-family:inherit}
+.iosguide-on .installbar{display:none}
+.iosarrow .lbl{display:inline-block;font-size:15px;font-weight:900;color:#fff;background:#E8590C;border-radius:999px;padding:4px 12px;white-space:nowrap;margin-bottom:4px;text-align:center}
+.iosarrow{position:absolute;text-align:center;font-size:64px;line-height:1;animation:iosbob 1s infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+.iosg-old .iosarrow{left:50%;transform:translateX(-50%);animation-name:iosbobc;bottom:calc(14px + env(safe-area-inset-bottom))}
+.iosg-new .iosarrow{right:6px;text-align:right;bottom:calc(14px + env(safe-area-inset-bottom))}
+.iosg-ipad .iosarrow{right:70px;top:8px;animation-name:iosbobup}
+@keyframes iosbob{50%{transform:translateY(12px)}}@keyframes iosbobc{0%,100%{transform:translateX(-50%)}50%{transform:translate(-50%,12px)}}@keyframes iosbobup{50%{transform:translateY(-10px)}}
 </style>
 </head>
 <body>
@@ -775,9 +795,36 @@ ensureDay();updateStars();home();
       modal(isIOS?'<h3>請先用 Safari 打開</h3><div class="note">現在是在 LINE 裡面打開的，LINE 裡沒辦法安裝。</div><ol><li>按右下角（或右上角）的 <b>⋯</b> 或 <b>分享</b></li><li>選「<b>在 Safari 中開啟</b>」或「<b>以瀏覽器開啟</b>」</li><li>在 Safari 裡再按一次「裝到手機」</li></ol>'
         :'<h3>請先用 Chrome 打開</h3><div class="note">現在是在 LINE 裡面打開的，LINE 裡沒辦法安裝。</div><ol><li>按右上角的 <b>⋮</b></li><li>選「<b>以其他應用程式開啟</b>」或「<b>以瀏覽器開啟</b>」→ <b>Chrome</b></li><li>在 Chrome 裡再按一次「裝到手機」</li></ol>');return}
     if(isIOS&&isIOSChrome){modal('<h3>請改用 Safari 打開</h3><div class="note">iPhone 只有 Safari 能把網頁裝到主畫面。</div><ol><li>複製這個網址：<br><b style="word-break:break-all">'+location.href.split('#')[0]+'</b></li><li>打開 <b>Safari</b> 貼上網址</li><li>再按一次「裝到手機」</li></ol>');return}
-    if(isIOS){modal('<h3>iPhone 安裝 3 步驟</h3><ol><li>按畫面<b>最下面</b>中間的 <b>分享</b> 按鈕 <span style="font-size:22px">⬆️</span><br><small>（看不到的話，先往上滑一下畫面）</small></li><li>往下滑，選「<b>加入主畫面</b>」 <span style="font-size:22px">➕</span></li><li>右上角按「<b>新增</b>」</li></ol><div class="note">完成後回到手機桌面，就會看到「英語冒險島」圖示 🏝️</div><div class="arrowdown">👇</div>');return}
+    if(isIOS){iosGuide(true);return}
     modal('<h3>Android 安裝步驟</h3><ol><li>按 Chrome 右上角的 <b>⋮</b></li><li>選「<b>安裝應用程式</b>」或「<b>加到主畫面</b>」</li><li>按「<b>安裝</b>」</li></ol><div class="note">完成後回到手機桌面，就會看到「英語冒險島」圖示 🏝️</div>');
   }
+  /* ===== iPhone / iPad 安裝引導：大箭頭指向分享按鈕 ===== */
+  const SHARE_SVG='<svg viewBox="0 0 24 24" width="26" height="26" style="vertical-align:-6px"><path d="M12 3v12M8 7l4-4 4 4" fill="none" stroke="#1E7CF2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1h-2" fill="none" stroke="#1E7CF2" stroke-width="2.2" stroke-linecap="round"/></svg>';
+  function iosGuide(force){
+    if(!force){try{if(localStorage.getItem('kidsEN_iosNoGuide')||sessionStorage.getItem('kidsEN_iosShown'))return;sessionStorage.setItem('kidsEN_iosShown','1')}catch(e){}}
+    if(document.querySelector('.iosg'))return;
+    const ver=+((ua.match(/Version\/(\d+)/)||[])[1]||0),iPad=/iPad/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+    const mode=iPad?'ipad':ver>=26?'new':'old';
+    const step1={old:`按畫面<b>最下面中間</b>的「<b>分享</b>」${SHARE_SVG}`,
+      new:`按畫面<b>右下角</b>的「<b>⋯</b>」，再按「<b>分享</b>」${SHARE_SVG}`,
+      ipad:`按畫面<b>右上角</b>的「<b>分享</b>」${SHARE_SVG}`}[mode];
+    const g=document.createElement('div');g.className='iosg iosg-'+mode;
+    g.innerHTML=`<div class="iosarrow"><span class="lbl">${mode=='new'?'「⋯」在這下面':'「分享」在這'+(mode=='ipad'?'上面':'下面')}</span><div>${mode=='ipad'?'👆':'👇'}</div></div>
+     <div class="ioscard"><div class="iosh">📲 把冒險島裝到 ${iPad?'iPad':'iPhone'}<small>只要 3 步，裝好後沒網路也能玩</small></div>
+      <ol class="iossteps">
+       <li><span class="n">1</span><span>${step1}</span></li>
+       <li><span class="n">2</span><span>往下滑，按「<b>加入主畫面</b>」<span class="ib">＋</span>${mode=='new'?'<br><small>沒看到的話，先按「更多」或往上滑選單</small>':''}</span></li>
+       <li><span class="n">3</span><span>按右上角「<b>新增</b>」，桌面就會出現 🏝️ 圖示</span></li>
+      </ol>
+      <div class="iosfoot">${mode=='ipad'?'分享按鈕在網址列旁邊。':'看不到下方工具列？先在畫面上往下輕滑一下。'}</div>
+      <div class="iosbtns"><button class="btn" id="iosok">知道了，我去按分享</button><button class="iosno" id="iosno">已經裝好了，不要再提醒</button></div></div>`;
+    document.body.appendChild(g);document.body.classList.add('iosguide-on');
+    const close=()=>{g.remove();document.body.classList.remove('iosguide-on')};
+    g.querySelector('#iosok').onclick=close;
+    g.querySelector('#iosno').onclick=()=>{try{localStorage.setItem('kidsEN_iosNoGuide','1')}catch(e){}close()};
+  }
+  /* iPhone 用 Safari 打開時，自動跳出一次引導 */
+  if(isIOS&&!inLine&&!inFB&&!isIOSChrome)window.addEventListener('load',()=>setTimeout(()=>iosGuide(false),1200));
   window.addEventListener('load',()=>setTimeout(showBar,600));
 })();
 </script>
