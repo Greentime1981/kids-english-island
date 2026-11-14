@@ -130,6 +130,26 @@ body{-webkit-user-select:none;user-select:none;overscroll-behavior:none}
 .srsstat{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:14px 0 4px;text-align:center;font-size:12px;color:var(--muted)}
 .srsstat div{background:#F6F2FF;border-radius:12px;padding:8px 2px}.srsstat b{display:block;font-size:20px;color:var(--ink)}
 .mbar{letter-spacing:-1px;color:#2FA9E0}
+.bubble{background:#EEF4FF;border-radius:18px;padding:12px 14px;margin:6px 0 12px}.bctx{font-size:14px;color:var(--muted);margin-bottom:6px}.bline{font-size:22px;font-weight:800}
+.passage{background:#FFFBF2;border:2px solid #FFE3B0;border-radius:16px;padding:14px;font-size:18px;line-height:1.7;margin:4px 0 12px;text-align:left}
+.exs{font-size:18px;color:#2F6FE0;margin:8px 0 2px;font-weight:700}
+.skhead,.skrow{display:grid;grid-template-columns:92px 1fr 40px 54px 124px 46px;gap:6px;align-items:center;font-size:14px}
+.skrow{padding:7px 0;border-bottom:1px dashed var(--line)}.skn{font-weight:700}
+.skbar{height:12px;background:var(--line);border-radius:99px;overflow:hidden}.skbar i{display:block;height:100%}
+.skp{font-weight:900;text-align:right}.skg{color:#fff;border-radius:999px;text-align:center;font-size:12px;font-weight:700;padding:2px 0}
+.sktr{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;color:var(--muted);font-size:12px}.skhead .tw{font-size:10px}
+.skgo{border:0;background:var(--accent);color:#fff;border-radius:10px;padding:5px 0;font-weight:700;cursor:pointer;font-family:inherit}
+.warnbox{background:#FFECEC;border-radius:14px;padding:12px;margin-top:12px;line-height:1.7;font-size:15px}.okbox{background:#E7F8EE;border-radius:14px;padding:12px;margin-top:12px;font-weight:700}
+.weekbanner{display:flex;align-items:center;gap:12px;width:100%;border:2px solid #FFD08A;border-radius:20px;padding:12px 14px;margin-bottom:14px;background:#FFFBF2;color:var(--ink);cursor:pointer;font-family:inherit;text-align:left}
+.weekbanner>span:first-child{font-size:28px}.weekbanner b{flex:1;font-size:17px}.weekbanner small{display:block;font-size:13px;font-weight:500;color:var(--muted)}.weekbanner .go{background:var(--accent);color:#fff;border-radius:999px;padding:6px 12px;font-weight:900}
+.semh{margin:18px 0 8px;font-size:19px}.tcard{border:2px solid var(--line);border-radius:16px;padding:10px 12px;margin-bottom:10px;background:#fff}
+.thead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.thead span{color:var(--muted);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 10px;font-size:15px;cursor:pointer;font-family:"Arial Rounded MT Bold","Avenir Next",system-ui,"PingFang TC";color:var(--ink)}
+.chip.ext{border-color:#FFD08A;background:#FFFBF2}.chip small{margin-left:4px;color:var(--muted);font-family:inherit}
+.tbtns{display:flex;gap:8px;margin-top:8px}.tbtns .btn{padding:8px 14px;font-size:15px}
+.cw{width:100%;min-height:120px;border:2px solid var(--line);border-radius:14px;padding:10px;font-size:16px;font-family:inherit}
+.ch.locked{opacity:.55}.drow.tap{cursor:pointer}.drow.tap .dt{text-decoration:underline dotted}
+@media (max-width:560px){.skhead,.skrow{grid-template-columns:80px 1fr 36px 50px 0 42px}.sktr{display:none}}
 .extb{display:inline-block;background:#FFF0D9;color:#B35C00;border-radius:999px;padding:3px 12px;font-size:14px;font-weight:700;margin-bottom:6px}
 .wl.ext{border-color:#FFD08A;background:#FFFBF2}
 .slot.reveal{background:#FFE3E3;border-color:var(--bad);color:var(--bad)}
@@ -218,15 +238,15 @@ const app=$('#app');
 const COLORS_G=['','#FF7A59','#FFB23F','#3CC79A','#2FA9E0','#7B6CF6','#E85BB3'];
 const BAND=['','低年段','低年段','中年段','中年段','高年段','高年段'];
 const RAW={
-1:"girl|女孩|👧;boy|男孩|👦;teacher|老師|👩‍🏫;friend|朋友|🤝;mom|媽媽|👩;dad|爸爸|👨;sister|姊妹|👧;brother|兄弟|👦;apple|蘋果|🍎;banana|香蕉|🍌;egg|蛋|🥚;milk|牛奶|🥛;cake|蛋糕|🍰;book|書|📕;fish|魚|🐟;cat|貓|🐱;dog|狗|🐶;one|一|1️⃣;two|二|2️⃣;three|三|3️⃣;four|四|4️⃣;five|五|5️⃣;good|好的|👍;happy|快樂的|😊;hat|帽子|👒;I|我|🙋;my|我的|🙋;you|你|👉;your|你的|👉;am|是（I 用）|🟰;is|是（他、她、它用）|🟰;are|是（你、我們、他們用）|🟰;a|一個（子音前）|1️⃣;yes|是的|⭕;no|不；沒有|❌",
-2:"mother|母親|👩;father|父親|👨;ball|球|⚽;box|盒子|📦;bag|袋子；書包|🎒;class|班級|🏫;cow|母牛|🐄;pig|豬|🐷;bird|鳥|🐦;home|家|🏠;school|學校|🏫;zoo|動物園|🦒;Taipei|台北|🏙️;Taiwan|台灣|🇹🇼;English|英語|🔤;he|他|👦;she|她|👧;it|它|📦;who|誰|❓;what|什麼|❓;an|一個（母音前）|1️⃣;the|這／那個（特定的）|👆;this|這個|👇;that|那個|👉;look|看|👀;go|去|🚶;name|名字|📛;not|不|🚫",
-3:"doctor|醫生|👨‍⚕️;kid|小孩|🧒;student|學生|🧑‍🎓;grandma|奶奶；外婆|👵;grandpa|爺爺；外公|👴;rice|米飯|🍚;tea|茶|🍵;water|水|💧;juice|果汁|🧃;hamburger|漢堡|🍔;ice cream|冰淇淋|🍦;pizza|披薩|🍕;desk|書桌|🪑;door|門|🚪;marker|麥克筆|🖍️;pen|原子筆|🖊️;pencil|鉛筆|✏️;table|桌子|🪵;chair|椅子|🪑;eraser|橡皮擦|🧽;ruler|尺|📏;window|窗戶|🪟;bear|熊|🐻;monkey|猴子|🐵;lion|獅子|🦁;rabbit|兔子|🐰;tiger|老虎|🐯;here|這裡|📍;there|那裡|👉;six|六|6️⃣;seven|七|7️⃣;eight|八|8️⃣;nine|九|9️⃣;ten|十|🔟;many|許多（可數）|🔢;blue|藍色|🔵;color|顏色|🎨;green|綠色|🟢;red|紅色|🔴;yellow|黃色|🟡;black|黑色|⚫;brown|棕色|🟤;white|白色|⚪;head|頭|🙂;eye|眼睛|👁️;nose|鼻子|👃;ear|耳朵|👂;hand|手|✋;arm|手臂|💪;leg|腿|🦵;foot|腳|🦶;face|臉|😀;mouth|嘴巴|👄;we|我們|👫;they|他們|👥;how|如何；怎麼|❓;where|哪裡|📍;can|能；會|💪;do|做；（助動詞）|✔️;these|這些|👇;those|那些|👉;cry|哭|😭;like|喜歡|❤️;want|想要|🙏;close|關上|🚪;come|來|👋;listen|聽|👂;open|打開|📖;play|玩|🎲;see|看見|👀;at|在（地點、時間點）|📍;in|在…裡面|📦;on|在…上面|⬆️;under|在…下面|⬇️;and|和；而且|➕",
-4:"orange|柳橙；橘色|🍊;breakfast|早餐|🍳;lunch|午餐|🍱;dinner|晚餐|🍽️;park|公園|🌳;bookstore|書店|📚;eleven|十一|🕚;twelve|十二|🕛;much|許多（不可數）|🔢;cup|杯子|☕;fan|電扇|🌀;key|鑰匙|🔑;old|老的；舊的|👴;short|矮的；短的|📏;tall|高的|🦒;big|大的|🐘;long|長的|🐍;small|小的|🐭;thin|瘦的|🥢;cold|冷的|🥶;cool|涼爽的|🍃;dry|乾的|🏜️;hot|熱的|🔥;warm|溫暖的|☀️;wet|濕的|💦;cloudy|多雲的|☁️;rainy|下雨的|🌧️;sunny|晴朗的|🌞;weather|天氣|🌦️;windy|颳風的|🌬️;Sunday|星期日|📅;Monday|星期一|📅;Tuesday|星期二|📅;Wednesday|星期三|📅;Thursday|星期四|📅;Friday|星期五|📅;Saturday|星期六|📅;day|天；日|🌞;evening|傍晚|🌆;morning|早上|🌅;night|晚上|🌙;now|現在|⏱️;time|時間|⏰;today|今天|📆;tomorrow|明天|📆;week|星期；週|🗓️;year|年|🗓️;yesterday|昨天|📆;bike|腳踏車|🚲;bus|公車|🚌;car|汽車|🚗;bad|壞的；不好的|👎;fine|很好的|🙂;great|很棒的|🌟;nice|好的；親切的|😄;OK|好；可以|👌;sad|難過的|😢;cap|棒球帽|🧢;jacket|夾克|🧥;shoes|鞋子|👟;Japan|日本|🇯🇵;UK|英國|🇬🇧;USA|美國|🇺🇸;game|遊戲|🎮;hiking|健行|🥾;art|美術|🎨;Chinese|中文|🀄;math|數學|➗;music|音樂|🎵;which|哪一個|🤔;does|做；（助動詞，他/她用）|✔️;dance|跳舞|💃;jump|跳|🦘;read|閱讀|📖;sing|唱歌|🎤;cook|煮飯；廚師|👩‍🍳;draw|畫畫|🖍️;run|跑|🏃;sleep|睡覺|😴;swim|游泳|🏊;walk|走路|🚶;write|寫|✍️;kite|風箏|🪁;yo-yo|溜溜球|🪀;o'clock|…點鐘|🕐;but|但是|↔️;or|或者|🔀;so|所以|➡️",
-5:"baby|嬰兒|👶;man|男人|👨;nurse|護理師|👩‍⚕️;singer|歌手|🎤;child|小孩|🧒;mailman|郵差|📮;woman|女人|👩;aunt|阿姨；姑姑|👩;daughter|女兒|👧;son|兒子|👦;uncle|叔叔；舅舅|👨;candy|糖果|🍬;pie|派|🥧;bread|麵包|🍞;coffee|咖啡|☕;cookies|餅乾|🍪;food|食物|🍱;fruit|水果|🍇;noodles|麵|🍜;sandwich|三明治|🥪;soup|湯|🍲;card|卡片|🃏;computer|電腦|💻;classroom|教室|🏫;clock|時鐘|⏰;page|頁|📄;seat|座位|💺;bee|蜜蜂|🐝;duck|鴨子|🦆;chicken|雞|🐔;elephant|大象|🐘;shop|商店|🏪;supermarket|超市|🛒;gym|體育館|🏋️;hospital|醫院|🏥;library|圖書館|📚;post office|郵局|🏤;restaurant|餐廳|🍴;thirteen|十三|1️⃣;fourteen|十四|1️⃣;fifteen|十五|1️⃣;sixteen|十六|1️⃣;seventeen|十七|1️⃣;eighteen|十八|1️⃣;nineteen|十九|1️⃣;some|一些|🔢;twenty|二十|2️⃣;thirty|三十|3️⃣;forty|四十|4️⃣;fifty|五十|5️⃣;sixty|六十|6️⃣;seventy|七十|7️⃣;eighty|八十|8️⃣;ninety|九十|9️⃣;hundred|一百|💯;pink|粉紅色|🩷;gray|灰色|🩶;purple|紫色|🟣;bathroom|浴室|🛁;bed|床|🛏️;bedroom|臥室|🛏️;kitchen|廚房|🍳;living room|客廳|🛋️;sofa|沙發|🛋️;TV|電視|📺;PE|體育課|🤸;her|她的；她（受格）|👧;his|他的|👦;our|我們的|👫;their|他們的|👥;whose|誰的|🔑;have|有|🤲;has|有（他、她用）|🤲;live|住|🏠;sit|坐|🪑;stand|站|🧍;thank|感謝|🙏;by|搭乘；在…旁邊|🚌;for|為了；給|🎁;from|來自|🛫;January|一月|❄️|x;February|二月|🧧|x;March|三月|🌱|x;April|四月|🌷|x;May|五月|🌼|x;June|六月|🌞|x;July|七月|🍉|x;August|八月|🏖️|x;September|九月|🍁|x;October|十月|🎃|x;November|十一月|🍂|x;December|十二月|🎄|x;month|月|🗓️|x;birthday|生日|🎂|x;holiday|假日|🎉|x;weekend|週末|🛋️|x;afternoon|下午|🌤️|x;hour|小時|⏳|x;minute|分鐘|⏱️|x;chocolate|巧克力|🍫|x;vegetable|蔬菜|🥦|x;meat|肉|🍖|x;beef|牛肉|🥩|x;salad|沙拉|🥗|x;lemon|檸檬|🍋|x;grape|葡萄|🍇|x;watermelon|西瓜|🍉|x;strawberry|草莓|🍓|x;tomato|番茄|🍅|x;potato|馬鈴薯|🥔|x;horse|馬|🐴|x;sheep|綿羊|🐑|x;mouse|老鼠|🐭|x;snake|蛇|🐍|x;dolphin|海豚|🐬|x;zebra|斑馬|🦓|x;turtle|烏龜|🐢|x;frog|青蛙|🐸|x;butterfly|蝴蝶|🦋|x;farmer|農夫|👨‍🌾|x;driver|司機|🧑‍✈️|x;writer|作家|✍️|x;artist|藝術家|🧑‍🎨|x;scientist|科學家|🧑‍🔬|x;beach|海灘|🏖️|x;mountain|山|⛰️|x;river|河|🏞️|x;city|城市|🌆|x;street|街道|🛣️|x;museum|博物館|🏛️|x;station|車站|🚉|x;farm|農場|🚜|x",
-6:"police officer|警察|👮;police station|警察局|🚓;cellphone|手機|📱;telephone|電話|☎️;hair|頭髮|💇;back|背部|🧍;body|身體|🧍;tooth|牙齒|🦷;busy|忙碌的|🏃;clean|乾淨的；打掃|✨;cute|可愛的|🥰;dirty|髒的|🟫;heavy|重的|🏋️;kind|親切的|💗;sick|生病的|🤒;smart|聰明的|🧠;strong|強壯的|💪;young|年輕的|🧒;moon|月亮|🌙;sky|天空|🌌;star|星星|⭐;sun|太陽|☀️;fall|秋天|🍂;spring|春天|🌸;summer|夏天|🏖️;winter|冬天|⛄;MRT|捷運|🚇;plane|飛機|✈️;ship|船|🚢;taxi|計程車|🚕;train|火車|🚆;mad|生氣的|😤;angry|生氣的|😠;excited|興奮的|🤩;hungry|飢餓的|😋;tired|疲累的|🥱;coat|外套|🧥;dress|洋裝|👗;glasses|眼鏡|👓;pants|長褲|👖;shorts|短褲|🩳;skirt|裙子|👗;socks|襪子|🧦;T-shirt|T恤|👕;jeans|牛仔褲|👖;sweater|毛衣|🧶;baseball|棒球|⚾;basketball|籃球|🏀;camping|露營|🏕️;jogging|慢跑|🏃;sport|運動|🏅;table tennis|桌球|🏓;science|自然科學|🔬;mine|我的（東西）|🙋;when|什麼時候|⏰;may|可以|🙏;drink|喝|🥤;drive|開車|🚗;eat|吃|🍽️;feel|感覺|💭;fly|飛|🕊️;get|得到；起（床）|🎁;give|給|🎁;ride|騎|🚴;say|說|💬;speak|說（語言）|🗣️;study|讀書|📚;take|拿；搭乘|✋;talk|談話|💬;wash|洗|🧼;watch|觀看|📺;wear|穿戴|👕;work|工作|💼;hurry|趕快|💨;put|放|📥;share|分享|🤲;spell|拼字|🔤;stop|停止|🛑;try|嘗試|💪;turn|轉；輪到|🔄;e-mail|電子郵件|📧;flower|花|🌸;tree|樹|🌳;dollar|元|💵;early|早的|🐓;late|晚的；遲的|⏰;loud|大聲的|📢;money|錢|💰;quiet|安靜的|🤫;very|非常|‼️;beautiful|美麗的|🌹|x;cheap|便宜的|🏷️|x;expensive|昂貴的|💎|x;easy|簡單的|👌|x;difficult|困難的|🧩|x;fast|快的|⚡|x;slow|慢的|🐢|x;new|新的|🆕|x;same|相同的|🟰|x;different|不同的|🔀|x;favorite|最喜歡的|💖|x;interesting|有趣的|🤔|x;delicious|美味的|😋|x;healthy|健康的|🥦|x;careful|小心的|⚠️|x;famous|有名的|🌟|x;afraid|害怕的|😨|x;thirsty|口渴的|🥤|x;homework|功課|📝|x;test|考試|📝|x;question|問題|❓|x;answer|答案；回答|💡|x;story|故事|📖|x;picture|圖畫；照片|🖼️|x;gift|禮物|🎁|x;toy|玩具|🧸|x;umbrella|雨傘|☂️|x;map|地圖|🗺️|x;buy|買|🛍️|x;sell|賣|🏷️|x;help|幫忙|🤝|x;know|知道|💡|x;think|想；認為|💭|x;learn|學習|📘|x;teach|教|👩‍🏫|x;visit|拜訪|🏡|x;travel|旅行|🧳|x;finish|完成|🏁|x;forget|忘記|🤦|x;remember|記得|🧠|x;find|找到|🔍|x;call|打電話|📞|x;ask|問|🙋|x;need|需要|🙏|x;wait|等待|⌛|x;win|贏|🏆|x;always|總是|💯|x;usually|通常|🔁|x;often|常常|🔂|x;sometimes|有時候|🎲|x;never|從不|🚫|x;together|一起|👫|x"
+1:"girl|女孩|👧||people;boy|男孩|👦||people;teacher|老師|👩‍🏫||people;friend|朋友|🤝||people;mom|媽媽|👩||people;dad|爸爸|👨||people;sister|姊妹|👧||people;brother|兄弟|👦||people;apple|蘋果|🍎||food;banana|香蕉|🍌||food;egg|蛋|🥚||food;milk|牛奶|🥛||food;cake|蛋糕|🍰||food;book|書|📕||school;fish|魚|🐟||animal;cat|貓|🐱||animal;dog|狗|🐶||animal;one|一|1️⃣||number;two|二|2️⃣||number;three|三|3️⃣||number;four|四|4️⃣||number;five|五|5️⃣||number;good|好的|👍||feel;happy|快樂的|😊||feel;hat|帽子|👒||clothes;I|我|🙋||grammar;my|我的|🙋||grammar;you|你|👉||grammar;your|你的|👉||grammar;am|是（I 用）|🟰||grammar;is|是（他、她、它用）|🟰||grammar;are|是（你、我們、他們用）|🟰||grammar;a|一個（子音前）|1️⃣||grammar;yes|是的|⭕||grammar;no|不；沒有|❌||grammar",
+2:"mother|母親|👩||people;father|父親|👨||people;ball|球|⚽||school;box|盒子|📦||school;bag|袋子；書包|🎒||school;class|班級|🏫||school;cow|母牛|🐄||animal;pig|豬|🐷||animal;bird|鳥|🐦||animal;home|家|🏠||place;school|學校|🏫||place;zoo|動物園|🦒||place;Taipei|台北|🏙️||country;Taiwan|台灣|🇹🇼||country;English|英語|🔤||subject;he|他|👦||grammar;she|她|👧||grammar;it|它|📦||grammar;who|誰|❓||grammar;what|什麼|❓||grammar;an|一個（母音前）|1️⃣||grammar;the|這／那個（特定的）|👆||grammar;this|這個|👇||grammar;that|那個|👉||grammar;look|看|👀||grammar;go|去|🚶||grammar;name|名字|📛||people;not|不|🚫||grammar",
+3:"doctor|醫生|👨‍⚕️||people;kid|小孩|🧒||people;student|學生|🧑‍🎓||people;grandma|奶奶；外婆|👵||people;grandpa|爺爺；外公|👴||people;rice|米飯|🍚||food;tea|茶|🍵||food;water|水|💧||food;juice|果汁|🧃||food;hamburger|漢堡|🍔||food;ice cream|冰淇淋|🍦||food;pizza|披薩|🍕||food;desk|書桌|🪑||school;door|門|🚪||school;marker|麥克筆|🖍️||school;pen|原子筆|🖊️||school;pencil|鉛筆|✏️||school;table|桌子|🪵||school;chair|椅子|🪑||school;eraser|橡皮擦|🧽||school;ruler|尺|📏||school;window|窗戶|🪟||school;bear|熊|🐻||animal;monkey|猴子|🐵||animal;lion|獅子|🦁||animal;rabbit|兔子|🐰||animal;tiger|老虎|🐯||animal;here|這裡|📍||grammar;there|那裡|👉||grammar;six|六|6️⃣||number;seven|七|7️⃣||number;eight|八|8️⃣||number;nine|九|9️⃣||number;ten|十|🔟||number;many|許多（可數）|🔢||number;blue|藍色|🔵||color;color|顏色|🎨||color;green|綠色|🟢||color;red|紅色|🔴||color;yellow|黃色|🟡||color;black|黑色|⚫||color;brown|棕色|🟤||color;white|白色|⚪||color;head|頭|🙂||body;eye|眼睛|👁️||body;nose|鼻子|👃||body;ear|耳朵|👂||body;hand|手|✋||body;arm|手臂|💪||body;leg|腿|🦵||body;foot|腳|🦶||body;face|臉|😀||body;mouth|嘴巴|👄||body;we|我們|👫||grammar;they|他們|👥||grammar;how|如何；怎麼|❓||grammar;where|哪裡|📍||grammar;can|能；會|💪||grammar;do|做；（助動詞）|✔️||grammar;these|這些|👇||grammar;those|那些|👉||grammar;cry|哭|😭||verb;like|喜歡|❤️||verb;want|想要|🙏||verb;close|關上|🚪||verb;come|來|👋||verb;listen|聽|👂||verb;open|打開|📖||verb;play|玩|🎲||verb;see|看見|👀||verb;at|在（地點、時間點）|📍||grammar;in|在…裡面|📦||grammar;on|在…上面|⬆️||grammar;under|在…下面|⬇️||grammar;and|和；而且|➕||grammar",
+4:"orange|柳橙；橘色|🍊||food;breakfast|早餐|🍳||food;lunch|午餐|🍱||food;dinner|晚餐|🍽️||food;park|公園|🌳||place;bookstore|書店|📚||place;eleven|十一|🕚||number;twelve|十二|🕛||number;much|許多（不可數）|🔢||number;cup|杯子|☕||home;fan|電扇|🌀||home;key|鑰匙|🔑||home;old|老的；舊的|👴||adj;short|矮的；短的|📏||adj;tall|高的|🦒||adj;big|大的|🐘||adj;long|長的|🐍||adj;small|小的|🐭||adj;thin|瘦的|🥢||adj;cold|冷的|🥶||weather;cool|涼爽的|🍃||weather;dry|乾的|🏜️||weather;hot|熱的|🔥||weather;warm|溫暖的|☀️||weather;wet|濕的|💦||weather;cloudy|多雲的|☁️||weather;rainy|下雨的|🌧️||weather;sunny|晴朗的|🌞||weather;weather|天氣|🌦️||weather;windy|颳風的|🌬️||weather;Sunday|星期日|📅||time;Monday|星期一|📅||time;Tuesday|星期二|📅||time;Wednesday|星期三|📅||time;Thursday|星期四|📅||time;Friday|星期五|📅||time;Saturday|星期六|📅||time;day|天；日|🌞||time;evening|傍晚|🌆||time;morning|早上|🌅||time;night|晚上|🌙||time;now|現在|⏱️||time;time|時間|⏰||time;today|今天|📆||time;tomorrow|明天|📆||time;week|星期；週|🗓️||time;year|年|🗓️||time;yesterday|昨天|📆||time;bike|腳踏車|🚲||transport;bus|公車|🚌||transport;car|汽車|🚗||transport;bad|壞的；不好的|👎||feel;fine|很好的|🙂||feel;great|很棒的|🌟||feel;nice|好的；親切的|😄||feel;OK|好；可以|👌||feel;sad|難過的|😢||feel;cap|棒球帽|🧢||clothes;jacket|夾克|🧥||clothes;shoes|鞋子|👟||clothes;Japan|日本|🇯🇵||country;UK|英國|🇬🇧||country;USA|美國|🇺🇸||country;game|遊戲|🎮||sport;hiking|健行|🥾||sport;art|美術|🎨||subject;Chinese|中文|🀄||subject;math|數學|➗||subject;music|音樂|🎵||subject;which|哪一個|🤔||grammar;does|做；（助動詞，他/她用）|✔️||grammar;dance|跳舞|💃||verb;jump|跳|🦘||verb;read|閱讀|📖||verb;sing|唱歌|🎤||verb;cook|煮飯；廚師|👩‍🍳||verb;draw|畫畫|🖍️||verb;run|跑|🏃||verb;sleep|睡覺|😴||verb;swim|游泳|🏊||verb;walk|走路|🚶||verb;write|寫|✍️||verb;kite|風箏|🪁||sport;yo-yo|溜溜球|🪀||sport;o'clock|…點鐘|🕐||time;but|但是|↔️||grammar;or|或者|🔀||grammar;so|所以|➡️||grammar",
+5:"baby|嬰兒|👶||job;man|男人|👨||job;nurse|護理師|👩‍⚕️||job;singer|歌手|🎤||job;child|小孩|🧒||job;mailman|郵差|📮||job;woman|女人|👩||job;aunt|阿姨；姑姑|👩||people;daughter|女兒|👧||people;son|兒子|👦||people;uncle|叔叔；舅舅|👨||people;candy|糖果|🍬||food;pie|派|🥧||food;bread|麵包|🍞||food;coffee|咖啡|☕||food;cookies|餅乾|🍪||food;food|食物|🍱||food;fruit|水果|🍇||food;noodles|麵|🍜||food;sandwich|三明治|🥪||food;soup|湯|🍲||food;card|卡片|🃏||school;computer|電腦|💻||school;classroom|教室|🏫||school;clock|時鐘|⏰||school;page|頁|📄||school;seat|座位|💺||school;bee|蜜蜂|🐝||animal;duck|鴨子|🦆||animal;chicken|雞|🐔||animal;elephant|大象|🐘||animal;shop|商店|🏪||place;supermarket|超市|🛒||place;gym|體育館|🏋️||place;hospital|醫院|🏥||place;library|圖書館|📚||place;post office|郵局|🏤||place;restaurant|餐廳|🍴||place;thirteen|十三|1️⃣||number;fourteen|十四|1️⃣||number;fifteen|十五|1️⃣||number;sixteen|十六|1️⃣||number;seventeen|十七|1️⃣||number;eighteen|十八|1️⃣||number;nineteen|十九|1️⃣||number;some|一些|🔢||number;twenty|二十|2️⃣||number;thirty|三十|3️⃣||number;forty|四十|4️⃣||number;fifty|五十|5️⃣||number;sixty|六十|6️⃣||number;seventy|七十|7️⃣||number;eighty|八十|8️⃣||number;ninety|九十|9️⃣||number;hundred|一百|💯||number;pink|粉紅色|🩷||color;gray|灰色|🩶||color;purple|紫色|🟣||color;bathroom|浴室|🛁||home;bed|床|🛏️||home;bedroom|臥室|🛏️||home;kitchen|廚房|🍳||home;living room|客廳|🛋️||home;sofa|沙發|🛋️||home;TV|電視|📺||home;PE|體育課|🤸||subject;her|她的；她（受格）|👧||grammar;his|他的|👦||grammar;our|我們的|👫||grammar;their|他們的|👥||grammar;whose|誰的|🔑||grammar;have|有|🤲||grammar;has|有（他、她用）|🤲||grammar;live|住|🏠||verb;sit|坐|🪑||verb;stand|站|🧍||verb;thank|感謝|🙏||verb;by|搭乘；在…旁邊|🚌||grammar;for|為了；給|🎁||grammar;from|來自|🛫||grammar;January|一月|❄️|x|time;February|二月|🧧|x|time;March|三月|🌱|x|time;April|四月|🌷|x|time;May|五月|🌼|x|time;June|六月|🌞|x|time;July|七月|🍉|x|time;August|八月|🏖️|x|time;September|九月|🍁|x|time;October|十月|🎃|x|time;November|十一月|🍂|x|time;December|十二月|🎄|x|time;month|月|🗓️|x|time;birthday|生日|🎂|x|time;holiday|假日|🎉|x|time;weekend|週末|🛋️|x|time;afternoon|下午|🌤️|x|time;hour|小時|⏳|x|time;minute|分鐘|⏱️|x|time;chocolate|巧克力|🍫|x|food;vegetable|蔬菜|🥦|x|food;meat|肉|🍖|x|food;beef|牛肉|🥩|x|food;salad|沙拉|🥗|x|food;lemon|檸檬|🍋|x|food;grape|葡萄|🍇|x|food;watermelon|西瓜|🍉|x|food;strawberry|草莓|🍓|x|food;tomato|番茄|🍅|x|food;potato|馬鈴薯|🥔|x|food;horse|馬|🐴|x|animal;sheep|綿羊|🐑|x|animal;mouse|老鼠|🐭|x|animal;snake|蛇|🐍|x|animal;dolphin|海豚|🐬|x|animal;zebra|斑馬|🦓|x|animal;turtle|烏龜|🐢|x|animal;frog|青蛙|🐸|x|animal;butterfly|蝴蝶|🦋|x|animal;farmer|農夫|👨‍🌾|x|job;driver|司機|🧑‍✈️|x|job;writer|作家|✍️|x|job;artist|藝術家|🧑‍🎨|x|job;scientist|科學家|🧑‍🔬|x|job;beach|海灘|🏖️|x|place;mountain|山|⛰️|x|place;river|河|🏞️|x|place;city|城市|🌆|x|place;street|街道|🛣️|x|place;museum|博物館|🏛️|x|place;station|車站|🚉|x|place;farm|農場|🚜|x|place",
+6:"police officer|警察|👮||job;police station|警察局|🚓||place;cellphone|手機|📱||home;telephone|電話|☎️||home;hair|頭髮|💇||body;back|背部|🧍||body;body|身體|🧍||body;tooth|牙齒|🦷||body;busy|忙碌的|🏃||adj;clean|乾淨的；打掃|✨||adj;cute|可愛的|🥰||adj;dirty|髒的|🟫||adj;heavy|重的|🏋️||adj;kind|親切的|💗||adj;sick|生病的|🤒||adj;smart|聰明的|🧠||adj;strong|強壯的|💪||adj;young|年輕的|🧒||adj;moon|月亮|🌙||nature;sky|天空|🌌||nature;star|星星|⭐||nature;sun|太陽|☀️||nature;fall|秋天|🍂||weather;spring|春天|🌸||weather;summer|夏天|🏖️||weather;winter|冬天|⛄||weather;MRT|捷運|🚇||transport;plane|飛機|✈️||transport;ship|船|🚢||transport;taxi|計程車|🚕||transport;train|火車|🚆||transport;mad|生氣的|😤||feel;angry|生氣的|😠||feel;excited|興奮的|🤩||feel;hungry|飢餓的|😋||feel;tired|疲累的|🥱||feel;coat|外套|🧥||clothes;dress|洋裝|👗||clothes;glasses|眼鏡|👓||clothes;pants|長褲|👖||clothes;shorts|短褲|🩳||clothes;skirt|裙子|👗||clothes;socks|襪子|🧦||clothes;T-shirt|T恤|👕||clothes;jeans|牛仔褲|👖||clothes;sweater|毛衣|🧶||clothes;baseball|棒球|⚾||sport;basketball|籃球|🏀||sport;camping|露營|🏕️||sport;jogging|慢跑|🏃||sport;sport|運動|🏅||sport;table tennis|桌球|🏓||sport;science|自然科學|🔬||subject;mine|我的（東西）|🙋||grammar;when|什麼時候|⏰||grammar;may|可以|🙏||grammar;drink|喝|🥤||verb;drive|開車|🚗||verb;eat|吃|🍽️||verb;feel|感覺|💭||verb;fly|飛|🕊️||verb;get|得到；起（床）|🎁||verb;give|給|🎁||verb;ride|騎|🚴||verb;say|說|💬||verb;speak|說（語言）|🗣️||verb;study|讀書|📚||verb;take|拿；搭乘|✋||verb;talk|談話|💬||verb;wash|洗|🧼||verb;watch|觀看|📺||verb;wear|穿戴|👕||verb;work|工作|💼||verb;hurry|趕快|💨||verb;put|放|📥||verb;share|分享|🤲||verb;spell|拼字|🔤||verb;stop|停止|🛑||verb;try|嘗試|💪||verb;turn|轉；輪到|🔄||verb;e-mail|電子郵件|📧||nature;flower|花|🌸||nature;tree|樹|🌳||nature;dollar|元|💵||adj;early|早的|🐓||adj;late|晚的；遲的|⏰||adj;loud|大聲的|📢||adj;money|錢|💰||adj;quiet|安靜的|🤫||adj;very|非常|‼️||adj;beautiful|美麗的|🌹|x|adj;cheap|便宜的|🏷️|x|adj;expensive|昂貴的|💎|x|adj;easy|簡單的|👌|x|adj;difficult|困難的|🧩|x|adj;fast|快的|⚡|x|adj;slow|慢的|🐢|x|adj;new|新的|🆕|x|adj;same|相同的|🟰|x|adj;different|不同的|🔀|x|adj;favorite|最喜歡的|💖|x|adj;interesting|有趣的|🤔|x|adj;delicious|美味的|😋|x|adj;healthy|健康的|🥦|x|adj;careful|小心的|⚠️|x|adj;famous|有名的|🌟|x|adj;afraid|害怕的|😨|x|adj;thirsty|口渴的|🥤|x|adj;homework|功課|📝|x|school;test|考試|📝|x|school;question|問題|❓|x|school;answer|答案；回答|💡|x|school;story|故事|📖|x|school;picture|圖畫；照片|🖼️|x|school;gift|禮物|🎁|x|school;toy|玩具|🧸|x|school;umbrella|雨傘|☂️|x|school;map|地圖|🗺️|x|school;buy|買|🛍️|x|verb;sell|賣|🏷️|x|verb;help|幫忙|🤝|x|verb;know|知道|💡|x|verb;think|想；認為|💭|x|verb;learn|學習|📘|x|verb;teach|教|👩‍🏫|x|verb;visit|拜訪|🏡|x|verb;travel|旅行|🧳|x|verb;finish|完成|🏁|x|verb;forget|忘記|🤦|x|verb;remember|記得|🧠|x|verb;find|找到|🔍|x|verb;call|打電話|📞|x|verb;ask|問|🙋|x|verb;need|需要|🙏|x|verb;wait|等待|⌛|x|verb;win|贏|🏆|x|verb;always|總是|💯|x|grammar;usually|通常|🔁|x|grammar;often|常常|🔂|x|grammar;sometimes|有時候|🎲|x|grammar;never|從不|🚫|x|grammar;together|一起|👫|x|grammar"
 };
 const WORDS={};
-for(const g in RAW){WORDS[g]=RAW[g].split(';').map(s=>{const[e,z,m,x]=s.split('|');return{e,z,m:m||'🔤',ext:x==='x'}})}
+for(const g in RAW){WORDS[g]=RAW[g].split(';').map((s,i,arr)=>{const[e,z,m,x,t]=s.split('|');return{e,z,m:m||'🔤',ext:x==='x',t:t||'grammar',sem:i<Math.ceil(arr.length/2)?1:2}})}
 function wordsUpTo(g){let a=[];for(let i=1;i<=g;i++)a=a.concat(WORDS[i]);return a}
 
 /* ===================== 出題用字庫（g = 最早出現的年級） ===================== */
@@ -440,6 +460,7 @@ function distinct(make,n,key,tries){const out=[],seen=new Set();for(let k=0;k<(t
 function makeLike(fam,n){
  if(fam.k=='word'){const f=shuffle(wordFmts(fam.w,true));const out=[];for(let k=0;k<n;k++)out.push(wordItem(fam.w,f[k%f.length]));return out}
  if(fam.k=='rule'){const out=distinct(()=>ruleItem(fam.id),n,x=>x.q);while(out.length<n)out.push(ruleItem(fam.id));return out}
+ if(fam.k=='x'){const out=distinct(()=>xItem(fam.id),n,x=>x.q+x.ans+(x.listen||''),n*15);while(out.length<n)out.push(xItem(fam.id));return out}
  let out=distinct(()=>tplItem(fam.t),n,x=>x.zh);
  const same=TPL.filter(t=>t[0]==fam.t[0]&&t!==fam.t);while(out.length<n)out.push(tplItem(one(same.length?same:TPL)));return out;
 }
@@ -463,33 +484,39 @@ const esc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g
 /* ===================== 首頁 ===================== */
 const SESSION={grammar:24,tense:24,spell:24,trans:15};
 const CHAPTERS=[
- ['learn','🃏','單字卡','看圖、聽發音、認識單字'],
- ['battle','👾','打怪練習','答對攻擊、連對暴擊'],
+ ['learn','🃏','單字卡','看圖、聽發音、讀例句'],
+ ['map','🗺️','學習地圖','上下學期主題、設定本週單字'],
  ['review','🔁','複習本','遺忘曲線：當天、1、2、4、7、15、30 天'],
+ ['battle','👾','打怪練習','答對攻擊、連對暴擊'],
+ ['phonics','🔤','自然發音','字母拼讀、字族、sh/ch/th'],
  ['spell','🧩','填空單字','每回 24 個單字'],
  ['grammar','🧱','文法城堡','每回 24 題'],
  ['tense','⏰','時光列車','時態練習，每回 24 題'],
  ['trans','🌉','中翻英拼橋','每回 15 句'],
+ ['talk','💬','情境對話','點餐、問路、買東西'],
+ ['read','📖','閱讀理解','短文閱讀，3 年級起'],
  ['match','🎴','翻牌配對','英文和中文配成一對'],
  ['mock','📝','模擬考','學習內容 × 3 倍題量'],
+ ['report','📊','學習報告','能力診斷，給家長看'],
  ['info','📚','單字來源與教材','給家長和老師看']
 ];
 function home(){
  setAccent();const g=state.grade;const ex=examInfo(g);
  const doneP=ex.papers.filter((_,k)=>best[g+'_mock'+k]).length,due=srsDue().length,beat=Math.min(MONP[g]||0,6);
- const extra=k=>k=='mock'?`<div class="stars">完成 ${doneP} / ${ex.papers.length} 回</div>`:k=='battle'?`<div class="stars">打倒 ${beat} / 6 隻</div>`:k=='review'?`<div class="stars" style="${due?'color:var(--bad);font-weight:700':''}">${due?'今天要複習 '+due+' 題':'今天的複習完成了'}</div>`:(k!='info'&&k!='learn'?`<div class="stars">${starStr(best[g+'_'+k]||0)}</div>`:'');
+ const extra=k=>k=='mock'?`<div class="stars">完成 ${doneP} / ${ex.papers.length} 回</div>`:k=='battle'?`<div class="stars">打倒 ${beat} / 6 隻</div>`:k=='review'?`<div class="stars" style="${due?'color:var(--bad);font-weight:700':''}">${due?'今天要複習 '+due+' 題':'今天的複習完成了'}</div>`:(['info','learn','map','report'].includes(k)?'':`<div class="stars">${starStr(best[g+'_'+(k=='read'?'reading':k)]||0)}</div>`);
  app.innerHTML=`
  <div class="grades">${[1,2,3,4,5,6].map(i=>`<button class="gbtn ${i==g?'on':''}" style="background:${COLORS_G[i]}" onclick="setGrade(${i})">${i}年級<small>${BAND[i]}</small></button>`).join('')}</div>
  ${(()=>{const d=srsDue().length;return d?`<button class="revbanner" onclick="go('review')"><span>🔁</span><b>今天有 ${d} 題要複習<small>趁還沒忘記，現在複習最有效！</small></b><span class="go">GO ▶</span></button>`:''})()}
+ ${weekBanner()}
  ${dailyPanel()}
  <div class="hero"><div class="big">${['','🐣','🐥','🦊','🐯','🦁','🦅'][g]}</div>
   <h2>${g} 年級的冒險</h2>
-  <p>本年級新單字 ${WORDS[g].length} 個${WORDS[g].filter(w=>w.ext).length?`（含⭐銜接國中 ${WORDS[g].filter(w=>w.ext).length} 個）`:''}・句型文法 ${ex.rules.length+ex.tpls.length} 項・模擬考 ${ex.total} 題<br>學過的題目會依遺忘曲線自動複習，答錯再加 3 題補充習題</p></div>
+  <p>本年級新單字 ${WORDS[g].length} 個${WORDS[g].filter(w=>w.ext).length?`（含⭐銜接國中 ${WORDS[g].filter(w=>w.ext).length} 個）`:''}・句型文法 ${ex.rules.length+ex.tpls.length} 項・模擬考 ${ex.total} 題<br>另有自然發音、情境對話、閱讀理解；學過的題目會依遺忘曲線自動複習</p></div>
  <div class="chapters">${CHAPTERS.map(([k,i,t,d])=>`<button class="ch" onclick="go('${k}')"><div class="ico">${i}</div><b>${t}</b><span>${d}</span>${extra(k)}</button>`).join('')}</div>`;
 }
 function setGrade(g){state.grade=g;store.set('kidsEN_grade',g);home()}
 function go(v){try{speechSynthesis.cancel()}catch(e){}window.scrollTo(0,0);
- ({home,learn,match,mock:mockMenu,info,battle:battleMenu,review:reviewMenu,
+ ({home,learn,match,mock:mockMenu,info,battle:battleMenu,review:reviewMenu,map:mapPage,week:weekPage,phonics:phonicsMenu,talk:talkMenu,read:readMenu,reading:readMenu,report,
    spell:startSpell,grammar:()=>startRules('grammar','🧱 文法城堡'),tense:()=>startRules('tense','⏰ 時光列車'),trans:startTrans})[v]()}
 
 /* ===================== 各章節開始 ===================== */
@@ -519,9 +546,10 @@ function examInfo(g){
   words.forEach(w=>{shuffle(wordFmts(w,false)).slice(0,3).forEach(f=>items.push(wordItem(w,f)))});
   rules.forEach(r=>{items=items.concat(makeLike({k:'rule',id:r[0]},3))});
   tpls.forEach(t=>{items=items.concat(makeLike({k:'tpl',t},3))});
+  const xg=XGEN.filter(x=>x.min<=g&&g<=x.max&&(x.cat!=='phonics'||g<=4));xg.forEach(x=>{items=items.concat(makeLike({k:'x',id:x.id},3))});
   items=shuffle(items);const papers=[];for(let k=0;k<items.length;k+=20)papers.push(items.slice(k,k+20));
   if(papers.length>1&&papers[papers.length-1].length<8){const last=papers.pop();papers[papers.length-1]=papers[papers.length-1].concat(last)}
-  return EXAM[g]={total:items.length,papers,rules,tpls,words:words.length};
+  return EXAM[g]={total:items.length,papers,rules,tpls,words:words.length,xg};
  }finally{R=old;state.grade=oldG}
 }
 function mockMenu(){
@@ -543,7 +571,7 @@ function runQuiz(o){
   i<o.items.length?draw():result(o,score,wrong)}
  function done(ok){
   const it=o.items[i];
-  if(!it.retry){if(ok){score++;dayInc('correct')}else wrong.push(it);if(!it.srsKey)srsTouch(it,ok)}
+  if(!it.retry){if(ok){score++;dayInc('correct')}else wrong.push(it);if(!it.srsKey)srsTouch(it,ok);recordSkill(it,ok)}
   if(it.srsKey&&!it.retry)srsUpdate(it.srsKey,ok);
   /* 複習時答錯：同一回合 3 題後換個題型再考一次 */
   if(!ok&&o.review&&it.srsKey&&!it.retry&&it.type!=='spell'){const again=srsMake(it.srsKey);if(again){again.retry=1;o.items.splice(Math.min(i+4,o.items.length),0,again)}}
@@ -564,7 +592,7 @@ function runQuiz(o){
  draw();
 }
 function drawMC(it,el,done,last){
- el.innerHTML=`<div class="q en">${it.pre||''}${esc(it.q).replace('___','<span class="blank">　?　</span>')}</div>${it.sub?`<div class="qsub">${it.sub}</div>`:''}
+ el.innerHTML=`${it.ctx||''}<div class="q en">${it.pre||''}${esc(it.q).replace('___','<span class="blank">　?　</span>')}</div>${it.sub?`<div class="qsub">${it.sub}</div>`:''}
   ${it.listen?`<div class="row" style="margin:-4px 0 14px"><button class="btn" id="ls">🔊 再聽一次</button></div>`:''}
   ${it.sayFirst?`<div class="row" style="margin:-4px 0 14px"><button class="speak" id="ls">🔊</button></div>`:''}
   <div class="opts">${it.opts.map(o=>`<button class="opt en" data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>
@@ -673,11 +701,11 @@ function learn(){
  const list=WORDS[state.grade];let i=0;
  function draw(){const w=list[i];
   app.innerHTML=topBar('🃏 單字卡')+`<div class="panel"><div class="prog"><i style="width:${(i+1)/list.length*100}%"></i></div>
-  <div class="flash">${w.ext?'<div class="extb">⭐ 銜接國中</div>':''}<div class="emo pop">${w.m}</div><div class="w en">${w.e}</div><div class="z">${w.z}</div><div class="row"><button class="speak" id="sp">🔊</button></div></div>
+  <div class="flash">${w.ext?'<div class="extb">⭐ 銜接國中</div>':''}<div class="emo pop">${w.m}</div><div class="w en">${w.e}</div><div class="z">${w.z}</div>${exampleOf(w)?`<div class="exs en">💬 ${exampleOf(w)} <button class="speak" id="spx">🔊</button></div>`:''}<div class="row"><button class="speak" id="sp">🔊</button></div><div class="qsub" style="margin-top:6px">${THEMES[w.t]?THEMES[w.t][0]+' '+THEMES[w.t][1]+'・':''}${w.sem==1?'上學期':'下學期'}</div></div>
   <div class="row"><button class="btn ghost" id="pv">← 上一個</button><span style="align-self:center;font-weight:700">${i+1} / ${list.length}</span><button class="btn" id="nx">下一個 →</button></div>
   <h4 style="margin-top:24px">本年級全部單字（點一下聽發音）</h4>
   <div class="wlist">${list.map((x,k)=>`<button class="wl ${x.ext?'ext':''}" data-k="${k}"><b>${x.m} ${x.e}</b><small>${x.ext?'⭐ ':''}${x.z}</small></button>`).join('')}</div></div>`;
-  $('#sp').onclick=()=>say(w.e);$('#pv').onclick=()=>{i=(i-1+list.length)%list.length;dayInc('cards');draw()};
+  $('#sp').onclick=()=>say(w.e);if($('#spx'))$('#spx').onclick=()=>say(exampleOf(w));$('#pv').onclick=()=>{i=(i-1+list.length)%list.length;dayInc('cards');draw()};
   $('#nx').onclick=()=>{i=(i+1)%list.length;dayInc('cards');draw();say(list[i].e)};
   app.querySelectorAll('.wl').forEach(b=>b.onclick=()=>{i=+b.dataset.k;draw();say(list[i].e);window.scrollTo(0,0)});
  }
@@ -707,6 +735,10 @@ function match(){
 function info(){
  const rows=[1,2,3,4,5,6].map(g=>{const e=examInfo(g);return`<tr><td>${g} 年級</td><td>${e.words}</td><td>${e.rules.length+e.tpls.length}</td><td>${e.total} 題（${e.papers.length} 回）</td></tr>`}).join('');
  app.innerHTML=topBar('📚 單字來源與教材')+`<div class="panel info">
+ <h4>加深加厚的內容（全部離線）</h4>
+ <p><b>🗺️ 學習地圖：</b>500 字依主題分成上下學期；家長可勾選學校正在教的主題，或自己輸入本週單字，App 自動產生配對、聽力、拼字和打怪練習。</p>
+ <p><b>🔤 自然發音：</b>字母的聲音、短母音字族、押韻、字尾 e、sh/ch/th、ee/ai/oa。<b>💬 情境對話：</b>打招呼、點餐、買東西、問路等，聽懂並選出合適回答。<b>📖 閱讀理解：</b>3～6 年級分級短文。</p>
+ <p><b>📊 學習報告：</b>統計單字辨識、拼寫、聽力、文法、造句、自然發音、情境會話、閱讀 8 項能力的正確率與四週趨勢，連續下滑會出現提醒；每日任務會自動加強最弱的能力。</p>
  <h4>讓孩子每天回來練習的設計</h4>
  <p><b>🔁 複習本（遺忘曲線＋萊特納間隔複習）：</b>孩子學過的每個單字、文法、句型都會自動排進複習，依記憶強度在當天、1、2、4、7、15、30 天後再出現；答對間隔拉長，答錯回到第一天，複習時答錯的題目同一回合還會換題型再考一次。連續答對 7 次才算熟練。首頁會顯示今天要複習幾題。</p>
  <p><b>📅 每日任務＋🔥 連續天數：</b>每天 3 個小任務（約 5–10 分鐘）。全部完成，連續天數 +1。每連續 7 天送 1 張冰凍卡（最多 2 張），漏掉一天也不會斷。</p>
@@ -748,6 +780,7 @@ const SRS_STAGE=['🌱 剛學','🌱 剛學','🌿 短期','🌿 短期','🌳 �
 function srsKeyOf(it){const f=it.fam;if(!f)return null;
  if(f.k=='word')return{key:'w|'+f.w.e,e:{k:'w',g:WG[f.w.e]||state.grade,e:f.w.e}};
  if(f.k=='rule')return{key:'r|'+state.grade+'|'+f.id,e:{k:'r',g:state.grade,id:f.id}};
+ if(f.k=='x')return{key:'x|'+state.grade+'|'+f.id,e:{k:'x',g:state.grade,id:f.id}};
  const ti=TPL.indexOf(f.t);return{key:'t|'+ti,e:{k:'t',g:f.t[0],ti}}}
 function srsSave(){store.set('kidsEN_srs',SRS);store.set('kidsEN_srsstat',SRSSTAT)}
 /* 一般練習時答過的題目：第一次見到就排進複習；已在複習中，答錯退回、到期答對算一次複習 */
@@ -760,7 +793,8 @@ function srsUpdate(key,ok){const e=SRS[key];if(!e)return;
  else{e.box=0;e.due=dstr(0);e.n=(e.n||0)+1}srsSave()}
 function srsDue(){const t=dstr(0);return Object.keys(SRS).filter(k=>SRS[k].due<=t).sort((a,b)=>SRS[a].box-SRS[b].box||(SRS[b].n||0)-(SRS[a].n||0))}
 function srsMake(key){const e=SRS[key],og=state.grade;state.grade=e.g;let it=null;
- try{if(e.k=='w'){const w=(WORDS[e.g]||[]).find(x=>x.e==e.e);if(w)it=wordItem(w,one(wordFmts(w,true)))}
+ try{if(e.k=='w'){const w=(WORDS[e.g]||[]).find(x=>x.e==e.e)||findWord(e.e);if(w)it=wordItem(w,one(wordFmts(w,true)))}
+  else if(e.k=='x'){if(XGEN.find(x=>x.id===e.id))it=xItem(e.id)}
   else if(e.k=='r'){if(GEN[e.id])it=ruleItem(e.id)}else if(TPL[e.ti])it=tplItem(TPL[e.ti])}finally{state.grade=og}
  if(it)it.srsKey=key;return it}
 function reviewMenu(){
@@ -784,12 +818,13 @@ function reviewMenu(){
 
 /* ===================== 每日任務＋連續天數 ===================== */
 let DAY=null,STREAK=store.get('kidsEN_streak',{count:0,last:'',freeze:1});
-function ensureDay(){if(!DAY)DAY=store.get('kidsEN_day',null);if(!DAY||DAY.date!==dstr(0)){DAY={date:dstr(0),correct:0,monsters:0,cards:0,reviewDone:false,rewarded:false,t3:srsDue().length?'review':'cards'};store.set('kidsEN_day',DAY)}return DAY}
+function ensureDay(){if(!DAY)DAY=store.get('kidsEN_day',null);if(!DAY||DAY.date!==dstr(0)){DAY={date:dstr(0),correct:0,monsters:0,cards:0,weak:0,ws:weakestSkill(),reviewDone:false,rewarded:false,t3:srsDue().length?'review':'cards'};store.set('kidsEN_day',DAY)}return DAY}
 function tasks(){const d=ensureDay();return[
  {ico:'✅',t:'答對 15 題',v:Math.min(d.correct,15),n:15},
  {ico:'👾',t:'打倒 1 隻怪獸',v:Math.min(d.monsters,1),n:1},
- d.t3=='review'?{ico:'🔁',t:'完成今日複習',v:d.reviewDone?1:0,n:1}:{ico:'🃏',t:'看 10 張單字卡',v:Math.min(d.cards,10),n:10}]}
-function dayInc(k,n){ensureDay();DAY[k]+=(n||1);store.set('kidsEN_day',DAY);checkDaily()}
+ d.t3=='review'?{ico:'🔁',t:'完成今日複習',v:d.reviewDone?1:0,n:1,go:"go('review')"}:{ico:'🃏',t:'看 10 張單字卡',v:Math.min(d.cards,10),n:10,go:"go('learn')"},
+ {ico:'🎯',t:`加強${SKILLS[d.ws||'listen'][1]}`,v:Math.min(d.weak||0,10),n:10,go:`startWeak('${d.ws||'listen'}')`}]}
+function dayInc(k,n){ensureDay();DAY[k]=(DAY[k]||0)+(n||1);store.set('kidsEN_day',DAY);checkDaily()}
 function dayFlag(k){ensureDay();DAY[k]=true;store.set('kidsEN_day',DAY);checkDaily()}
 function streakNow(){const s=STREAK;if(s.last==dstr(0)||s.last==dstr(-1))return s.count;if(s.last==dstr(-2)&&s.freeze>0)return s.count;return 0}
 function checkDaily(){
@@ -801,12 +836,12 @@ function checkDaily(){
  else if(s.last!==dstr(0))s.count=1;
  s.last=dstr(0);if(s.count%7==0&&s.freeze<2){s.freeze++;note+='<p>🧊 連續 7 天！獲得 1 張冰凍卡（漏掉一天也不會斷）</p>'}
  store.set('kidsEN_streak',s);updateStars();
- setTimeout(()=>{popup(`<div style="font-size:70px">🔥</div><h2 style="margin:6px 0">連續 ${s.count} 天！</h2><p>今天的 3 個任務全部完成，太厲害了！</p>${note}`);beep(true)},700);
+ setTimeout(()=>{popup(`<div style="font-size:70px">🔥</div><h2 style="margin:6px 0">連續 ${s.count} 天！</h2><p>今天的任務全部完成，太厲害了！</p>${note}`);beep(true)},700);
 }
 function dailyPanel(){const ts=tasks(),done=ts.filter(t=>t.v>=t.n).length,sk=streakNow();
- return `<div class="daily"><div class="dhead"><b>📅 今日任務 ${done}/3</b><span>🔥 連續 <b>${sk}</b> 天　🧊×${STREAK.freeze}</span></div>
- ${ts.map(t=>`<div class="drow ${t.v>=t.n?'ok':''}"><span>${t.v>=t.n?'✔️':t.ico}</span><span class="dt">${t.t}</span><div class="dbar"><i style="width:${t.v/t.n*100}%"></i></div><span class="dn">${t.v}/${t.n}</span></div>`).join('')}
- ${done==3?'<div class="dok">🎉 今天任務完成！明天再來保持連續紀錄</div>':''}</div>`}
+ return `<div class="daily"><div class="dhead"><b>📅 今日任務 ${done}/${ts.length}</b><span>🔥 連續 <b>${sk}</b> 天　🧊×${STREAK.freeze}</span></div>
+ ${ts.map(t=>`<div class="drow ${t.v>=t.n?'ok':''} ${t.go?'tap':''}" ${t.go?`onclick="${t.go}"`:''}><span>${t.v>=t.n?'✔️':t.ico}</span><span class="dt">${t.t}</span><div class="dbar"><i style="width:${t.v/t.n*100}%"></i></div><span class="dn">${t.v}/${t.n}</span></div>`).join('')}
+ ${done==ts.length?'<div class="dok">🎉 今天任務完成！明天再來保持連續紀錄</div>':''}</div>`}
 
 /* ===================== 打怪模式 ===================== */
 const MONS=[['🟢','字母史萊姆'],['🐙','拼字章魚'],['🦖','文法恐龍'],['👻','時態幽靈'],['🦂','句子毒蠍'],['🐉','單字魔王']];
@@ -847,6 +882,272 @@ function battleHit(B,ok){
   const h=$('#hearts');if(h)h.textContent='❤️'.repeat(Math.max(0,B.hearts))+'🤍'.repeat(3-Math.max(0,B.hearts));
   if(B.hearts<=0){B.over=true;B.win=false}}
 }
+
+/* =====================================================================
+   加深加厚模組：學習地圖、本週單字、自然發音、情境對話、閱讀理解、弱點診斷
+   全部離線運作，資料只存在這支手機
+   ===================================================================== */
+const THEMES={people:['👪','人物與家人'],food:['🍔','食物'],school:['✏️','學校與文具'],animal:['🐾','動物'],place:['🏙️','地方'],
+ number:['🔢','數字'],color:['🎨','顏色'],body:['🙂','身體'],adj:['📏','形容詞'],weather:['⛅','天氣與季節'],time:['⏰','時間與日期'],
+ transport:['🚌','交通工具'],feel:['😊','心情感受'],clothes:['👕','衣服'],sport:['⚽','運動與休閒'],subject:['📚','科目'],home:['🏠','家與物品'],
+ nature:['🌳','自然'],job:['👩‍⚕️','職業'],country:['🌏','國家與城市'],verb:['🏃','動作'],grammar:['🧩','文法小字'],custom:['📝','自訂單字']};
+let CUSTOM=store.get('kidsEN_custom',[]);
+function allWordObjs(){return wordsUpTo(6).concat(CUSTOM)}
+function findWord(e){return allWordObjs().find(w=>w.e===e)}
+
+/* ---------- 例句 ---------- */
+const NO_EX=new Set(['color','weather','some','many','much','hundred','game','sport','English','here','there','name','e-mail','dollar','money','very','together','month','hour','minute','holiday','weekend','day','week','year','time','now','today','tomorrow','yesterday','night','Taipei','like','want','see','feel','get','have','has','may','thank','try','say','live','know','think','need','hope','forget','remember','help','wait','win','teach','learn','visit','find','call','ask','buy','sell','finish','travel','question','answer','homework','test','story','class','page','seat']);
+function exampleOf(w){
+ const e=w.e,t=w.t;if(NO_EX.has(e)||w.custom)return '';
+ const art=/^[aeiou]/i.test(e)?'an':'a';
+ switch(t){
+  case 'people':return ['girl','boy','kid','child','man','woman'].includes(e)?`Look at the ${e}!`:`This is my ${e}.`;
+  case 'job':return `She is ${art} ${e}.`;
+  case 'food':case 'animal':case 'school':case 'home':case 'nature':return `Look at the ${e}!`;
+  case 'clothes':return `Look at my ${e}!`;
+  case 'color':return `My bag is ${e}.`;
+  case 'number':return e==='one'?'I have one pencil.':(/teen$|ty$|^(two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)$/.test(e)?`I have ${e} pencils.`:'');
+  case 'adj':case 'feel':return t==='feel'?`I am ${e}.`:`It is ${e}.`;
+  case 'weather':return ['spring','summer','fall','winter'].includes(e)?`I like ${e}.`:`It is ${e} today.`;
+  case 'time':if(['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].includes(e))return `Today is ${e}.`;
+   if(MONTHS.some(m=>m.e===e))return `My birthday is in ${e}.`;
+   if(['morning','afternoon','evening'].includes(e))return `Good ${e}!`;if(e==="o'clock")return "It is seven o'clock.";if(e==='birthday')return 'Happy birthday!';return '';
+  case 'transport':return `I go to school by ${e}.`;
+  case 'subject':return `I like ${e}.`;
+  case 'country':return e==='UK'||e==='USA'?`I am from the ${e}.`:`I am from ${e}.`;
+  case 'body':return `Touch your ${e}.`;
+  case 'place':return e==='home'?"Let's go home.":e==='school'?"Let's go to school.":`Let's go to the ${e}.`;
+  case 'sport':return ['kite','yo-yo'].includes(e)?`Look at the ${e}!`:`I like ${e}.`;
+  case 'verb':return `I can ${e}.`;
+  case 'grammar':return ['always','usually','often','sometimes','never'].includes(e)?`I ${e} get up early.`:'';
+ }return ''}
+
+/* ---------- 能力統計（弱點診斷） ---------- */
+const SKILLS={vocab:['🔤','單字辨識'],spell:['✍️','單字拼寫'],listen:['🎧','英語聽力'],grammar:['🧱','文法句型'],sentence:['🌉','造句能力'],phonics:['🔊','自然發音'],talk:['💬','情境會話'],reading:['📖','閱讀理解']};
+const SKILL_GO={vocab:'learn',spell:'spell',listen:'weak:listen',grammar:'grammar',sentence:'trans',phonics:'phonics',talk:'talk',reading:'read'};
+let STATS=store.get('kidsEN_stats',{});
+function skillOf(it){if(it.skill)return it.skill;if(it.type==='spell')return 'spell';if(it.type==='arrange')return 'sentence';
+ if(it.fam&&it.fam.k==='rule')return 'grammar';if(it.listen)return 'listen';if(it.fam&&it.fam.k==='word')return /拼字/.test(it.sub||'')?'spell':'vocab';return 'vocab'}
+function recordSkill(it,ok){const d=dstr(0),sk=skillOf(it);STATS[d]=STATS[d]||{};const a=STATS[d][sk]=STATS[d][sk]||[0,0];if(ok)a[0]++;a[1]++;
+ const keys=Object.keys(STATS).sort();if(keys.length>150)keys.slice(0,keys.length-150).forEach(k=>delete STATS[k]);store.set('kidsEN_stats',STATS)}
+function statRange(from,to){const out={};for(const d in STATS){if(d>=from&&d<=to)for(const sk in STATS[d]){const o=out[sk]=out[sk]||[0,0];o[0]+=STATS[d][sk][0];o[1]+=STATS[d][sk][1]}}return out}
+function rate(a){return a&&a[1]?a[0]/a[1]:null}
+function grade5(r){return r==null?['—','資料不足','#bbb']:r>=.9?['A','優秀','#2EBD6B']:r>=.75?['B','良好','#3CC79A']:r>=.6?['C','普通','#FFB23F']:['D','待加強','#F2545B']}
+function weakestSkill(){const s=statRange(dstr(-13),dstr(0));let best=null,low=2;
+ for(const k in SKILLS){const a=s[k];if(a&&a[1]>=8&&a[0]/a[1]<low){low=a[0]/a[1];best=k}}
+ return best||(state.grade<=2?'phonics':'listen')}
+function weekly(sk,w){return rate(statRange(dstr(-7*w-6),dstr(-7*w))[sk])}
+
+/* ---------- 弱點加強練習 ---------- */
+function skillItems(sk,n){
+ const g=state.grade,ws=WORDS[g].length>=8?WORDS[g]:wordsUpTo(g),out=[];
+ const xs=id=>XGEN.filter(x=>x.cat===id&&x.min<=g&&g<=x.max);
+ for(let k=0;k<n*3&&out.length<n;k++){
+  const w=one(ws);let it=null;
+  if(sk==='vocab')it=wordItem(w,one(['enzh','zhen']));
+  else if(sk==='spell')it=spellable(w)&&R()<.5?wordItem(w,'spell'):wordItem(w,/^[A-Za-z]{4,}$/.test(w.e)?'spellc':'zhen');
+  else if(sk==='listen')it=R()<.6?wordItem(w,'listen'):(xs('talk').length?xItem(one(xs('talk')).id):wordItem(w,'listen'));
+  else if(sk==='grammar'){const rs=rulesFor('all',g);it=rs.length?ruleItem(one(rs)[0]):null}
+  else if(sk==='sentence'){const ts=TPL.filter(t=>t[0]<=g);it=tplItem(one(ts.filter(t=>t[0]>=g-1).length?ts.filter(t=>t[0]>=g-1):ts))}
+  else{const pool=xs(sk==='phonics'?'phonics':sk==='talk'?'talk':'reading');const p2=pool.length?pool:XGEN.filter(x=>x.cat===(sk==='reading'?'reading':sk==='talk'?'talk':'phonics'));it=xItem(one(p2).id)}
+  if(it)out.push(it);
+ }return out}
+function startWeak(sk){sk=sk||weakestSkill();
+ runQuiz({title:`🎯 弱點加強：${SKILLS[sk][1]}`,items:skillItems(sk,10),replay:()=>startWeak(sk),onFinish:()=>dayInc('weak',10)})}
+
+/* ---------- 學習報告（家長） ---------- */
+function report(){
+ const all=statRange('0000','9999'),last=statRange(dstr(-6),dstr(0));
+ const days=Object.keys(STATS).length,tot=Object.values(all).reduce((a,b)=>a+b[1],0),cor=Object.values(all).reduce((a,b)=>a+b[0],0);
+ const warn=[];
+ for(const sk in SKILLS){const w0=statRange(dstr(-6),dstr(0))[sk],w1=statRange(dstr(-13),dstr(-7))[sk],w2=statRange(dstr(-20),dstr(-14))[sk];
+  const r0=rate(w0),r1=rate(w1),r2=rate(w2);
+  if(w0&&w1&&w2&&w0[1]>=10&&w1[1]>=10&&w2[1]>=10&&r0<r1&&r1<r2)warn.push(`📉 <b>${SKILLS[sk][1]}</b>連續三週下降（${Math.round(r2*100)}% → ${Math.round(r1*100)}% → ${Math.round(r0*100)}%），建議每天做「🎯 ${SKILLS[sk][1]}」加強 10 題。`);
+  else if(w0&&w0[1]>=10&&r0<.6)warn.push(`⚠️ <b>${SKILLS[sk][1]}</b>這週正確率只有 ${Math.round(r0*100)}%，建議每天加強 10 題。`)}
+ const rows=Object.keys(SKILLS).map(sk=>{const r7=rate(last[sk]),ra=rate(all[sk]),gr=grade5(r7!=null&&last[sk][1]>=5?r7:ra);
+  const tr=[3,2,1,0].map(w=>{const r=weekly(sk,w);return r==null?'<span class="tw">—</span>':`<span class="tw">${Math.round(r*100)}</span>`}).join('');
+  const pct=ra==null?0:Math.round(ra*100);
+  return `<div class="skrow"><div class="skn">${SKILLS[sk][0]} ${SKILLS[sk][1]}</div><div class="skbar"><i style="width:${pct}%;background:${gr[2]}"></i></div>
+   <div class="skp">${ra==null?'—':pct+'%'}</div><div class="skg" style="background:${gr[2]}">${gr[1]}</div><div class="sktr">${tr}</div>
+   ${all[sk]?`<button class="skgo" onclick="startWeak('${sk}')">加強</button>`:'<span></span>'}</div>`}).join('');
+ const weak=Object.keys(SRS).filter(k=>(SRS[k].n||0)>0).sort((a,b)=>SRS[b].n-SRS[a].n).slice(0,10);
+ const ws=weakestSkill();
+ app.innerHTML=topBar('📊 學習報告')+`<div class="panel">
+  <div class="srsstat"><div><b>${days}</b>練習天數</div><div><b>${tot}</b>總題數</div><div><b>${tot?Math.round(cor/tot*100):0}%</b>正確率</div><div><b>${streakNow()}</b>連續天數</div><div><b>${SRSSTAT.grad}</b>熟練題</div></div>
+  ${warn.length?`<div class="warnbox">${warn.join('<br>')}</div>`:(tot>=30?'<div class="okbox">👍 各項能力都很穩定，繼續保持！</div>':'')}
+  <h4 style="margin:18px 0 6px">各項能力（全部紀錄）</h4>
+  <div class="skhead"><span></span><span></span><span></span><span></span><span class="sktr"><span class="tw">3週前</span><span class="tw">2週前</span><span class="tw">上週</span><span class="tw">本週</span></span><span></span></div>
+  ${rows}
+  <p class="qsub" style="text-align:left;margin-top:8px">評等以最近 7 天為主（題數太少時用全部紀錄）：90% 以上優秀、75% 良好、60% 普通、未滿 60% 待加強。口說需要錄音評分，離線版不列入。</p>
+  <div class="row"><button class="btn" onclick="startWeak()">🎯 針對最弱的「${SKILLS[ws][1]}」練習 10 題</button></div>
+  ${weak.length?`<h4 style="margin:18px 0 6px">最常錯的題目</h4>${weak.map(k=>`<div class="srsrow"><span class="en">${esc(SRS[k].r)}</span><span class="srsmeta" style="color:var(--bad)">錯 ${SRS[k].n} 次</span></div>`).join('')}`:''}
+  ${!tot?'<p class="qsub" style="margin-top:16px">還沒有練習紀錄。孩子練習後，這裡會自動整理出各項能力的表現。</p>':''}</div>`;
+}
+
+/* ---------- 學習地圖＋本週單字 ---------- */
+let WEEK=store.get('kidsEN_week',{words:[],title:''});
+function weekWords(){return WEEK.words.map(findWord).filter(Boolean)}
+function setWeek(words,title){WEEK={words:[...new Set(words.map(w=>w.e))],title,set:dstr(0)};store.set('kidsEN_week',WEEK)}
+function themeSession(words,title,n){
+ const ws=shuffle(words),fm=['enzh','listen','zhen','spell','spellc'],items=[];n=n||Math.min(24,Math.max(12,ws.length*2));
+ for(let k=0;items.length<n&&k<n*3;k++){const w=ws[k%ws.length],f=fm[(k+Math.floor(k/ws.length))%fm.length];
+  if(f==='spell'&&!spellable(w))continue;if(f==='spellc'&&!/^[A-Za-z]{4,}$/.test(w.e))continue;items.push(wordItem(w,f))}
+ runQuiz({title,items:shuffle(items),replay:()=>themeSession(words,title,n)})}
+function weekBanner(){const ws=weekWords();if(!ws.length)return '';
+ return `<button class="weekbanner" onclick="go('week')"><span>📌</span><b>本週單字：${esc(WEEK.title||'')}（${ws.length} 個）<small>${ws.slice(0,6).map(w=>esc(w.e)).join('、')}${ws.length>6?'…':''}</small></b><span class="go">練習 ▶</span></button>`}
+function weekPage(){
+ const ws=weekWords();
+ app.innerHTML=topBar('📌 本週單字')+`<div class="panel">
+  <div class="remedy-box">把<b>學校這週教的單字</b>設成本週單字，回家就能用各種方式複習。可以在「🗺️ 學習地圖」勾選主題，也可以在下面自己輸入。</div>
+  ${ws.length?`<h4 style="margin:16px 0 6px">${esc(WEEK.title||'本週單字')}（${ws.length} 個）</h4><div class="chips">${ws.map(w=>`<button class="chip" data-e="${esc(w.e)}">${w.m} ${esc(w.e)}<small>${esc(w.z)}</small></button>`).join('')}</div>
+  <div class="row"><button class="btn" id="wp">🎯 綜合練習</button><button class="btn ghost" id="wb">👾 用本週單字打怪</button><button class="btn ghost" id="wc">清除</button></div>`:'<p class="qsub" style="margin-top:14px">還沒有設定本週單字。</p>'}
+  <h4 style="margin:20px 0 6px">✏️ 自己輸入單字</h4>
+  <p class="qsub" style="text-align:left;margin:0 0 6px">一行一個：英文 空格 中文，例如<br><span class="en">apple 蘋果</span><br><span class="en">ice cream 冰淇淋</span></p>
+  <textarea id="cw" class="cw" placeholder="apple 蘋果&#10;banana 香蕉"></textarea>
+  <div class="row"><button class="btn" id="cs">設成本週單字</button></div></div>`;
+ app.querySelectorAll('.chip').forEach(b=>b.onclick=()=>say(b.dataset.e));
+ if(ws.length){$('#wp').onclick=()=>themeSession(ws,'📌 本週單字');
+  $('#wb').onclick=()=>{const B={k:-1,boss:false,emo:'🐲',name:'本週單字龍',hp:100,max:100,hearts:3,combo:0,maxCombo:0,over:false,win:false,more:()=>ws.map(w=>wordItem(w,one(['enzh','zhen','listen'])))};
+   runQuiz({title:'👾 本週單字龍',items:shuffle(ws.concat(ws).map(w=>wordItem(w,one(['enzh','zhen','listen'])))),battle:B,replay:()=>go('week'),back:'week'})};
+  $('#wc').onclick=()=>{WEEK={words:[],title:''};store.set('kidsEN_week',WEEK);weekPage()}}
+ $('#cs').onclick=()=>{const lines=$('#cw').value.split('\n').map(l=>l.trim()).filter(Boolean),out=[];
+  for(const l of lines){const m=l.match(/^([A-Za-z][A-Za-z '\-]*?)\s*([\u3400-\u9fff\uff00-\uffef（].*)$/);if(!m)continue;const e=m[1].trim(),z=m[2].trim();
+   let w=findWord(e);if(!w){w={e,z,m:'📝',g:state.grade,t:'custom',custom:true,ext:false};CUSTOM=CUSTOM.filter(x=>x.e!==e).concat(w);store.set('kidsEN_custom',CUSTOM)}out.push(w)}
+  if(!out.length){toast('格式：英文 空格 中文');return}
+  setWeek(out,'自訂單字');toast(`已設定 ${out.length} 個本週單字`);weekPage()};
+}
+function mapPage(){
+ const g=state.grade,ws=WORDS[g];
+ const sem=s=>{const list=ws.filter(w=>w.sem===s),groups={};list.forEach(w=>{(groups[w.t]=groups[w.t]||[]).push(w)});
+  return Object.keys(groups).map(t=>`<div class="tcard"><div class="thead"><b>${THEMES[t][0]} ${THEMES[t][1]}</b><span>${groups[t].length} 字</span></div>
+   <div class="chips">${groups[t].map(w=>`<button class="chip ${w.ext?'ext':''}" data-e="${esc(w.e)}">${w.m} ${esc(w.e)}</button>`).join('')}</div>
+   <div class="tbtns"><button class="btn" data-p="${s}|${t}">練習</button><button class="btn ghost" data-w="${s}|${t}">📌 設為本週</button></div></div>`).join('')};
+ app.innerHTML=topBar('🗺️ 學習地圖')+`<div class="panel">
+  <div class="remedy-box">${g} 年級共 ${ws.length} 個字，依主題分成<b>上學期、下學期</b>。點單字聽發音；按「練習」做這個主題的配對、聽力、拼字；學校正在教哪個主題，就按「📌 設為本週」。<br><small>各校課本版本和進度不同，主題順序僅供參考。</small></div>
+  <h3 class="semh">📗 ${g} 年級上學期</h3>${sem(1)}<h3 class="semh">📘 ${g} 年級下學期</h3>${sem(2)}</div>`;
+ app.querySelectorAll('.chip').forEach(b=>b.onclick=()=>say(b.dataset.e));
+ const pickWs=v=>{const[s,t]=v.split('|');return ws.filter(w=>w.sem==+s&&w.t===t)};
+ app.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const[s,t]=b.dataset.p.split('|');themeSession(pickWs(b.dataset.p),`${THEMES[t][0]} ${THEMES[t][1]}`)});
+ app.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{const[s,t]=b.dataset.w.split('|');setWeek(pickWs(b.dataset.w),`${g}年級${s==1?'上':'下'}・${THEMES[t][1]}`);toast('已設為本週單字 📌')});
+}
+
+/* ---------- 延伸題型產生器（自然發音、情境對話、閱讀理解） ---------- */
+function mcx(o){const op=[o.ans];for(const x of o.wr){if(op.length>=3)break;if(!op.includes(x))op.push(x)}return Object.assign({type:'mc',opts:shuffle(op)},o)}
+const LETTERS=P("a|apple|蘋果;b|ball|球;c|cat|貓;d|dog|狗;e|egg|蛋;f|fish|魚;g|girl|女孩;h|hat|帽子;i|ink|墨水;j|juice|果汁;k|key|鑰匙;l|lion|獅子;m|milk|牛奶;n|nose|鼻子;o|ox|公牛;p|pig|豬;q|queen|女王;r|red|紅色;s|sun|太陽;t|ten|十;u|umbrella|雨傘;v|van|廂型車;w|water|水;y|yellow|黃色;z|zoo|動物園",['l','w','z']);
+const CVC=P("cat|貓|at;hat|帽子|at;bat|球棒|at;mat|墊子|at;fan|電扇|an;man|男人|an;pan|平底鍋|an;van|廂型車|an;cap|棒球帽|ap;map|地圖|ap;nap|小睡|ap;pig|豬|ig;big|大的|ig;dig|挖|ig;wig|假髮|ig;pin|別針|in;fin|魚鰭|in;win|贏|in;sit|坐|it;hit|打|it;kit|工具組|it;hop|跳|op;top|頂端|op;mop|拖把|op;hot|熱的|ot;pot|鍋子|ot;dot|點|ot;dog|狗|og;log|木頭|og;frog|青蛙|og;bug|蟲|ug;rug|地毯|ug;hug|擁抱|ug;mug|馬克杯|ug;sun|太陽|un;run|跑|un;fun|有趣|un;bed|床|ed;red|紅色|ed;pen|原子筆|en;ten|十|en;hen|母雞|en;pet|寵物|et;wet|濕的|et;net|網子|et;jet|噴射機|et",['w','z','f']);
+const MAGIC=[['cap','棒球帽','cape','披風'],['tap','輕拍','tape','膠帶'],['can','罐子','cane','拐杖'],['hat','帽子','hate','討厭'],['kit','工具組','kite','風箏'],['pin','別針','pine','松樹'],['bit','一點點','bite','咬'],['hop','跳','hope','希望'],['not','不','note','筆記'],['cub','幼獸','cube','方塊'],['tub','浴缸','tube','管子'],['cut','切','cute','可愛的']];
+const DIGRAPH=P("sh|ship|船;sh|shop|商店;sh|fish|魚;sh|sheep|綿羊;ch|chair|椅子;ch|chick|小雞;ch|lunch|午餐;ch|cheese|起司;th|three|三;th|bath|洗澡;th|think|想;th|thumb|大拇指;wh|whale|鯨魚;wh|white|白色;wh|wheel|輪子;ck|duck|鴨子;ck|clock|時鐘;ck|sock|襪子;ng|ring|戒指;ng|king|國王;ng|song|歌",['d','w','z']);
+const TEAMS=P("ee|tree|樹;ee|bee|蜜蜂;ee|feet|腳（複數）;ea|sea|海;ea|eat|吃;ea|tea|茶;oo|moon|月亮;oo|food|食物;oo|zoo|動物園;ai|rain|雨;ai|train|火車;ai|mail|信件;ay|day|天;ay|play|玩;ay|say|說;oa|boat|船;oa|coat|外套;oa|road|路",['d','w','z']);
+const NAMEGEN=()=>{const[n,s]=one(NAMES);return{n,f:s==='f',he:s==='f'?'she':'he',He:s==='f'?'She':'He',his:s==='f'?'her':'his',His:s==='f'?'Her':'His'}};
+const AGES=['eight','nine','ten','eleven','twelve'];
+const XGEN=[
+ /* 自然發音 */
+ {id:'ph_letter',cat:'phonics',name:'🔤 字母的聲音',min:1,max:3,gen(){const L=one(LETTERS),o=pick(LETTERS.filter(x=>x.l!==L.l),2);
+  return R()<.5?mcx({q:'🎧 聽一聽，這個字的第一個字母是？',listen:L.w,ans:L.l,wr:o.map(x=>x.l),tip:`${L.w}（${L.z}）開頭是字母 ${L.l}`,review:`${L.w} 的開頭是 ${L.l}`})
+   :mcx({q:`哪一個字的開頭聲音是 ${L.l}？`,sub:`像 ${L.w} 的開頭`,ans:L.w,wr:o.map(x=>x.w),tip:`${L.w} 以字母 ${L.l} 開頭`,sayAfter:L.w,review:`${L.l} → ${L.w}`})}},
+ {id:'ph_cvc',cat:'phonics',name:'🐱 短母音拼讀',min:1,max:4,gen(){const w=one(CVC),v=w.w.match(/[aeiou]/)[0],vs=['a','e','i','o','u'].filter(x=>x!==v);
+  if(R()<.5){const blank=w.w.replace(v,'_');return mcx({q:`${blank}（${w.z}）`,sub:'🎧 聽一聽，缺少哪個母音？',listen:w.w,ans:v,wr:pick(vs,2),tip:`${w.w}：短母音 ${v}`,review:`${w.w} 的母音是 ${v}`})}
+  return mcx({q:'🎧 聽一聽，選出聽到的字',listen:w.w,ans:w.w,wr:pick(CVC.filter(x=>x.w!==w.w&&x.f!==w.f),2).map(x=>x.w),tip:`${w.w}（${w.z}）`,review:`🎧 ${w.w}`})}},
+ {id:'ph_rhyme',cat:'phonics',name:'🎵 押韻字族',min:2,max:4,gen(){const w=one(CVC),same=CVC.filter(x=>x.f===w.f&&x.w!==w.w);if(!same.length)return XGEN[1].gen();
+  const a=one(same);return mcx({q:`哪一個字和 ${w.w} 押韻？`,sub:'結尾的聲音一樣',sayFirst:w.w,ans:a.w,wr:pick(CVC.filter(x=>x.f!==w.f),2).map(x=>x.w),tip:`${w.w} 和 ${a.w} 都是 -${w.f} 字族`,sayAfter:`${w.w}, ${a.w}`,review:`${w.w} ↔ ${a.w}（-${w.f}）`})}},
+ {id:'ph_magic',cat:'phonics',name:'🪄 字尾 e 的魔法',min:3,max:6,gen(){const p=one(MAGIC),long=R()<.5,ans=long?p[2]:p[0],other=long?p[0]:p[2],z=long?p[3]:p[1];
+  return mcx({q:'🎧 聽一聽，選出聽到的字',sub:`意思是「${z}」`,listen:ans,ans,wr:[other,one(MAGIC.filter(x=>x!==p))[long?2:0]],tip:`字尾有 e 時，前面的母音唸字母本身的名字：${p[0]} → ${p[2]}`,review:`${p[0]}（${p[1]}）／${p[2]}（${p[3]}）`})}},
+ {id:'ph_digraph',cat:'phonics',name:'🚢 sh、ch、th…',min:3,max:6,gen(){const w=one(DIGRAPH),gs=[...new Set(DIGRAPH.map(x=>x.d))].filter(x=>x!==w.d);
+  return mcx({q:`${w.w.replace(w.d,'__')}（${w.z}）`,sub:'🎧 聽一聽，空格要填哪兩個字母？',listen:w.w,ans:w.d,wr:pick(gs,2),tip:`${w.w}：${w.d} 是一起發音的子音組合`,review:`${w.w} 的 ${w.d}`})}},
+ {id:'ph_team',cat:'phonics',name:'🌳 ee、ai、oa…',min:4,max:6,gen(){const w=one(TEAMS),gs=[...new Set(TEAMS.map(x=>x.d))].filter(x=>x!==w.d);
+  return mcx({q:`${w.w.replace(w.d,'__')}（${w.z}）`,sub:'🎧 聽一聽，空格要填哪兩個母音？',listen:w.w,ans:w.d,wr:pick(gs,2),tip:`${w.w}：${w.d} 兩個母音一起，唸一個長音`,review:`${w.w} 的 ${w.d}`})}},
+ /* 情境對話 */
+ ...[
+ ['dl_greet','👋 打招呼與自我介紹',1,()=>{const N=NAMEGEN(),a=one(AGES),c=one(COLORS.filter(x=>x.g<=3)).e;return one([
+  ['Hi! How are you?','朋友跟你打招呼',"I'm fine, thank you.",["I'm ten.",'It is a cat.']],
+  ['Good morning!','早上到學校遇到老師','Good morning!',['Good night!','You are welcome.']],
+  ["What's your name?",'新同學問你的名字',`My name is ${N.n}.`,["I'm fine.",`It's ${c}.`]],
+  ['How old are you?','朋友問你幾歲',`I'm ${a} years old.`,[`I'm ${N.n}.`,`It's ${c}.`]],
+  ['Nice to meet you.','第一次見面','Nice to meet you, too.',["I'm sorry.",'Good night!']],
+  ['Thank you!','你幫了朋友，朋友向你道謝',"You're welcome.",['Thank you.','Yes, I am.']],
+  ['Goodbye!','放學要回家了','See you tomorrow!','Good morning!'.split('|').concat(['Nice to meet you.'])]])}],
+ ['dl_like','❤️ 喜歡什麼',2,()=>{const f=one(L(FOODS)).e,c=one(COLORS.filter(x=>x.g<=3)).e,a=one(L(ANIMALS));return one([
+  [`Do you like ${f}?`,'朋友問你喜不喜歡','Yes, I do.',['Yes, I am.','Yes, it is.']],
+  ['What color do you like?','朋友問你喜歡什麼顏色',`I like ${c}.`,[`I'm ${c}.`,`It's ${aN(a.e)}.`]],
+  ['What animal do you like?','朋友問你喜歡什麼動物',`I like ${a.p}.`,[`I am ${a.e}.`,'Yes, I can.']]])}],
+ ['dl_can','💪 會不會',3,()=>{const v=one(L(VERBS));return one([
+  [`Can you ${v.b}?`,'朋友問你會不會',"Yes, I can.",['Yes, I do.','Yes, I am.']],
+  [`Can your brother ${v.b}?`,'朋友問你哥哥會不會',"No, he can't.",["No, I'm not.","No, she isn't."]]])}],
+ ['dl_food','🍔 餐廳點餐',3,()=>{const f=one(['a hamburger','a sandwich','some pizza','some juice','some noodles','a cake','some rice']);return one([
+  ['What would you like?','在餐廳，服務生問你要點什麼',`I'd like ${f}, please.`,["I'm hungry, too.","It's on the desk."]],
+  ['Are you hungry?','媽媽問你餓不餓','Yes, I am.',['Yes, I do.','Yes, it is.']],
+  ['Here you are.','服務生把餐點拿給你','Thank you.',['Goodbye.','How are you?']]])}],
+ ['dl_time','⏰ 時間與天氣',4,()=>{const n=one(NUMS.filter(x=>x.g<=4)).e,d=one(['Monday','Tuesday','Friday','Sunday']),w=one(WEATHER).e;return one([
+  ['What time is it?','同學問你現在幾點',`It's ${n} o'clock.`,[`It's ${d}.`,`It's ${w}.`]],
+  ['What day is it today?','老師問今天星期幾',`It's ${d}.`,[`It's ${n} o'clock.`,`It's ${w}.`]],
+  ["How's the weather today?",'朋友問今天天氣如何',`It's ${w}.`,[`It's ${d}.`,"I'm fine."]]])}],
+ ['dl_shop','🛒 買東西',5,()=>{const t=one(L(THINGS)),n=one(['ten','twenty','fifty','one hundred']);return one([
+  [`How much is the ${t.e}?`,'在商店問價錢',`It's ${n} dollars.`,["It's red.","It's on the table."]],
+  ['Can I help you?','店員問你需要什麼',`Yes, I want ${aN(t.e)}.`,["Yes, I'm fine.","No, it isn't."]]])}],
+ ['dl_way','🗺️ 問路',5,()=>{const p=one(L(PLACES).filter(x=>x.a==='1'));return one([
+  [`Where is the ${p.e}?`,'路上有人問你地方在哪裡','Go straight. It is near the park.',["It's ten o'clock.","I'm fine, thank you."]],
+  ['How do you go to school?','朋友問你怎麼上學','I go to school by bus.',['I go to bed at nine.','Yes, I do.']]])}],
+ ['dl_sick','🤒 關心別人',5,()=>one([
+  ["What's wrong?",'你的朋友看起來不舒服',"I'm sick.",["I'm ten.",'It is Monday.']],
+  ['Are you OK?','朋友跌倒了，你問他','No, my leg hurts.',['Yes, I can.','It is sunny.']],
+  ['Are you tired?','你看到弟弟一直打哈欠','Yes, I am. I want to sleep.',["No, it isn't.",'Yes, I do. I like cake.']]])],
+ ['dl_past','📅 昨天做了什麼',6,()=>{const v=one(L(VERBS).filter(x=>x.p!==x.b));return one([
+  ['What did you do yesterday?','朋友問你昨天做了什麼',`I ${v.p} yesterday.`,[`I will ${v.b} tomorrow.`,`I am ${v.i} now.`]],
+  ['Where were you last Sunday?','老師問你上週日在哪裡','I was at the zoo.',['I am at the zoo.','I will be at the zoo.']],
+  ['What will you do tomorrow?','朋友問你明天要做什麼',`I will ${v.b}.`,[`I ${v.p}.`,`I am ${v.i}.`]]])}]
+ ].map(([id,name,min,f])=>({id,cat:'talk',name,min,max:6,gen(){const[line,ctx,ans,wr]=f();
+  return mcx({skill:'talk',ctx:`<div class="bubble"><div class="bctx">💡 ${ctx}</div><div class="bline en">🗨️ ${esc(line)}</div></div>`,q:'你要怎麼回答？',listen:line,ans,wr,tip:`「${line}」→「${ans}」`,review:`${line} → ${ans}`,sayAfter:ans})}})),
+ /* 閱讀理解 */
+ ...[
+ ['rd_me','👧 自我介紹',3,()=>{const N=NAMEGEN(),a=one(AGES),f=one(FOODS.filter(x=>x.g<=3)),c=one(COLORS.filter(x=>x.g<=3)),an=one(ANIMALS.filter(x=>x.g<=3));
+  const text=`Hi! My name is ${N.n}. I am ${a} years old. I like ${f.e}. My favorite color is ${c.e}. I have ${aN(an.e)}. It is very cute.`;
+  return[text,[[`How old is ${N.n}?`,`${N.n} 幾歲？`,`${N.He} is ${a}.`,AGES.filter(x=>x!==a).slice(0,2).map(x=>`${N.He} is ${x}.`)],
+   [`What does ${N.n} like?`,`${N.n} 喜歡什麼食物？`,f.e,pick(FOODS.filter(x=>x.g<=3&&x.e!==f.e),2).map(x=>x.e)],
+   [`What is ${N.n}'s favorite color?`,`${N.n} 最喜歡什麼顏色？`,c.e,pick(COLORS.filter(x=>x.e!==c.e&&x.g<=3),2).map(x=>x.e)],
+   [`What animal does ${N.n} have?`,`${N.n} 養了什麼動物？`,aN(an.e),pick(ANIMALS.filter(x=>x.g<=3&&x.e!==an.e),2).map(x=>aN(x.e))]]]}],
+ ['rd_day','🌞 快樂的一天',4,()=>{const N=NAMEGEN(),d=one(['Saturday','Sunday']),w=one(['sunny','warm','cool','windy']),p=one(['mom','dad','sister','brother','grandma']),pl=one(['park','zoo','bookstore']),tr=one(['bus','bike','car']),v=one(VERBS.filter(x=>['run','jump','dance','sing','walk','draw'].includes(x.b)));
+  const text=`Today is ${d}. It is ${w}. ${N.n} and ${N.his} ${p} go to the ${pl} by ${tr}. They ${v.b} there. ${N.n} is very happy.`;
+  return[text,[['What day is it today?','今天星期幾？',d,['Monday','Friday']],['How is the weather?','天氣如何？',`It is ${w}.`,pick(['It is rainy.','It is cold.','It is cloudy.','It is hot.'],2)],
+   [`Where do they go?`,'他們去哪裡？',`To the ${pl}.`,pick(['park','zoo','bookstore','school','library'].filter(x=>x!==pl),2).map(x=>`To the ${x}.`)],
+   ['How do they go there?','他們怎麼去？',`By ${tr}.`,['bus','bike','car','MRT'].filter(x=>x!==tr).slice(0,2).map(x=>`By ${x}.`)],
+   [`Who goes with ${N.n}?`,`誰跟 ${N.n} 一起去？`,`${N.His} ${p}.`,['mom','dad','sister','brother','grandma'].filter(x=>x!==p).slice(0,2).map(x=>`${N.His} ${x}.`)]]]}],
+ ['rd_week','🏫 上學的日子',5,()=>{const N=NAMEGEN(),n=one(['six','seven']),tr=one(['bus','MRT','bike']),su=one(['math','English','music','art','science']),v=one(L(VERBS).filter(x=>x.g<=6));
+  const text=`${N.n} is a student. ${N.He} gets up at ${n} o'clock every day. ${N.He} eats breakfast with ${N.his} family. ${N.He} goes to school by ${tr}. ${N.His} favorite subject is ${su}. After school, ${N.he} ${v.s}.`;
+  return[text,[[`What time does ${N.n} get up?`,`${N.n} 幾點起床？`,`At ${n} o'clock.`,['At eight o\'clock.','At nine o\'clock.','At five o\'clock.'].filter(x=>!x.includes(n)).slice(0,2)],
+   [`How does ${N.n} go to school?`,`${N.n} 怎麼上學？`,`By ${tr}.`,['bus','MRT','bike','taxi'].filter(x=>x!==tr).slice(0,2).map(x=>`By ${x}.`)],
+   [`What is ${N.n}'s favorite subject?`,'最喜歡的科目是？',su,['math','English','music','art','science'].filter(x=>x!==su).slice(0,2)],
+   [`What does ${N.n} do after school?`,'放學後做什麼？',`${N.He} ${v.s}.`,pick(L(VERBS).filter(x=>x.b!==v.b),2).map(x=>`${N.He} ${x.s}.`)]]]}],
+ ['rd_past','🎂 生日派對',6,()=>{const N=NAMEGEN(),f=one(['happy','excited']),p=one(['mom','dad','grandma','aunt']),w=one(['sunny','warm','windy','cloudy']),v=one(VERBS.filter(x=>['run','jump','dance','sing','walk','draw','play basketball','fly a kite','ride a bike'].includes(x.b)));
+  const text=`Yesterday was ${N.n}'s birthday. ${N.He} was very ${f}. ${N.His} ${p} made a big cake. In the afternoon, they went to the park. It was ${w}. They ${v.p} there. It was a great day!`;
+  return[text,[['Whose birthday was it yesterday?','昨天是誰的生日？',`${N.n}'s.`,pick(NAMES.filter(x=>x[0]!==N.n),2).map(x=>`${x[0]}'s.`)],
+   [`Who made the cake?`,'誰做了蛋糕？',`${N.His} ${p}.`,['mom','dad','grandma','aunt'].filter(x=>x!==p).slice(0,2).map(x=>`${N.His} ${x}.`)],
+   ['How was the weather?','天氣如何？',`It was ${w}.`,['sunny','warm','windy','cloudy','rainy'].filter(x=>x!==w).slice(0,2).map(x=>`It is ${x}.`)],
+   ['What did they do in the park?','他們在公園做什麼？',`They ${v.p}.`,[`They ${v.b} tomorrow.`,`They are ${v.i}.`]]]]}]
+ ].map(([id,name,min,f])=>({id,cat:'reading',name,min,max:6,make:f,gen(){const[text,qs]=f();return readItem(text,one(qs),id)}}))
+];
+function readItem(text,q,id){const[qe,qz,ans,wr]=q;
+ return mcx({skill:'reading',ctx:`<div class="passage en">${esc(text)}<button class="speak" style="float:right;margin:-4px -4px 0 6px" onclick="say(this.parentNode.firstChild.textContent)">🔊</button></div>`,
+  q:qe,sub:qz,ans,wr,tip:`答案在短文裡：「${ans}」`,review:`${qe} → ${ans}`,fam:{k:'x',id}})}
+function xItem(id){const x=XGEN.find(z=>z.id===id);const it=x.gen();it.fam={k:'x',id};it.skill=it.skill||x.cat;if(!it.review)it.review=it.q+' → '+it.ans;return it}
+function xFor(cat,g){return XGEN.filter(x=>x.cat===cat&&x.min<=g&&g<=x.max)}
+function readingSession(g){const rs=xFor('reading',g),items=[];
+ for(let k=0;k<4;k++){const x=rs.length?rs[k%rs.length]:XGEN.find(z=>z.id==='rd_me');const[text,qs]=x.make();pick(qs,3).forEach(q=>items.push(readItem(text,q,x.id)))}
+ return items}
+function xMenu(cat,title,intro){
+ const g=state.grade,list=XGEN.filter(x=>x.cat===cat);
+ app.innerHTML=topBar(title)+`<div class="panel"><div class="remedy-box">${intro}</div>
+  <div class="row"><button class="btn" id="mix">🎲 ${g} 年級綜合練習</button></div>
+  <div class="papers">${list.map(x=>`<button class="ch ${g<x.min?'locked':''}" data-x="${x.id}"><b>${x.name}</b><span>${x.min} 年級起</span><div class="stars">${starStr(best[g+'_'+x.id]||0)}</div></button>`).join('')}</div></div>`;
+ const run=(ids,key,ttl)=>{let items;
+  if(cat==='reading')items=key==='mix'?readingSession(g):(()=>{const x=XGEN.find(z=>z.id===ids[0]),out=[];for(let k=0;k<4;k++){const[t,qs]=x.make();pick(qs,3).forEach(q=>out.push(readItem(t,q,x.id)))}return out})();
+  else items=distinct(()=>xItem(one(ids)),15,i=>i.q+i.ans+(i.listen||''),300);
+  runQuiz({title:ttl,items:shuffle(items),saveKey:key==='mix'?cat:key,replay:()=>run(ids,key,ttl),back:cat})};
+ $('#mix').onclick=()=>{const ids=xFor(cat,g).map(x=>x.id);run(ids.length?ids:list.filter(x=>x.min<=Math.max(g,list[0].min)).map(x=>x.id),'mix',`${title}・綜合`)};
+ app.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{const x=XGEN.find(z=>z.id===b.dataset.x);run([x.id],x.id,x.name)});
+}
+const phonicsMenu=()=>xMenu('phonics','🔤 自然發音','<b>自然發音（字母拼讀）</b>讓孩子看到字就會唸、聽到字就會拼。從字母的聲音、短母音字族（cat、hat、bat），到字尾 e 的魔法（cap → cape）、子音組合（sh、ch、th）和母音組合（ee、ai、oa）。<br>🎧 每題都會唸出單字，記得打開聲音。');
+const talkMenu=()=>xMenu('talk','💬 情境對話','在<b>真實情境</b>中聽懂別人說的話，選出最合適的回答：打招呼、點餐、買東西、問路、關心別人。每題都會唸出對方說的話，可以按「再聽一次」。');
+const readMenu=()=>xMenu('reading','📖 閱讀理解','讀一段短文，回答問題。3～4 年級是自我介紹和一天的生活，5～6 年級加入上學日常和過去式的生日故事。按 🔊 可以聽整段短文。');
 
 ensureDay();updateStars();home();
 
