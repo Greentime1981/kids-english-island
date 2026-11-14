@@ -150,6 +150,8 @@ body{-webkit-user-select:none;user-select:none;overscroll-behavior:none}
 .cw{width:100%;min-height:120px;border:2px solid var(--line);border-radius:14px;padding:10px;font-size:16px;font-family:inherit}
 .ch.locked{opacity:.55}.drow.tap{cursor:pointer}.drow.tap .dt{text-decoration:underline dotted}
 @media (max-width:560px){.skhead,.skrow{grid-template-columns:80px 1fr 36px 50px 0 42px}.sktr{display:none}}
+.hasbar main{padding-bottom:150px}
+.teasebtn{border:2px dashed var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-family:inherit;font-size:14px;color:var(--muted);cursor:pointer}
 .extb{display:inline-block;background:#FFF0D9;color:#B35C00;border-radius:999px;padding:3px 12px;font-size:14px;font-weight:700;margin-bottom:6px}
 .wl.ext{border-color:#FFD08A;background:#FFFBF2}
 .slot.reveal{background:#FFE3E3;border-color:var(--bad);color:var(--bad)}
@@ -472,6 +474,13 @@ state.grade=store.get('kidsEN_grade',1);
 function saveBest(ch,stars){const k=state.grade+'_'+ch;if(!best[k]||stars>best[k]){best[k]=stars;store.set('kidsEN_best',best)}updateStars()}
 function updateStars(){$('#totalStars').textContent=Object.values(best).reduce((a,b)=>a+b,0);try{$('#streakN').textContent=streakNow()}catch(e){}}
 function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.8;speechSynthesis.speak(u)}catch(e){}}
+/* 答錯時的趣味語音：先用中文唸「不要瞎掰好嗎？」，再唸正確的英文（首頁可以關掉） */
+let TEASE=store.get('kidsEN_tease',true);
+function zhVoice(){try{const vs=speechSynthesis.getVoices();return vs.find(v=>/zh[-_]TW/i.test(v.lang))||vs.find(v=>/zh[-_](HK|Hant)/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))}catch(e){}}
+function tease(next){if(!TEASE){if(next)say(next);return}
+ try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance('不要瞎掰好嗎？');u.lang='zh-TW';const v=zhVoice();if(v)u.voice=v;u.rate=1.05;u.pitch=1.15;speechSynthesis.speak(u);
+  if(next){const e=new SpeechSynthesisUtterance(next);e.lang='en-US';e.rate=.8;speechSynthesis.speak(e)}}catch(e){}}
+function toggleTease(){TEASE=!TEASE;store.set('kidsEN_tease',TEASE);toast(TEASE?'😜 趣味語音：開':'🤫 趣味語音：關');if(TEASE)tease();home()}
 let actx;function beep(ok){try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.type='triangle';const t=actx.currentTime;if(ok){o.frequency.setValueAtTime(660,t);o.frequency.setValueAtTime(880,t+.1)}else{o.frequency.setValueAtTime(220,t)}g.gain.setValueAtTime(.15,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.start(t);o.stop(t+.3)}catch(e){}}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1200)}
 const starsFor=p=>p>=.9?3:p>=.7?2:p>=.4?1:0;
@@ -512,7 +521,8 @@ function home(){
  <div class="hero"><div class="big">${['','🐣','🐥','🦊','🐯','🦁','🦅'][g]}</div>
   <h2>${g} 年級的冒險</h2>
   <p>本年級新單字 ${WORDS[g].length} 個${WORDS[g].filter(w=>w.ext).length?`（含⭐銜接國中 ${WORDS[g].filter(w=>w.ext).length} 個）`:''}・句型文法 ${ex.rules.length+ex.tpls.length} 項・模擬考 ${ex.total} 題<br>另有自然發音、情境對話、閱讀理解；學過的題目會依遺忘曲線自動複習</p></div>
- <div class="chapters">${CHAPTERS.map(([k,i,t,d])=>`<button class="ch" onclick="go('${k}')"><div class="ico">${i}</div><b>${t}</b><span>${d}</span>${extra(k)}</button>`).join('')}</div>`;
+ <div class="chapters">${CHAPTERS.map(([k,i,t,d])=>`<button class="ch" onclick="go('${k}')"><div class="ico">${i}</div><b>${t}</b><span>${d}</span>${extra(k)}</button>`).join('')}</div>
+ <div class="row"><button class="teasebtn" onclick="toggleTease()">${TEASE?'😜':'🤫'} 答錯時的趣味語音「不要瞎掰好嗎？」：<b>${TEASE?'開':'關'}</b></button></div>`;
 }
 function setGrade(g){state.grade=g;store.set('kidsEN_grade',g);home()}
 function go(v){try{speechSynthesis.cancel()}catch(e){}window.scrollTo(0,0);
@@ -603,7 +613,7 @@ function drawMC(it,el,done,last){
   ok=b.dataset.o===it.ans;
   el.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.dataset.o===it.ans)x.classList.add('ok')});
   if(!ok)b.classList.add('bad');beep(ok);
-  const s=it.sayAfter||(it.speak?fill(it.q,it.ans).replace(/\s*\(.*?\)/g,''):'');if(s)say(s);
+  const s=it.sayAfter||(it.speak?fill(it.q,it.ans).replace(/\s*\(.*?\)/g,''):'');if(!ok)tease(s);else if(s)say(s);
   const tip=$('#tip');tip.innerHTML=(ok?'✅ '+one(praise):'💡 正確答案是 <b class="en">'+esc(it.ans)+'</b>')+(it.tip?'<br>'+it.tip:'')+(!ok&&it.fam?'<br><small>📘 這題會加 3 題補充習題</small>':'');tip.classList.add('show');
   $('#nextRow').style.display='flex';
  });
@@ -641,7 +651,7 @@ function drawSpell(it,el,done){
    el.querySelectorAll('.slot.hole').forEach(s=>{s.textContent=letters[+s.dataset.k];s.classList.remove('hole','cur');s.classList.add('reveal','en')});
    el.querySelectorAll('.tile').forEach(x=>x.disabled=true);
    $('#spmsg').innerHTML=`❌ 正確拼法是 <b class="en">${w.e}</b><br>等一下會換空格位置再考一次！`;$('#spmsg').classList.add('show');
-   say(w.e);setTimeout(()=>done(false),2200);
+   tease(w.e);setTimeout(()=>done(false),2600);
   }
  });
  setTimeout(()=>say(w.e),300);
@@ -662,8 +672,8 @@ function drawArrange(it,el,done,last){
   $('#ck').onclick=()=>{
    if(bank.length){toast('還有單字沒用到喔');return}
    if(chosen.map(c=>c.t).join(' ')===it.en){beep(true);say(it.en);finished=true;paint((tries?'✅ 這次對了！':'✅ '+one(praise))+' <b class="en">'+esc(it.en)+'</b>'+(tries?'<br><small>📘 這句會加 3 題補充習題</small>':''))}
-   else{beep(false);tries++;if(tries==1){bank=bank.concat(chosen);chosen=[];paint('🤔 順序不太對，再試一次！提示：第一個字是 <b class="en">'+esc(tokens[0])+'</b>')}
-    else{say(it.en);finished=true;paint('💡 正確句子：<b class="en">'+esc(it.en)+'</b><br><small>📘 這句會加 3 題補充習題</small>')}}
+   else{beep(false);tries++;if(tries==1){tease();bank=bank.concat(chosen);chosen=[];paint('🤔 順序不太對，再試一次！提示：第一個字是 <b class="en">'+esc(tokens[0])+'</b>')}
+    else{tease(it.en);finished=true;paint('💡 正確句子：<b class="en">'+esc(it.en)+'</b><br><small>📘 這句會加 3 題補充習題</small>')}}
   };
  }
  paint();
@@ -1167,8 +1177,8 @@ ensureDay();updateStars();home();
     try{if(sessionStorage.getItem('kidsEN_hideInstall'))return}catch(e){}
     bar=document.createElement('div');bar.className='installbar';
     bar.innerHTML='<b>📲 把英語冒險島裝到手機<br><small style="font-weight:400;opacity:.8">裝好後點圖示就能玩，不用網路</small></b><button class="btn" id="ib">裝到手機</button><button class="x" id="ix">×</button>';
-    document.body.appendChild(bar);
-    document.getElementById('ix').onclick=()=>{bar.remove();try{sessionStorage.setItem('kidsEN_hideInstall','1')}catch(e){}};
+    document.body.appendChild(bar);document.body.classList.add('hasbar');
+    document.getElementById('ix').onclick=()=>{bar.remove();document.body.classList.remove('hasbar');try{sessionStorage.setItem('kidsEN_hideInstall','1')}catch(e){}};
     document.getElementById('ib').onclick=install;
   }
   function modal(html){const m=document.createElement('div');m.className='imodal';m.innerHTML='<div class="box">'+html+'<button class="btn" style="width:100%">知道了</button></div>';m.onclick=e=>{if(e.target===m||e.target.tagName==='BUTTON')m.remove()};document.body.appendChild(m)}

@@ -1,5 +1,5 @@
 /* 離線快取：第一次開啟時把所有檔案存到手機，之後完全不需要網路 */
-const CACHE = 'kids-english-v8';
+const CACHE = 'kids-english-v9';
 const FILES = ['./', './manifest.json', './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png'];
 /* 有些主機（如 Cloudflare Pages）會把 index.html 轉址，轉址過的回應不能直接拿來開頁面，要重新包裝 */
 async function clean(res) {
