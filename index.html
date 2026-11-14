@@ -123,6 +123,8 @@ body{-webkit-user-select:none;user-select:none;overscroll-behavior:none}
 .badge{display:inline-block;background:#FFE1A8;color:#8A5A00;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;margin-left:8px;vertical-align:middle}
 .papers{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:14px}
 .remedy-box{background:#EAF6FF;border-radius:16px;padding:14px;margin-top:14px;line-height:1.7;font-size:15px}
+.extb{display:inline-block;background:#FFF0D9;color:#B35C00;border-radius:999px;padding:3px 12px;font-size:14px;font-weight:700;margin-bottom:6px}
+.wl.ext{border-color:#FFD08A;background:#FFFBF2}
 .slot.reveal{background:#FFE3E3;border-color:var(--bad);color:var(--bad)}
 .tile.wrongtile{background:var(--bad)}
 .tile:disabled{opacity:.6;cursor:default}
@@ -209,15 +211,15 @@ const app=$('#app');
 const COLORS_G=['','#FF7A59','#FFB23F','#3CC79A','#2FA9E0','#7B6CF6','#E85BB3'];
 const BAND=['','低年段','低年段','中年段','中年段','高年段','高年段'];
 const RAW={
-1:"girl|女孩|👧;boy|男孩|👦;teacher|老師|👩‍🏫;friend|朋友|🤝;mom|媽媽|👩;dad|爸爸|👨;sister|姊妹|👧;brother|兄弟|👦;apple|蘋果|🍎;banana|香蕉|🍌;egg|蛋|🥚;milk|牛奶|🥛;cake|蛋糕|🍰;cat|貓|🐱;dog|狗|🐶;fish|魚|🐟;one|一|1️⃣;two|二|2️⃣;three|三|3️⃣;four|四|4️⃣;five|五|5️⃣;hat|帽子|👒;happy|快樂的|😊;good|好的|👍;book|書|📕;yes|是|⭕;no|不|❌",
-2:"ball|球|⚽;box|盒子|📦;bag|袋子；書包|🎒;class|班級|🏫;cow|母牛|🐄;pig|豬|🐷;bird|鳥|🐦;home|家|🏠;school|學校|🏫;zoo|動物園|🦒;name|名字|📛;look|看|👀;go|去|🚶;English|英語|🔤;Taiwan|台灣|🇹🇼;Taipei|台北|🏙️;mother|母親|👩;father|父親|👨;who|誰|❓;what|什麼|❓;this|這個|👉;that|那個|👈",
-3:"doctor|醫生|👨‍⚕️;student|學生|🧑‍🎓;kid|小孩|🧒;grandma|奶奶；外婆|👵;grandpa|爺爺；外公|👴;rice|米飯|🍚;tea|茶|🍵;water|水|💧;juice|果汁|🧃;hamburger|漢堡|🍔;pizza|披薩|🍕;ice cream|冰淇淋|🍦;desk|書桌|🪑;door|門|🚪;pen|原子筆|🖊️;pencil|鉛筆|✏️;eraser|橡皮擦|🧽;ruler|尺|📏;chair|椅子|🪑;table|桌子|🪵;window|窗戶|🪟;bear|熊|🐻;monkey|猴子|🐵;lion|獅子|🦁;rabbit|兔子|🐰;tiger|老虎|🐯;six|六|6️⃣;seven|七|7️⃣;eight|八|8️⃣;nine|九|9️⃣;ten|十|🔟;red|紅色|🔴;blue|藍色|🔵;green|綠色|🟢;yellow|黃色|🟡;black|黑色|⚫;white|白色|⚪;brown|棕色|🟤;head|頭|🙂;eye|眼睛|👁️;nose|鼻子|👃;ear|耳朵|👂;mouth|嘴巴|👄;hand|手|✋;arm|手臂|💪;leg|腿|🦵;foot|腳|🦶;face|臉|😀",
-4:"breakfast|早餐|🍳;lunch|午餐|🍱;dinner|晚餐|🍽️;orange|柳橙|🍊;cup|杯子|☕;fan|電扇|🌀;key|鑰匙|🔑;park|公園|🌳;bookstore|書店|📚;eleven|十一|🕚;twelve|十二|🕛;big|大的|🐘;small|小的|🐭;tall|高的|🦒;short|矮的；短的|📏;long|長的|🐍;old|老的；舊的|👴;thin|瘦的|🥢;hot|熱的|🔥;cold|冷的|🥶;warm|溫暖的|☀️;cool|涼爽的|🍃;sunny|晴朗的|🌞;rainy|下雨的|🌧️;cloudy|多雲的|☁️;windy|颳風的|🌬️;Sunday|星期日|📅;Monday|星期一|📅;Friday|星期五|📅;Saturday|星期六|📅;morning|早上|🌅;night|晚上|🌙;today|今天|📆;bike|腳踏車|🚲;bus|公車|🚌;car|汽車|🚗;sad|難過的|😢;great|很棒的|🌟;cap|棒球帽|🧢;jacket|夾克|🧥;shoes|鞋子|👟;art|美術|🎨;math|數學|➗;music|音樂|🎵;dance|跳舞|💃;jump|跳|🦘;sing|唱歌|🎤;read|閱讀|📖;swim|游泳|🏊;run|跑|🏃;draw|畫畫|🖍️;write|寫|✍️;cook|煮飯|👩‍🍳;sleep|睡覺|😴;kite|風箏|🪁",
-5:"baby|嬰兒|👶;nurse|護理師|👩‍⚕️;singer|歌手|🎤;man|男人|👨;woman|女人|👩;mailman|郵差|📮;aunt|阿姨；姑姑|👩;uncle|叔叔；舅舅|👨;son|兒子|👦;daughter|女兒|👧;candy|糖果|🍬;bread|麵包|🍞;coffee|咖啡|☕;cookies|餅乾|🍪;noodles|麵|🍜;sandwich|三明治|🥪;soup|湯|🍲;fruit|水果|🍇;computer|電腦|💻;classroom|教室|🏫;clock|時鐘|⏰;bee|蜜蜂|🐝;duck|鴨子|🦆;chicken|雞|🐔;elephant|大象|🐘;supermarket|超市|🛒;gym|體育館|🏋️;hospital|醫院|🏥;library|圖書館|📚;post office|郵局|🏤;restaurant|餐廳|🍴;thirteen|十三|1️⃣;twenty|二十|2️⃣;thirty|三十|3️⃣;fifty|五十|5️⃣;hundred|一百|💯;pink|粉紅色|🩷;purple|紫色|🟣;gray|灰色|🩶;bathroom|浴室|🛁;bedroom|臥室|🛏️;kitchen|廚房|🍳;living room|客廳|🛋️;sofa|沙發|🛋️;TV|電視|📺",
-6:"hair|頭髮|💇;tooth|牙齒|🦷;busy|忙碌的|🏃;clean|乾淨的|✨;dirty|髒的|🟫;heavy|重的|🏋️;kind|親切的|💗;sick|生病的|🤒;smart|聰明的|🧠;strong|強壯的|💪;young|年輕的|🧒;cute|可愛的|🥰;moon|月亮|🌙;star|星星|⭐;sun|太陽|☀️;sky|天空|🌌;spring|春天|🌸;summer|夏天|🏖️;fall|秋天|🍂;winter|冬天|⛄;MRT|捷運|🚇;plane|飛機|✈️;ship|船|🚢;taxi|計程車|🚕;train|火車|🚆;angry|生氣的|😠;excited|興奮的|🤩;hungry|飢餓的|😋;tired|疲累的|🥱;coat|外套|🧥;dress|洋裝|👗;glasses|眼鏡|👓;pants|長褲|👖;skirt|裙子|👗;socks|襪子|🧦;sweater|毛衣|🧶;baseball|棒球|⚾;basketball|籃球|🏀;camping|露營|🏕️;jogging|慢跑|🏃;science|自然科學|🔬;drink|喝|🥤;eat|吃|🍽️;drive|開車|🚗;fly|飛|🕊️;ride|騎|🚴;speak|說|🗣️;study|讀書|📚;wash|洗|🧼;watch|觀看|📺;wear|穿戴|👕;work|工作|💼;early|早的|🐓;late|晚的；遲的|⏰;money|錢|💰;flower|花|🌸;tree|樹|🌳"
+1:"girl|女孩|👧;boy|男孩|👦;teacher|老師|👩‍🏫;friend|朋友|🤝;mom|媽媽|👩;dad|爸爸|👨;sister|姊妹|👧;brother|兄弟|👦;apple|蘋果|🍎;banana|香蕉|🍌;egg|蛋|🥚;milk|牛奶|🥛;cake|蛋糕|🍰;book|書|📕;fish|魚|🐟;cat|貓|🐱;dog|狗|🐶;one|一|1️⃣;two|二|2️⃣;three|三|3️⃣;four|四|4️⃣;five|五|5️⃣;good|好的|👍;happy|快樂的|😊;hat|帽子|👒;I|我|🙋;my|我的|🙋;you|你|👉;your|你的|👉;am|是（I 用）|🟰;is|是（他、她、它用）|🟰;are|是（你、我們、他們用）|🟰;a|一個（子音前）|1️⃣;yes|是的|⭕;no|不；沒有|❌",
+2:"mother|母親|👩;father|父親|👨;ball|球|⚽;box|盒子|📦;bag|袋子；書包|🎒;class|班級|🏫;cow|母牛|🐄;pig|豬|🐷;bird|鳥|🐦;home|家|🏠;school|學校|🏫;zoo|動物園|🦒;Taipei|台北|🏙️;Taiwan|台灣|🇹🇼;English|英語|🔤;he|他|👦;she|她|👧;it|它|📦;who|誰|❓;what|什麼|❓;an|一個（母音前）|1️⃣;the|這／那個（特定的）|👆;this|這個|👇;that|那個|👉;look|看|👀;go|去|🚶;name|名字|📛;not|不|🚫",
+3:"doctor|醫生|👨‍⚕️;kid|小孩|🧒;student|學生|🧑‍🎓;grandma|奶奶；外婆|👵;grandpa|爺爺；外公|👴;rice|米飯|🍚;tea|茶|🍵;water|水|💧;juice|果汁|🧃;hamburger|漢堡|🍔;ice cream|冰淇淋|🍦;pizza|披薩|🍕;desk|書桌|🪑;door|門|🚪;marker|麥克筆|🖍️;pen|原子筆|🖊️;pencil|鉛筆|✏️;table|桌子|🪵;chair|椅子|🪑;eraser|橡皮擦|🧽;ruler|尺|📏;window|窗戶|🪟;bear|熊|🐻;monkey|猴子|🐵;lion|獅子|🦁;rabbit|兔子|🐰;tiger|老虎|🐯;here|這裡|📍;there|那裡|👉;six|六|6️⃣;seven|七|7️⃣;eight|八|8️⃣;nine|九|9️⃣;ten|十|🔟;many|許多（可數）|🔢;blue|藍色|🔵;color|顏色|🎨;green|綠色|🟢;red|紅色|🔴;yellow|黃色|🟡;black|黑色|⚫;brown|棕色|🟤;white|白色|⚪;head|頭|🙂;eye|眼睛|👁️;nose|鼻子|👃;ear|耳朵|👂;hand|手|✋;arm|手臂|💪;leg|腿|🦵;foot|腳|🦶;face|臉|😀;mouth|嘴巴|👄;we|我們|👫;they|他們|👥;how|如何；怎麼|❓;where|哪裡|📍;can|能；會|💪;do|做；（助動詞）|✔️;these|這些|👇;those|那些|👉;cry|哭|😭;like|喜歡|❤️;want|想要|🙏;close|關上|🚪;come|來|👋;listen|聽|👂;open|打開|📖;play|玩|🎲;see|看見|👀;at|在（地點、時間點）|📍;in|在…裡面|📦;on|在…上面|⬆️;under|在…下面|⬇️;and|和；而且|➕",
+4:"orange|柳橙；橘色|🍊;breakfast|早餐|🍳;lunch|午餐|🍱;dinner|晚餐|🍽️;park|公園|🌳;bookstore|書店|📚;eleven|十一|🕚;twelve|十二|🕛;much|許多（不可數）|🔢;cup|杯子|☕;fan|電扇|🌀;key|鑰匙|🔑;old|老的；舊的|👴;short|矮的；短的|📏;tall|高的|🦒;big|大的|🐘;long|長的|🐍;small|小的|🐭;thin|瘦的|🥢;cold|冷的|🥶;cool|涼爽的|🍃;dry|乾的|🏜️;hot|熱的|🔥;warm|溫暖的|☀️;wet|濕的|💦;cloudy|多雲的|☁️;rainy|下雨的|🌧️;sunny|晴朗的|🌞;weather|天氣|🌦️;windy|颳風的|🌬️;Sunday|星期日|📅;Monday|星期一|📅;Tuesday|星期二|📅;Wednesday|星期三|📅;Thursday|星期四|📅;Friday|星期五|📅;Saturday|星期六|📅;day|天；日|🌞;evening|傍晚|🌆;morning|早上|🌅;night|晚上|🌙;now|現在|⏱️;time|時間|⏰;today|今天|📆;tomorrow|明天|📆;week|星期；週|🗓️;year|年|🗓️;yesterday|昨天|📆;bike|腳踏車|🚲;bus|公車|🚌;car|汽車|🚗;bad|壞的；不好的|👎;fine|很好的|🙂;great|很棒的|🌟;nice|好的；親切的|😄;OK|好；可以|👌;sad|難過的|😢;cap|棒球帽|🧢;jacket|夾克|🧥;shoes|鞋子|👟;Japan|日本|🇯🇵;UK|英國|🇬🇧;USA|美國|🇺🇸;game|遊戲|🎮;hiking|健行|🥾;art|美術|🎨;Chinese|中文|🀄;math|數學|➗;music|音樂|🎵;which|哪一個|🤔;does|做；（助動詞，他/她用）|✔️;dance|跳舞|💃;jump|跳|🦘;read|閱讀|📖;sing|唱歌|🎤;cook|煮飯；廚師|👩‍🍳;draw|畫畫|🖍️;run|跑|🏃;sleep|睡覺|😴;swim|游泳|🏊;walk|走路|🚶;write|寫|✍️;kite|風箏|🪁;yo-yo|溜溜球|🪀;o'clock|…點鐘|🕐;but|但是|↔️;or|或者|🔀;so|所以|➡️",
+5:"baby|嬰兒|👶;man|男人|👨;nurse|護理師|👩‍⚕️;singer|歌手|🎤;child|小孩|🧒;mailman|郵差|📮;woman|女人|👩;aunt|阿姨；姑姑|👩;daughter|女兒|👧;son|兒子|👦;uncle|叔叔；舅舅|👨;candy|糖果|🍬;pie|派|🥧;bread|麵包|🍞;coffee|咖啡|☕;cookies|餅乾|🍪;food|食物|🍱;fruit|水果|🍇;noodles|麵|🍜;sandwich|三明治|🥪;soup|湯|🍲;card|卡片|🃏;computer|電腦|💻;classroom|教室|🏫;clock|時鐘|⏰;page|頁|📄;seat|座位|💺;bee|蜜蜂|🐝;duck|鴨子|🦆;chicken|雞|🐔;elephant|大象|🐘;shop|商店|🏪;supermarket|超市|🛒;gym|體育館|🏋️;hospital|醫院|🏥;library|圖書館|📚;post office|郵局|🏤;restaurant|餐廳|🍴;thirteen|十三|1️⃣;fourteen|十四|1️⃣;fifteen|十五|1️⃣;sixteen|十六|1️⃣;seventeen|十七|1️⃣;eighteen|十八|1️⃣;nineteen|十九|1️⃣;some|一些|🔢;twenty|二十|2️⃣;thirty|三十|3️⃣;forty|四十|4️⃣;fifty|五十|5️⃣;sixty|六十|6️⃣;seventy|七十|7️⃣;eighty|八十|8️⃣;ninety|九十|9️⃣;hundred|一百|💯;pink|粉紅色|🩷;gray|灰色|🩶;purple|紫色|🟣;bathroom|浴室|🛁;bed|床|🛏️;bedroom|臥室|🛏️;kitchen|廚房|🍳;living room|客廳|🛋️;sofa|沙發|🛋️;TV|電視|📺;PE|體育課|🤸;her|她的；她（受格）|👧;his|他的|👦;our|我們的|👫;their|他們的|👥;whose|誰的|🔑;have|有|🤲;has|有（他、她用）|🤲;live|住|🏠;sit|坐|🪑;stand|站|🧍;thank|感謝|🙏;by|搭乘；在…旁邊|🚌;for|為了；給|🎁;from|來自|🛫;January|一月|❄️|x;February|二月|🧧|x;March|三月|🌱|x;April|四月|🌷|x;May|五月|🌼|x;June|六月|🌞|x;July|七月|🍉|x;August|八月|🏖️|x;September|九月|🍁|x;October|十月|🎃|x;November|十一月|🍂|x;December|十二月|🎄|x;month|月|🗓️|x;birthday|生日|🎂|x;holiday|假日|🎉|x;weekend|週末|🛋️|x;afternoon|下午|🌤️|x;hour|小時|⏳|x;minute|分鐘|⏱️|x;chocolate|巧克力|🍫|x;vegetable|蔬菜|🥦|x;meat|肉|🍖|x;beef|牛肉|🥩|x;salad|沙拉|🥗|x;lemon|檸檬|🍋|x;grape|葡萄|🍇|x;watermelon|西瓜|🍉|x;strawberry|草莓|🍓|x;tomato|番茄|🍅|x;potato|馬鈴薯|🥔|x;horse|馬|🐴|x;sheep|綿羊|🐑|x;mouse|老鼠|🐭|x;snake|蛇|🐍|x;dolphin|海豚|🐬|x;zebra|斑馬|🦓|x;turtle|烏龜|🐢|x;frog|青蛙|🐸|x;butterfly|蝴蝶|🦋|x;farmer|農夫|👨‍🌾|x;driver|司機|🧑‍✈️|x;writer|作家|✍️|x;artist|藝術家|🧑‍🎨|x;scientist|科學家|🧑‍🔬|x;beach|海灘|🏖️|x;mountain|山|⛰️|x;river|河|🏞️|x;city|城市|🌆|x;street|街道|🛣️|x;museum|博物館|🏛️|x;station|車站|🚉|x;farm|農場|🚜|x",
+6:"police officer|警察|👮;police station|警察局|🚓;cellphone|手機|📱;telephone|電話|☎️;hair|頭髮|💇;back|背部|🧍;body|身體|🧍;tooth|牙齒|🦷;busy|忙碌的|🏃;clean|乾淨的；打掃|✨;cute|可愛的|🥰;dirty|髒的|🟫;heavy|重的|🏋️;kind|親切的|💗;sick|生病的|🤒;smart|聰明的|🧠;strong|強壯的|💪;young|年輕的|🧒;moon|月亮|🌙;sky|天空|🌌;star|星星|⭐;sun|太陽|☀️;fall|秋天|🍂;spring|春天|🌸;summer|夏天|🏖️;winter|冬天|⛄;MRT|捷運|🚇;plane|飛機|✈️;ship|船|🚢;taxi|計程車|🚕;train|火車|🚆;mad|生氣的|😤;angry|生氣的|😠;excited|興奮的|🤩;hungry|飢餓的|😋;tired|疲累的|🥱;coat|外套|🧥;dress|洋裝|👗;glasses|眼鏡|👓;pants|長褲|👖;shorts|短褲|🩳;skirt|裙子|👗;socks|襪子|🧦;T-shirt|T恤|👕;jeans|牛仔褲|👖;sweater|毛衣|🧶;baseball|棒球|⚾;basketball|籃球|🏀;camping|露營|🏕️;jogging|慢跑|🏃;sport|運動|🏅;table tennis|桌球|🏓;science|自然科學|🔬;mine|我的（東西）|🙋;when|什麼時候|⏰;may|可以|🙏;drink|喝|🥤;drive|開車|🚗;eat|吃|🍽️;feel|感覺|💭;fly|飛|🕊️;get|得到；起（床）|🎁;give|給|🎁;ride|騎|🚴;say|說|💬;speak|說（語言）|🗣️;study|讀書|📚;take|拿；搭乘|✋;talk|談話|💬;wash|洗|🧼;watch|觀看|📺;wear|穿戴|👕;work|工作|💼;hurry|趕快|💨;put|放|📥;share|分享|🤲;spell|拼字|🔤;stop|停止|🛑;try|嘗試|💪;turn|轉；輪到|🔄;e-mail|電子郵件|📧;flower|花|🌸;tree|樹|🌳;dollar|元|💵;early|早的|🐓;late|晚的；遲的|⏰;loud|大聲的|📢;money|錢|💰;quiet|安靜的|🤫;very|非常|‼️;beautiful|美麗的|🌹|x;cheap|便宜的|🏷️|x;expensive|昂貴的|💎|x;easy|簡單的|👌|x;difficult|困難的|🧩|x;fast|快的|⚡|x;slow|慢的|🐢|x;new|新的|🆕|x;same|相同的|🟰|x;different|不同的|🔀|x;favorite|最喜歡的|💖|x;interesting|有趣的|🤔|x;delicious|美味的|😋|x;healthy|健康的|🥦|x;careful|小心的|⚠️|x;famous|有名的|🌟|x;afraid|害怕的|😨|x;thirsty|口渴的|🥤|x;homework|功課|📝|x;test|考試|📝|x;question|問題|❓|x;answer|答案；回答|💡|x;story|故事|📖|x;picture|圖畫；照片|🖼️|x;gift|禮物|🎁|x;toy|玩具|🧸|x;umbrella|雨傘|☂️|x;map|地圖|🗺️|x;buy|買|🛍️|x;sell|賣|🏷️|x;help|幫忙|🤝|x;know|知道|💡|x;think|想；認為|💭|x;learn|學習|📘|x;teach|教|👩‍🏫|x;visit|拜訪|🏡|x;travel|旅行|🧳|x;finish|完成|🏁|x;forget|忘記|🤦|x;remember|記得|🧠|x;find|找到|🔍|x;call|打電話|📞|x;ask|問|🙋|x;need|需要|🙏|x;wait|等待|⌛|x;win|贏|🏆|x;always|總是|💯|x;usually|通常|🔁|x;often|常常|🔂|x;sometimes|有時候|🎲|x;never|從不|🚫|x;together|一起|👫|x"
 };
 const WORDS={};
-for(const g in RAW){WORDS[g]=RAW[g].split(';').map(s=>{const[e,z,m]=s.split('|');return{e,z,m:m||'🔤'}})}
+for(const g in RAW){WORDS[g]=RAW[g].split(';').map(s=>{const[e,z,m,x]=s.split('|');return{e,z,m:m||'🔤',ext:x==='x'}})}
 function wordsUpTo(g){let a=[];for(let i=1;i<=g;i++)a=a.concat(WORDS[i]);return a}
 
 /* ===================== 出題用字庫（g = 最早出現的年級） ===================== */
@@ -236,6 +238,8 @@ const TRANSP=P("bus|公車|4;bike|腳踏車|4;car|汽車|4;MRT|捷運|6;taxi|計
 const WEATHER=P("hot|熱|4;cold|冷|4;warm|溫暖|4;cool|涼爽|4;sunny|晴朗|4;rainy|多雨|4;cloudy|多雲|4;windy|多風|4",['e','z','g']);
 const NUMS=P("one|一|1;two|二|1;three|三|1;four|四|1;five|五|1;six|六|3;seven|七|3;eight|八|3;nine|九|3;ten|十|3;eleven|十一|4;twelve|十二|4",['e','z','g']);
 const COUNTRIES=P("Taiwan|台灣|1;Japan|日本|3;the USA|美國|3;the UK|英國|3",['e','z','g']);
+const COMP=P("tall|taller|tallest|高|4;short|shorter|shortest|矮|4;big|bigger|biggest|大|4;small|smaller|smallest|小|4;long|longer|longest|長|4;old|older|oldest|老|4;young|younger|youngest|年輕|6;fast|faster|fastest|快|6;heavy|heavier|heaviest|重|6;cute|cuter|cutest|可愛|6;strong|stronger|strongest|強壯|6;busy|busier|busiest|忙|6;smart|smarter|smartest|聰明|6",['b','c','s','z','g']);
+const MONTHS=P("January|一月|5;February|二月|5;March|三月|5;April|四月|5;May|五月|5;June|六月|5;July|七月|5;August|八月|5;September|九月|5;October|十月|5;November|十一月|5;December|十二月|5",['e','z','g']);
 const NAMES=[['Amy','f'],['Lily','f'],['Mia','f'],['Jenny','f'],['Tom','m'],['Ben','m'],['Andy','m'],['Sam','m']];
 let state={grade:1};
 function L(list){const r=list.filter(x=>x.g<=state.grade);if(r.length)return r;const m=Math.min(...list.map(x=>x.g));return list.filter(x=>x.g==m)}
@@ -311,13 +315,55 @@ past_be(){const r=R(),a=one(L(FEEL));if(r<.4)return MC(`I ___ ${a.e} yesterday. 
  if(r<.7){const pl=one(L(PLACES));return MC(`They ___ at ${toP(pl)} yesterday.`,'were',['was','are'],'they / we / you 的過去式是 were')}
  const n=one(NAMES)[0];return MC(`${n} ___ ${a.e} last night.`,'was',['were','is'],'last night 昨晚 → 過去式；一個人用 was')},
 past_verb(){const v=one(L(VERBS).filter(x=>x.p!==x.b));if(R()<.5)return MC(`I ___ yesterday. (我昨天${v.z})`,v.p,[v.b,v.s],`yesterday → 過去式：${v.b} → ${v.p}`);
- return MC(`What did you do yesterday? I ___.`,v.p,[v.b,v.i],`What did you do? 要用過去式回答：${v.p}`)}
+ return MC(`What did you do yesterday? I ___.`,v.p,[v.b,v.i],`What did you do? 要用過去式回答：${v.p}`)},
+/* ===== 國中銜接文法（5～6 年級） ===== */
+compar(){const a=one(COMP),[n1]=one(NAMES),n2=one(NAMES.filter(x=>x[0]!==n1))[0];
+ if(R()<.5)return MC(`${n1} is ___ than ${n2}. (${n1}比${n2}${a.z})`,a.c,[a.b,a.s],`比較兩個 → 比較級 + than：${a.b} → ${a.c}`);
+ return MC(`Which is ___, the cat or the dog? (哪一個比較${a.z})`,a.c,[a.s,a.b],`兩個比較用比較級：${a.c}`)},
+superl(){const a=one(COMP),n=one(NAMES)[0];
+ if(R()<.5)return MC(`${n} is the ___ in our class. (${n}是全班最${a.z}的)`,a.s,[a.c,a.b],`三個以上比較「最…」→ the + 最高級：${a.s}`);
+ return MC(`This is the ___ one of all. (最${a.z}的)`,a.s,[a.c,a.b],`「最…」用 the + 最高級：${a.s}`)},
+there_be(){const t=one(L(THINGS)),pl=one([['desk','書桌'],['table','桌子'],['chair','椅子'],['box','盒子']]),pr=one([['on','上'],['under','下']]);
+ if(R()<.5)return MC(`There ___ ${aN(t.e)} ${pr[0]} the ${pl[0]}. (${pl[1]}${pr[1]}有一個${t.z})`,'is',['are','am'],'There is + 單數名詞');
+ const n=one(NUMS.filter(x=>x.g<=3&&x.e!=='one'));return MC(`There ___ ${n.e} ${t.p} ${pr[0]} the ${pl[0]}.`,'are',['is','am'],'There are + 複數名詞')},
+obj_pron(){const o=one([['him','he','his','他'],['her','she','hers','她'],['them','they','their','他們'],['me','I','my','我'],['us','we','our','我們']]),v=one(['like','help','know','see']);
+ return MC(`I ${v} ___. (${o[3]})`,o[0],[o[1],o[2]],`動詞後面要用受格：${o[3]} → ${o[0]}`)},
+poss_pron(){const o=one([['mine','my','me','我的'],['yours','your','you','你的'],['his','he','him','他的'],['hers','her','she','她的'],['ours','our','us','我們的']]),t=one(L(THINGS));
+ return MC(`This ${t.e} is ___. (${o[3]})`,o[0],[o[1],o[2]],`後面沒有名詞的「…的」用所有格代名詞：${o[0]}`)},
+freq(){const f=one([['always','總是'],['usually','通常'],['often','常常'],['sometimes','有時候'],['never','從不']]),v=one(L(VERBS)),others=['always','usually','often','sometimes','never'].filter(x=>x!==f[0]);
+ return MC(`I ___ ${v.b} after school. (我${f[1]}放學後${v.z})`,f[0],pick(others,2),`頻率副詞：always 總是 > usually 通常 > often 常常 > sometimes 有時 > never 從不`)},
+some_any(){const t=one(L(THINGS));if(R()<.5)return MC(`I have ___ ${t.p}.`,'some',['any','a'],'肯定句用 some');
+ return MC(`Do you have ___ ${t.p}?`,'any',['some','a'],'否定句、問句用 any')},
+want_to(){const v=one(L(VERBS));if(R()<.5)return MC(`I want ___ ${v.b}. (我想要${v.z})`,'to',['for','at'],'want to + 原形動詞');
+ return MC(`She wants to ___. (她想要${v.z})`,v.b,[v.s,v.i],'want to 後面接原形動詞')},
+modal(){const m=one([['should','應該'],['must','必須'],['can','可以'],['will','將會']]),v=one(L(VERBS));
+ return MC(`You ${m[0]} ___. (你${m[1]}${v.z})`,v.b,[v.s,v.i],`${m[0]} 是助動詞，後面接原形動詞`)},
+time_prep(){const r=R();if(r<.35){const m=one(MONTHS);return MC(`My birthday is ___ ${m.e}. (在${m.z})`,'in',['on','at'],'月份、季節、年前面用 in')}
+ if(r<.7){const d=one(['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']);return MC(`We have music class ___ ${d}.`,'on',['in','at'],'星期幾、日期前面用 on')}
+ const n=one(L(NUMS));return MC(`I go to bed ___ ${n.e} o'clock.`,'at',['in','on'],'幾點鐘前面用 at')},
+how_much(){const n=one(['ten','twenty','fifty','one hundred']),t=one(L(THINGS));
+ if(R()<.5)return MC(`How ___ is the ${t.e}? It's ${n} dollars.`,'much',['many','old'],'問價錢用 How much');
+ return MC(`How ___ ${t.p} do you have?`,'many',['much','old'],'問數量（可數）用 How many')},
+future_will(){const v=one(L(VERBS).filter(x=>x.p!==x.b)),r=R();if(r<.5)return MC(`I ___ ${v.b} tomorrow. (我明天會${v.z})`,'will',['am','did'],'tomorrow 明天 → 未來式 will + 原形');
+ const n=one(NAMES)[0];return MC(`${n} will ___ next week.`,v.b,[v.s,v.p],'will 後面接原形動詞')},
+going_to(){const v=one(L(VERBS)),[n,s]=one(NAMES);if(R()<.5)return MC(`${n} ___ going to ${v.b} tomorrow.`,'is',['are','am'],'be going to：一個人用 is going to');
+ return MC(`We are going ___ ${v.b} this weekend.`,'to',['for','at'],'be going to + 原形動詞，表示「打算」')},
+past_q(){const v=one(L(VERBS).filter(x=>x.p!==x.b));if(R()<.5)return MC(`___ you ${v.b} yesterday?`,'Did',['Do','Are'],'問過去的事用 Did，後面接原形');
+ return MC(`I didn't ___ yesterday.`,v.b,[v.p,v.i],"didn't 後面接原形動詞")},
+tense_mix(){const v=one(L(VERBS)),n=one(NAMES)[0],k=one(['yesterday','now','every day','tomorrow']);
+ const ans={yesterday:v.p,now:'is '+v.i,'every day':v.s,tomorrow:'will '+v.b}[k];
+ const tip={yesterday:'yesterday → 過去式',now:'now → 現在進行式',['every day']:'every day → 現在簡單式（第三人稱加 s）',tomorrow:'tomorrow → 未來式 will'}[k];
+ const all=[v.p,'is '+v.i,v.s,'will '+v.b].filter(x=>x!==ans);
+ return MC(`${n} ___ ${k}.`,ans,pick(all,2),'看時間詞決定時態：'+tip)}
+
 };
 /* [規則, 文法城堡年級起訖, 時光列車年級起訖, 名稱] */
 const RULES=[['be',1,2,1,3,'be 動詞 am/is/are'],['a_an',1,3,0,0,'a / an'],['wh1',1,2,0,0,'Who / What'],['poss',1,3,0,0,'my / your'],['yes_be',1,2,1,2,'Yes, it is.'],
 ['this_these',3,4,0,0,'This / These'],['neg_be',3,4,0,0,"否定 isn't / aren't"],['can_ans',3,4,3,4,'Can 問答'],['can_base',3,5,0,0,'can + 原形'],['prep',3,4,0,0,'in / on / under'],['how_many',3,4,0,0,'How many'],['plural',3,5,0,0,'複數'],['oclock',3,4,0,0,"o'clock"],['like_pl',3,4,0,0,'I like + 複數'],['do_ans',3,5,0,0,'Do 問答'],['where_q',3,4,0,0,'Where'],
 ['have_neg',5,6,0,0,'Do / Does have'],['by',5,6,0,0,'by bus / on foot'],['whose',5,6,0,0,'Whose'],['his_her',5,6,0,0,'his / her'],['at_time',5,6,0,0,'at + 時間'],['has_have',5,6,5,6,'has / have'],['from',5,6,0,0,'be from'],
-['prog_ing',0,0,3,6,'現在進行式 V-ing'],['prog_be',0,0,3,6,'進行式 be 動詞'],['habit',0,0,3,4,'現在簡單式'],['third_s',0,0,5,6,'第三人稱 -s'],['does_q',0,0,5,6,'Does 問句'],['prog_simple',0,0,5,6,'進行式 vs 簡單式'],['past_be',0,0,6,6,'過去式 was/were'],['past_verb',0,0,6,6,'過去式動詞']];
+['prog_ing',0,0,3,6,'現在進行式 V-ing'],['prog_be',0,0,3,6,'進行式 be 動詞'],['habit',0,0,3,4,'現在簡單式'],['third_s',0,0,5,6,'第三人稱 -s'],['does_q',0,0,5,6,'Does 問句'],['prog_simple',0,0,5,6,'進行式 vs 簡單式'],['past_be',0,0,6,6,'過去式 was/were'],['past_verb',0,0,6,6,'過去式動詞'],
+['compar',5,6,0,0,'⭐比較級 than'],['superl',6,6,0,0,'⭐最高級 the -est'],['there_be',5,6,0,0,'⭐There is / are'],['obj_pron',5,6,0,0,'⭐受格代名詞'],['poss_pron',6,6,0,0,'⭐所有格代名詞 mine'],['freq',6,6,0,0,'⭐頻率副詞'],['some_any',5,6,0,0,'⭐some / any'],['want_to',5,6,0,0,'⭐want to + V'],['modal',6,6,0,0,'⭐助動詞 should / must'],['time_prep',5,6,0,0,'⭐in / on / at 時間'],['how_much',5,6,0,0,'⭐How much / many'],
+['future_will',0,0,5,6,'⭐未來式 will'],['going_to',0,0,6,6,'⭐be going to'],['past_q',0,0,6,6,"⭐Did / didn't"],['tense_mix',0,0,6,6,'⭐時態大混合']];
 function rulesFor(ch,g){return RULES.filter(r=>ch=='grammar'?(r[1]&&r[1]<=g&&g<=r[2]):ch=='tense'?(r[3]&&r[3]<=g&&g<=r[4]):((r[1]&&r[1]<=g&&g<=r[2])||(r[3]&&r[3]<=g&&g<=r[4])))}
 
 /* ===================== 中翻英句型模板 ===================== */
@@ -350,23 +396,33 @@ const TPL=[
 [6,()=>{const a=one(L(FEEL));return[`我昨天很${a.z}。`,`I was ${a.e} yesterday.`]}],
 [6,()=>{const t=one(L(THINGS));return[`這是誰的${t.z}？`,`Whose ${t.e} is it?`]}],
 [6,()=>{const v=one(L(VERBS));return[`我昨天${v.z}。`,`I ${v.p} yesterday.`]}],
-[6,()=>{const pl=one(L(PLACES));return[`他們上週日在${pl.z}。`,`They were at ${toP(pl)} last Sunday.`]}]
+[6,()=>{const pl=one(L(PLACES));return[`他們上週日在${pl.z}。`,`They were at ${toP(pl)} last Sunday.`]}],
+[5,()=>{const a=one(COMP.filter(x=>x.g<=4)),[n1]=one(NAMES),n2=one(NAMES.filter(x=>x[0]!==n1))[0];return[`${n1}比${n2}${a.z}。`,`${n1} is ${a.c} than ${n2}.`]}],
+[5,()=>{const t=one(L(THINGS)),pl=one([['desk','書桌'],['table','桌子'],['chair','椅子']]);return[`${pl[1]}下面有一個${t.z}。`,`There is ${aN(t.e)} under the ${pl[0]}.`]}],
+[5,()=>{const m=one(MONTHS);return[`我的生日在${m.z}。`,`My birthday is in ${m.e}.`]}],
+[5,()=>{const v=one(L(VERBS));return[`我想要${v.z}。`,`I want to ${v.b}.`]}],
+[6,()=>{const v=one(L(VERBS));return[`我明天會${v.z}。`,`I will ${v.b} tomorrow.`]}],
+[6,()=>{const a=one(COMP),n=one(NAMES)[0];return[`${n}是全班最${a.z}的。`,`${n} is the ${a.s} in the class.`]}],
+[6,()=>{const f=one([['always','總是'],['usually','通常'],['often','常常'],['never','從不']]),v=one(L(VERBS));return[`我${f[1]}${v.z}。`,`I ${f[0]} ${v.b}.`]}],
+[6,()=>{const t=one(L(THINGS));return[`這個${t.z}是我的。`,`This ${t.e} is mine.`]}]
 ];
 
 /* ===================== 題目物件 ===================== */
 function misspell(w){const out=new Set(),L2=w.length;for(let n=0;n<40&&out.size<2;n++){const k=1+(R()*(L2-2)|0),r=R();let v;
  if(r<.33)v=w.slice(0,k)+w[k+1]+w[k]+w.slice(k+2);else if(r<.66)v=w.slice(0,k)+w.slice(k+1);else v=w.slice(0,k)+w[k]+w.slice(k);
  if(v&&v!==w)out.add(v)}return[...out]}
+/* 發音相同的字，聽力題不能同時出現 */
+const HOMO=[['i','eye'],['four','for'],['son','sun'],['may'],['hour','our'],['no','know'],['there','their'],['by','buy'],['wear','where'],['two','to','too']];
 const spellable=w=>/^[A-Za-z ]+$/.test(w.e)&&w.e.replace(/ /g,'').length>=3;
 function wordFmts(w,withSpell){const f=['enzh','zhen','listen'];if(/^[A-Za-z]{4,}$/.test(w.e))f.push('spellc');if(withSpell&&spellable(w))f.push('spell');return f}
 function wordItem(w,f){
- const all=wordsUpTo(state.grade),dz=()=>pick(all.filter(x=>x.z!==w.z),6).map(x=>x.z),de=()=>pick(all.filter(x=>x.e!==w.e),6).map(x=>x.e);
+ const all=wordsUpTo(state.grade),dz=()=>pick(all.filter(x=>x.z!==w.z),6).map(x=>x.z),de=()=>pick(all.filter(x=>x.e!==w.e&&x.z!==w.z),6).map(x=>x.e);
  const base={fam:{k:'word',w},review:`${w.m} ${w.e}＝${w.z}`};
  const mk=(o,ans,wr)=>{const op=[ans];for(const x of wr){if(op.length>=3)break;if(!op.includes(x))op.push(x)}return Object.assign({type:'mc',ans,opts:shuffle(op)},o,base)};
  if(f=='spell')return Object.assign({type:'spell',w},base);
  if(f=='enzh')return mk({pre:w.m+' ',q:w.e,sub:'這個單字是什麼意思？',sayFirst:w.e,sayAfter:w.e},w.z,dz());
  if(f=='zhen')return mk({pre:w.m+' ',q:w.z,sub:'英文怎麼說？',sayAfter:w.e},w.e,de());
- if(f=='listen')return mk({q:'🎧 聽一聽，是哪個單字？',sub:'按「再聽一次」可以重聽',listen:w.e},w.e,de());
+ if(f=='listen'){const hs=HOMO.find(h=>h.includes(w.e.toLowerCase()))||[];return mk({q:'🎧 聽一聽，是哪個單字？',sub:'按「再聽一次」可以重聽',listen:w.e},w.e,de().filter(e=>!hs.includes(e.toLowerCase())))}
  const ms=misspell(w.e);if(ms.length<2)return wordItem(w,'zhen');
  return mk({pre:w.m+' ',q:w.z,sub:'哪一個拼字是正確的？',sayAfter:w.e},w.e,ms);
 }
@@ -420,7 +476,7 @@ function home(){
  ${dailyPanel()}
  <div class="hero"><div class="big">${['','🐣','🐥','🦊','🐯','🦁','🦅'][g]}</div>
   <h2>${g} 年級的冒險</h2>
-  <p>本年級新單字 ${WORDS[g].length} 個・句型文法 ${ex.rules.length+ex.tpls.length} 項・模擬考 ${ex.total} 題<br>答錯的題目自動加 3 題補充習題，並放進錯題本</p></div>
+  <p>本年級新單字 ${WORDS[g].length} 個${WORDS[g].filter(w=>w.ext).length?`（含⭐銜接國中 ${WORDS[g].filter(w=>w.ext).length} 個）`:''}・句型文法 ${ex.rules.length+ex.tpls.length} 項・模擬考 ${ex.total} 題<br>答錯的題目自動加 3 題補充習題，並放進錯題本</p></div>
  <div class="chapters">${CHAPTERS.map(([k,i,t,d])=>`<button class="ch" onclick="go('${k}')"><div class="ico">${i}</div><b>${t}</b><span>${d}</span>${extra(k)}</button>`).join('')}</div>`;
 }
 function setGrade(g){state.grade=g;store.set('kidsEN_grade',g);home()}
@@ -604,10 +660,10 @@ function learn(){
  const list=WORDS[state.grade];let i=0;
  function draw(){const w=list[i];
   app.innerHTML=topBar('🃏 單字卡')+`<div class="panel"><div class="prog"><i style="width:${(i+1)/list.length*100}%"></i></div>
-  <div class="flash"><div class="emo pop">${w.m}</div><div class="w en">${w.e}</div><div class="z">${w.z}</div><div class="row"><button class="speak" id="sp">🔊</button></div></div>
+  <div class="flash">${w.ext?'<div class="extb">⭐ 銜接國中</div>':''}<div class="emo pop">${w.m}</div><div class="w en">${w.e}</div><div class="z">${w.z}</div><div class="row"><button class="speak" id="sp">🔊</button></div></div>
   <div class="row"><button class="btn ghost" id="pv">← 上一個</button><span style="align-self:center;font-weight:700">${i+1} / ${list.length}</span><button class="btn" id="nx">下一個 →</button></div>
   <h4 style="margin-top:24px">本年級全部單字（點一下聽發音）</h4>
-  <div class="wlist">${list.map((x,k)=>`<button class="wl" data-k="${k}"><b>${x.m} ${x.e}</b><small>${x.z}</small></button>`).join('')}</div></div>`;
+  <div class="wlist">${list.map((x,k)=>`<button class="wl ${x.ext?'ext':''}" data-k="${k}"><b>${x.m} ${x.e}</b><small>${x.ext?'⭐ ':''}${x.z}</small></button>`).join('')}</div></div>`;
   $('#sp').onclick=()=>say(w.e);$('#pv').onclick=()=>{i=(i-1+list.length)%list.length;dayInc('cards');draw()};
   $('#nx').onclick=()=>{i=(i+1)%list.length;dayInc('cards');draw();say(list[i].e)};
   app.querySelectorAll('.wl').forEach(b=>b.onclick=()=>{i=+b.dataset.k;draw();say(list[i].e);window.scrollTo(0,0)});
@@ -648,6 +704,7 @@ function info(){
  <p>文法城堡、時光列車、填空單字每回 24 題，中翻英每回 15 句，都是原本的 3 倍。</p>
  <p><b>補充習題：</b>任何一題答錯（或填字時點錯字母、排句子第一次排錯），做完那一回後會自動出 3 倍的類似題：單字換成其他題型再考 3 次，文法換成同一個觀念的新句子 3 題，中翻英換成同句型的新句子 3 句。補充習題又錯，可以再接著補。</p>
  <h4>單字從哪裡來？</h4>
+ <p><b>共 500 字：</b>臺北市手冊應用字詞全部收錄（約 391 字，部分如 mom / mother、am / is / are 分開列），再加上約 100 個從國中 1,200 基本字彙挑選、國小課本常見的<b>⭐銜接國中</b>單字（月份、職業、動物、形容詞、頻率副詞等），放在 5、6 年級。5、6 年級文法也加入比較級、最高級、There is/are、受格與所有格代名詞、未來式 will / be going to、Did 問句等國中銜接內容。</p>
  <p>主要依據臺北市政府教育局發行的<b>《臺北市國民小學英語聽說評量手冊》</b>：應用字詞 391 字、生活用語 87 句、簡易句型 54 組，分為低、中、高年段。App 再把每個年段拆成兩個年級。教育部課綱的國小目標是能聽、說、讀 300 字，其中會拼寫 180 字。</p>
  <h4>臺北市的考試怎麼考？</h4>
  <p>臺北市自 102 年度起每年 10 月對五年級學生辦理「基本學力檢測」，英語範圍是一到四年級的聽、讀、說、寫內容（含低、中年段生活用語與簡易句型），另抽測口說。</p>
