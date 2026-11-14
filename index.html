@@ -123,6 +123,13 @@ body{-webkit-user-select:none;user-select:none;overscroll-behavior:none}
 .badge{display:inline-block;background:#FFE1A8;color:#8A5A00;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;margin-left:8px;vertical-align:middle}
 .papers{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:14px}
 .remedy-box{background:#EAF6FF;border-radius:16px;padding:14px;margin-top:14px;line-height:1.7;font-size:15px}
+.revbanner{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:20px;padding:14px 16px;margin-bottom:14px;background:linear-gradient(90deg,#2FA9E0,#7B6CF6);color:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 5px 0 rgba(0,0,0,.12);animation:pulse 2s infinite}
+.revbanner>span:first-child{font-size:34px}.revbanner b{flex:1;font-size:19px;font-weight:900}.revbanner small{display:block;font-size:13px;font-weight:500;opacity:.9}
+.revbanner .go{background:#fff;color:#2F6FE0;border-radius:999px;padding:6px 12px;font-weight:900}
+@keyframes pulse{50%{transform:scale(1.02)}}
+.srsstat{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:14px 0 4px;text-align:center;font-size:12px;color:var(--muted)}
+.srsstat div{background:#F6F2FF;border-radius:12px;padding:8px 2px}.srsstat b{display:block;font-size:20px;color:var(--ink)}
+.mbar{letter-spacing:-1px;color:#2FA9E0}
 .extb{display:inline-block;background:#FFF0D9;color:#B35C00;border-radius:999px;padding:3px 12px;font-size:14px;font-weight:700;margin-bottom:6px}
 .wl.ext{border-color:#FFD08A;background:#FFFBF2}
 .slot.reveal{background:#FFE3E3;border-color:var(--bad);color:var(--bad)}
@@ -458,7 +465,7 @@ const SESSION={grammar:24,tense:24,spell:24,trans:15};
 const CHAPTERS=[
  ['learn','🃏','單字卡','看圖、聽發音、認識單字'],
  ['battle','👾','打怪練習','答對攻擊、連對暴擊'],
- ['review','📒','錯題本','1、3、7 天間隔複習'],
+ ['review','🔁','複習本','遺忘曲線：當天、1、2、4、7、15、30 天'],
  ['spell','🧩','填空單字','每回 24 個單字'],
  ['grammar','🧱','文法城堡','每回 24 題'],
  ['tense','⏰','時光列車','時態練習，每回 24 題'],
@@ -470,13 +477,14 @@ const CHAPTERS=[
 function home(){
  setAccent();const g=state.grade;const ex=examInfo(g);
  const doneP=ex.papers.filter((_,k)=>best[g+'_mock'+k]).length,due=srsDue().length,beat=Math.min(MONP[g]||0,6);
- const extra=k=>k=='mock'?`<div class="stars">完成 ${doneP} / ${ex.papers.length} 回</div>`:k=='battle'?`<div class="stars">打倒 ${beat} / 6 隻</div>`:k=='review'?`<div class="stars" style="${due?'color:var(--bad);font-weight:700':''}">${due?'今天要複習 '+due+' 題':'今天沒有要複習的'}</div>`:(k!='info'&&k!='learn'?`<div class="stars">${starStr(best[g+'_'+k]||0)}</div>`:'');
+ const extra=k=>k=='mock'?`<div class="stars">完成 ${doneP} / ${ex.papers.length} 回</div>`:k=='battle'?`<div class="stars">打倒 ${beat} / 6 隻</div>`:k=='review'?`<div class="stars" style="${due?'color:var(--bad);font-weight:700':''}">${due?'今天要複習 '+due+' 題':'今天的複習完成了'}</div>`:(k!='info'&&k!='learn'?`<div class="stars">${starStr(best[g+'_'+k]||0)}</div>`:'');
  app.innerHTML=`
  <div class="grades">${[1,2,3,4,5,6].map(i=>`<button class="gbtn ${i==g?'on':''}" style="background:${COLORS_G[i]}" onclick="setGrade(${i})">${i}年級<small>${BAND[i]}</small></button>`).join('')}</div>
+ ${(()=>{const d=srsDue().length;return d?`<button class="revbanner" onclick="go('review')"><span>🔁</span><b>今天有 ${d} 題要複習<small>趁還沒忘記，現在複習最有效！</small></b><span class="go">GO ▶</span></button>`:''})()}
  ${dailyPanel()}
  <div class="hero"><div class="big">${['','🐣','🐥','🦊','🐯','🦁','🦅'][g]}</div>
   <h2>${g} 年級的冒險</h2>
-  <p>本年級新單字 ${WORDS[g].length} 個${WORDS[g].filter(w=>w.ext).length?`（含⭐銜接國中 ${WORDS[g].filter(w=>w.ext).length} 個）`:''}・句型文法 ${ex.rules.length+ex.tpls.length} 項・模擬考 ${ex.total} 題<br>答錯的題目自動加 3 題補充習題，並放進錯題本</p></div>
+  <p>本年級新單字 ${WORDS[g].length} 個${WORDS[g].filter(w=>w.ext).length?`（含⭐銜接國中 ${WORDS[g].filter(w=>w.ext).length} 個）`:''}・句型文法 ${ex.rules.length+ex.tpls.length} 項・模擬考 ${ex.total} 題<br>學過的題目會依遺忘曲線自動複習，答錯再加 3 題補充習題</p></div>
  <div class="chapters">${CHAPTERS.map(([k,i,t,d])=>`<button class="ch" onclick="go('${k}')"><div class="ico">${i}</div><b>${t}</b><span>${d}</span>${extra(k)}</button>`).join('')}</div>`;
 }
 function setGrade(g){state.grade=g;store.set('kidsEN_grade',g);home()}
@@ -535,8 +543,10 @@ function runQuiz(o){
   i<o.items.length?draw():result(o,score,wrong)}
  function done(ok){
   const it=o.items[i];
-  if(!it.retry){if(ok){score++;dayInc('correct')}else{wrong.push(it);if(!it.srsKey)srsAdd(it)}}
+  if(!it.retry){if(ok){score++;dayInc('correct')}else wrong.push(it);if(!it.srsKey)srsTouch(it,ok)}
   if(it.srsKey&&!it.retry)srsUpdate(it.srsKey,ok);
+  /* 複習時答錯：同一回合 3 題後換個題型再考一次 */
+  if(!ok&&o.review&&it.srsKey&&!it.retry&&it.type!=='spell'){const again=srsMake(it.srsKey);if(again){again.retry=1;o.items.splice(Math.min(i+4,o.items.length),0,again)}}
   /* 填空單字錯了：3 題後再出一次，空格換位置、多一個空格（最多重考 3 次） */
   if(!ok&&it.type=='spell'&&(it.retry||0)<3){
    const again=Object.assign({},it,{retry:(it.retry||0)+1,extra:(it.extra||0)+1,prevHoles:it.holesUsed,srsKey:null});
@@ -574,7 +584,10 @@ function drawMC(it,el,done,last){
 function drawSpell(it,el,done){
  const g=state.grade,w=it.w,letters=w.e.split('');
  const idx=letters.map((c,k)=>c!==' '?k:-1).filter(k=>k>=0);
- const nh=Math.min(idx.length,(g<=2?1:g<=4?2:Math.max(2,Math.ceil(idx.length*.5)))+(it.extra||0));
+ const ratio=g<=2?.4:g<=4?.5:.65,base=Math.max(2,Math.ceil(idx.length*ratio));
+ /* 至少挖 2 格；1～4 年級保留至少 1 個字母當提示，5～6 年級重考時可以整個字都要拼 */
+ const cap=(g<=4||!it.retry)?Math.max(1,idx.length-1):idx.length;
+ const nh=Math.min(cap,base+(it.extra||0));
  /* 重考時：優先挑「上次沒挖空」的位置，讓空格換地方 */
  const prev=it.prevHoles||[],fresh=shuffle(idx.filter(k=>!prev.includes(k))),old=shuffle(idx.filter(k=>prev.includes(k)));
  const holes=fresh.concat(old).slice(0,nh).sort((a,b)=>a-b);
@@ -644,7 +657,7 @@ function result(o,score,wrong){
  window.scrollTo(0,0);
  app.innerHTML=topBar(o.remedial?'補充習題成績':B?'戰鬥結果':o.review?'複習成績':'成績單')+`<div class="panel result">
   <div class="s">${starStr(s)}</div>${head}<p style="font-size:18px">${msg}</p>
-  ${wrong.length?`<div class="remedy-box" style="text-align:left">📘 答錯 <b>${wrong.length}</b> 題，每題再練 3 題類似題，共 <b>${wrong.length*3}</b> 題補充習題。<br><small>📒 答錯的題目也已經放進錯題本，明天會再複習。</small>
+  ${wrong.length?`<div class="remedy-box" style="text-align:left">📘 答錯 <b>${wrong.length}</b> 題，每題再練 3 題類似題，共 <b>${wrong.length*3}</b> 題補充習題。<br><small>🔁 這些題目已排進複習本，今天稍後和明天都會再出現。</small>
    <div class="row" style="justify-content:flex-start"><button class="btn" id="rem">開始補充習題 ▶</button></div></div>
    <div class="review"><b>答錯的題目：</b>${wrong.map(w=>`<div class="en">${esc(w.review||'')}${w.tip?'<br><small>'+w.tip+'</small>':''}</div>`).join('')}</div>`:''}
   <div class="row"><button class="btn ${wrong.length?'ghost':''}" id="again">${o.remedial?'回到原本的練習':B?(B.win?'再打一次':'重新挑戰'):'再玩一次'}</button><button class="btn ghost" onclick="go('${o.back||'home'}')">${backName}</button></div></div>`;
@@ -695,7 +708,7 @@ function info(){
  const rows=[1,2,3,4,5,6].map(g=>{const e=examInfo(g);return`<tr><td>${g} 年級</td><td>${e.words}</td><td>${e.rules.length+e.tpls.length}</td><td>${e.total} 題（${e.papers.length} 回）</td></tr>`}).join('');
  app.innerHTML=topBar('📚 單字來源與教材')+`<div class="panel info">
  <h4>讓孩子每天回來練習的設計</h4>
- <p><b>📒 錯題本＋間隔複習：</b>答錯的題目自動收進錯題本，隔 1 天、3 天、7 天再出現；複習答對 3 次就畢業，又錯就從頭開始。這是記憶效果最好的複習方法。</p>
+ <p><b>🔁 複習本（遺忘曲線＋萊特納間隔複習）：</b>孩子學過的每個單字、文法、句型都會自動排進複習，依記憶強度在當天、1、2、4、7、15、30 天後再出現；答對間隔拉長，答錯回到第一天，複習時答錯的題目同一回合還會換題型再考一次。連續答對 7 次才算熟練。首頁會顯示今天要複習幾題。</p>
  <p><b>📅 每日任務＋🔥 連續天數：</b>每天 3 個小任務（約 5–10 分鐘）。全部完成，連續天數 +1。每連續 7 天送 1 張冰凍卡（最多 2 張），漏掉一天也不會斷。</p>
  <p><b>👾 打怪練習：</b>每個年級 6 隻怪獸（最後是魔王）。答對攻擊、連對 3 題暴擊、答錯掉一顆心。打倒才會解鎖下一隻。</p>
  <h4>題量設計</h4>
@@ -725,36 +738,48 @@ function info(){
 function dstr(off){const d=new Date(Date.now()+(off||0)*864e5);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function popup(html,btn){const m=document.createElement('div');m.className='imodal';m.innerHTML='<div class="box" style="text-align:center">'+html+'<button class="btn" style="width:100%;margin-top:14px">'+(btn||'太好了！')+'</button></div>';m.onclick=e=>{if(e.target===m||e.target.tagName==='BUTTON')m.remove()};document.body.appendChild(m)}
 
-/* ===================== 錯題本＋間隔複習（1 天 → 3 天 → 7 天，答對 3 次畢業） ===================== */
+/* ===================== 複習本：遺忘曲線＋萊特納間隔複習 =====================
+   每個學過的單字、文法、句型都會排進複習。
+   記憶盒 0～6：0＝今天再複習，之後間隔 1、2、4、7、15、30 天；連續答對 7 次＝熟練。答錯退回盒 0。 */
 const WG={};for(let g=6;g>=1;g--)WORDS[g].forEach(w=>WG[w.e]=g);
 let SRS=store.get('kidsEN_srs',{}),SRSSTAT=store.get('kidsEN_srsstat',{grad:0});
-const SRS_GAP=[1,3,7];
+const SRS_GAP=[0,1,2,4,7,15,30];
+const SRS_STAGE=['🌱 剛學','🌱 剛學','🌿 短期','🌿 短期','🌳 中期','🌳 中期','🏆 長期'];
 function srsKeyOf(it){const f=it.fam;if(!f)return null;
  if(f.k=='word')return{key:'w|'+f.w.e,e:{k:'w',g:WG[f.w.e]||state.grade,e:f.w.e}};
  if(f.k=='rule')return{key:'r|'+state.grade+'|'+f.id,e:{k:'r',g:state.grade,id:f.id}};
  const ti=TPL.indexOf(f.t);return{key:'t|'+ti,e:{k:'t',g:f.t[0],ti}}}
 function srsSave(){store.set('kidsEN_srs',SRS);store.set('kidsEN_srsstat',SRSSTAT)}
-function srsAdd(it){const s=srsKeyOf(it);if(!s)return;SRS[s.key]=Object.assign(s.e,{box:0,due:dstr(1),r:it.review||'',n:(SRS[s.key]&&SRS[s.key].n||0)+1});srsSave()}
+/* 一般練習時答過的題目：第一次見到就排進複習；已在複習中，答錯退回、到期答對算一次複習 */
+function srsTouch(it,ok){const s=srsKeyOf(it);if(!s)return;const t=dstr(0),e=SRS[s.key];
+ if(!e){SRS[s.key]=Object.assign(s.e,{box:ok?1:0,due:ok?dstr(1):t,r:it.review||'',n:ok?0:1,first:t});srsSave();return}
+ if(!ok){e.box=0;e.due=t;e.n=(e.n||0)+1;e.r=it.review||e.r;srsSave()}
+ else if(e.due<=t)srsUpdate(s.key,true)}
 function srsUpdate(key,ok){const e=SRS[key];if(!e)return;
- if(ok){e.box++;if(e.box>=3){delete SRS[key];SRSSTAT.grad++;toast('🎓 這題從錯題本畢業了！')}else e.due=dstr(SRS_GAP[e.box])}
- else{e.box=0;e.due=dstr(1)}srsSave()}
-function srsDue(){const t=dstr(0);return Object.keys(SRS).filter(k=>SRS[k].due<=t)}
+ if(ok){e.box++;if(e.box>=SRS_GAP.length){delete SRS[key];SRSSTAT.grad++;toast('🏆 這題已經熟練，記到長期記憶了！')}else e.due=dstr(SRS_GAP[e.box])}
+ else{e.box=0;e.due=dstr(0);e.n=(e.n||0)+1}srsSave()}
+function srsDue(){const t=dstr(0);return Object.keys(SRS).filter(k=>SRS[k].due<=t).sort((a,b)=>SRS[a].box-SRS[b].box||(SRS[b].n||0)-(SRS[a].n||0))}
 function srsMake(key){const e=SRS[key],og=state.grade;state.grade=e.g;let it=null;
  try{if(e.k=='w'){const w=(WORDS[e.g]||[]).find(x=>x.e==e.e);if(w)it=wordItem(w,one(wordFmts(w,true)))}
   else if(e.k=='r'){if(GEN[e.id])it=ruleItem(e.id)}else if(TPL[e.ti])it=tplItem(TPL[e.ti])}finally{state.grade=og}
  if(it)it.srsKey=key;return it}
 function reviewMenu(){
- const due=srsDue(),all=Object.keys(SRS),t=dstr(0);
- const dots=b=>'●'.repeat(b)+'○'.repeat(3-b);
- const list=all.sort((a,b)=>SRS[a].due<SRS[b].due?-1:1).map(k=>{const e=SRS[k];const d=e.due<=t?'<b style="color:var(--bad)">今天複習</b>':e.due==dstr(1)?'明天':e.due.slice(5).replace('-','/');
-  return `<div class="srsrow"><span class="en">${esc(e.r)}</span><span class="srsmeta">${e.g}年級・${dots(e.box)}・${d}</span></div>`}).join('');
- app.innerHTML=topBar('📒 錯題本')+`<div class="panel">
-  <div class="remedy-box">答錯的題目會自動收進錯題本，在 <b>1 天、3 天、7 天</b>後再出現。<br>複習答對 3 次（●●●）就畢業 🎓；又答錯就從頭開始。</div>
-  <div class="stat" style="margin-top:14px"><span>今天要複習：<b style="color:var(--bad)">${due.length}</b></span><span>錯題本：<b>${all.length}</b></span><span>已畢業：<b>${SRSSTAT.grad}</b></span></div>
-  <div class="row"><button class="btn" id="go" ${due.length?'':'disabled style="opacity:.5"'}>${due.length?`開始今日複習（${due.length} 題）▶`:'今天沒有要複習的題目 👍'}</button></div>
-  ${all.length?`<h4 style="margin:20px 0 8px">錯題清單</h4><div>${list}</div>`:'<p class="qsub" style="margin-top:20px">錯題本是空的！去練習吧，答錯的題目會自動出現在這裡。</p>'}</div>`;
- if(due.length)$('#go').onclick=()=>{const items=shuffle(due.map(srsMake).filter(Boolean));
-  runQuiz({title:'📒 錯題複習',items,review:true,replay:()=>go('review'),back:'review',onFinish:()=>dayFlag('reviewDone')})};
+ const due=srsDue(),all=Object.keys(SRS),t=dstr(0),ROUND=30;
+ const bar=b=>'▮'.repeat(b+1)+'▯'.repeat(SRS_GAP.length-b-1);
+ const cnt=[0,0,0,0];all.forEach(k=>{const b=SRS[k].box;cnt[b<2?0:b<4?1:b<6?2:3]++});
+ const weak=all.filter(k=>(SRS[k].n||0)>0).sort((a,b)=>(SRS[b].n||0)-(SRS[a].n||0)||SRS[a].box-SRS[b].box).slice(0,60);
+ const row=k=>{const e=SRS[k];const d=e.due<=t?'<b style="color:var(--bad)">今天</b>':e.due==dstr(1)?'明天':e.due.slice(5).replace('-','/');
+  return `<div class="srsrow"><span class="en">${esc(e.r)}${e.n?` <small style="color:var(--bad)">錯 ${e.n} 次</small>`:''}</span><span class="srsmeta">${SRS_STAGE[e.box]} <span class="mbar">${bar(e.box)}</span>・${d}</span></div>`};
+ app.innerHTML=topBar('🔁 複習本')+`<div class="panel">
+  <div class="remedy-box">🧠 <b>遺忘曲線：</b>剛學會的東西，如果不複習，隔天就會忘掉一大半。<br>
+  所以學過的每個單字和文法，都會在 <b>當天、1、2、4、7、15、30 天</b>後再出現。每答對一次，記憶就更牢、間隔拉長；<b>答錯就回到第一天</b>重新練。連續答對 7 次就「熟練」🏆。</div>
+  <div class="srsstat"><div><b>${cnt[0]}</b>🌱 剛學</div><div><b>${cnt[1]}</b>🌿 短期</div><div><b>${cnt[2]}</b>🌳 中期</div><div><b>${cnt[3]}</b>🏆 長期</div><div><b>${SRSSTAT.grad}</b>✅ 熟練</div></div>
+  <div class="row"><button class="btn" id="go" ${due.length?'':'disabled style="opacity:.5"'}>${due.length?`開始複習（${Math.min(due.length,ROUND)} 題）▶`:'今天的複習都完成了 👍'}</button></div>
+  ${due.length>ROUND?`<p class="qsub" style="margin-top:8px">今天共 ${due.length} 題要複習，每次 ${ROUND} 題，先從最不熟的開始。</p>`:''}
+  ${weak.length?`<h4 style="margin:20px 0 8px">⚠️ 最常錯的題目</h4><div>${weak.map(row).join('')}</div>`:''}
+  ${!all.length?'<p class="qsub" style="margin-top:20px">複習本還是空的！去練習吧，學過的單字和文法都會自動排進來。</p>':''}</div>`;
+ if(due.length)$('#go').onclick=()=>{const items=due.slice(0,ROUND).map(srsMake).filter(Boolean);
+  runQuiz({title:'🔁 今日複習',items:shuffle(items),review:true,replay:()=>go('review'),back:'review',onFinish:()=>dayFlag('reviewDone')})};
 }
 
 /* ===================== 每日任務＋連續天數 ===================== */
@@ -763,7 +788,7 @@ function ensureDay(){if(!DAY)DAY=store.get('kidsEN_day',null);if(!DAY||DAY.date!
 function tasks(){const d=ensureDay();return[
  {ico:'✅',t:'答對 15 題',v:Math.min(d.correct,15),n:15},
  {ico:'👾',t:'打倒 1 隻怪獸',v:Math.min(d.monsters,1),n:1},
- d.t3=='review'?{ico:'📒',t:'完成錯題本複習',v:d.reviewDone?1:0,n:1}:{ico:'🃏',t:'看 10 張單字卡',v:Math.min(d.cards,10),n:10}]}
+ d.t3=='review'?{ico:'🔁',t:'完成今日複習',v:d.reviewDone?1:0,n:1}:{ico:'🃏',t:'看 10 張單字卡',v:Math.min(d.cards,10),n:10}]}
 function dayInc(k,n){ensureDay();DAY[k]+=(n||1);store.set('kidsEN_day',DAY);checkDaily()}
 function dayFlag(k){ensureDay();DAY[k]=true;store.set('kidsEN_day',DAY);checkDaily()}
 function streakNow(){const s=STREAK;if(s.last==dstr(0)||s.last==dstr(-1))return s.count;if(s.last==dstr(-2)&&s.freeze>0)return s.count;return 0}
