@@ -142,6 +142,11 @@ body{-webkit-user-select:none;user-select:none;overscroll-behavior:none}
 .warnbox{background:#FFECEC;border-radius:14px;padding:12px;margin-top:12px;line-height:1.7;font-size:15px}.okbox{background:#E7F8EE;border-radius:14px;padding:12px;margin-top:12px;font-weight:700}
 .weekbanner{display:flex;align-items:center;gap:12px;width:100%;border:2px solid #FFD08A;border-radius:20px;padding:12px 14px;margin-bottom:14px;background:#FFFBF2;color:var(--ink);cursor:pointer;font-family:inherit;text-align:left}
 .weekbanner>span:first-child{font-size:28px}.weekbanner b{flex:1;font-size:17px}.weekbanner small{display:block;font-size:13px;font-weight:500;color:var(--muted)}.weekbanner .go{background:var(--accent);color:#fff;border-radius:999px;padding:6px 12px;font-weight:900}
+.explain{margin-top:8px;text-align:left;background:#fff;border-radius:12px;padding:10px 12px;font-size:15px;line-height:1.6}.exh{font-weight:900;margin-bottom:4px}.exmain{margin-bottom:6px}.exrow{padding:4px 0;border-top:1px dashed var(--line)}.exrow span{display:block;color:var(--muted);font-size:14px}.exrow.ok b{color:#1a9b55}.exrow.no b{color:#c0392b}
+.lesson .lsec{background:#fff;border:2px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:12px;line-height:1.8}.lh{font-weight:900;font-size:17px;margin-bottom:6px;color:var(--accent)}.lesson ul{margin:0;padding-left:20px}
+.ltbl{border-collapse:collapse;width:100%;margin-top:8px;font-size:15px}.ltbl th,.ltbl td{border:1px solid var(--line);padding:6px 8px;text-align:left}.ltbl th{background:#EAF6FF}
+.lex{display:block;width:100%;text-align:left;background:#F6FAFF;border:0;border-radius:12px;padding:8px 10px;margin:6px 0;font-family:inherit;font-size:16px;cursor:pointer}.lex span{display:block;color:var(--muted);font-size:14px}
+.lmis{border-top:1px dashed var(--line);padding:6px 0}.lmis small{color:var(--muted)}.ch.locked{opacity:.6}
 .semh{margin:18px 0 8px;font-size:19px}.tcard{border:2px solid var(--line);border-radius:16px;padding:10px 12px;margin-bottom:10px;background:#fff}
 .thead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.thead span{color:var(--muted);font-size:13px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 10px;font-size:15px;cursor:pointer;font-family:"Arial Rounded MT Bold","Avenir Next",system-ui,"PingFang TC";color:var(--ink)}
@@ -474,14 +479,7 @@ state.grade=store.get('kidsEN_grade',1);
 function saveBest(ch,stars){const k=state.grade+'_'+ch;if(!best[k]||stars>best[k]){best[k]=stars;store.set('kidsEN_best',best)}updateStars()}
 function updateStars(){$('#totalStars').textContent=Object.values(best).reduce((a,b)=>a+b,0);try{$('#streakN').textContent=streakNow()}catch(e){}}
 function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.8;speechSynthesis.speak(u)}catch(e){}}
-/* 答錯時的趣味語音：先用中文唸「不要瞎掰好嗎？」，再唸正確的英文（首頁可以關掉） */
-const APP_VERSION='v10（2026-11-14）';
-let TEASE=store.get('kidsEN_tease',true);
-function zhVoice(){try{const vs=speechSynthesis.getVoices();return vs.find(v=>/zh[-_]TW/i.test(v.lang))||vs.find(v=>/zh[-_](HK|Hant)/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))}catch(e){}}
-function tease(next){if(!TEASE){if(next)say(next);return}
- try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance('不要瞎掰好嗎？');u.lang='zh-TW';const v=zhVoice();if(v)u.voice=v;u.rate=1.05;u.pitch=1.15;speechSynthesis.speak(u);
-  if(next){const e=new SpeechSynthesisUtterance(next);e.lang='en-US';e.rate=.8;speechSynthesis.speak(e)}}catch(e){}}
-function toggleTease(){TEASE=!TEASE;store.set('kidsEN_tease',TEASE);toast(TEASE?'😜 趣味語音：開':'🤫 趣味語音：關');if(TEASE)tease();home()}
+const APP_VERSION='v11（2026-11-14）';
 let actx;function beep(ok){try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.type='triangle';const t=actx.currentTime;if(ok){o.frequency.setValueAtTime(660,t);o.frequency.setValueAtTime(880,t+.1)}else{o.frequency.setValueAtTime(220,t)}g.gain.setValueAtTime(.15,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.start(t);o.stop(t+.3)}catch(e){}}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1200)}
 const starsFor=p=>p>=.9?3:p>=.7?2:p>=.4?1:0;
@@ -500,6 +498,7 @@ const CHAPTERS=[
  ['battle','👾','打怪練習','答對攻擊、連對暴擊'],
  ['phonics','🔤','自然發音','字母拼讀、字族、sh/ch/th'],
  ['spell','🧩','填空單字','每回 24 個單字'],
+ ['gclass','📘','文法教室','29 個單元：講解＋測驗＋解析'],
  ['grammar','🧱','文法城堡','每回 24 題'],
  ['tense','⏰','時光列車','時態練習，每回 24 題'],
  ['trans','🌉','中翻英拼橋','每回 15 句'],
@@ -513,7 +512,7 @@ const CHAPTERS=[
 function home(){
  setAccent();const g=state.grade;const ex=examInfo(g);
  const doneP=ex.papers.filter((_,k)=>best[g+'_mock'+k]).length,due=srsDue().length,beat=Math.min(MONP[g]||0,6);
- const extra=k=>k=='mock'?`<div class="stars">完成 ${doneP} / ${ex.papers.length} 回</div>`:k=='battle'?`<div class="stars">打倒 ${beat} / 6 隻</div>`:k=='review'?`<div class="stars" style="${due?'color:var(--bad);font-weight:700':''}">${due?'今天要複習 '+due+' 題':'今天的複習完成了'}</div>`:(['info','learn','map','report'].includes(k)?'':`<div class="stars">${starStr(best[g+'_'+(k=='read'?'reading':k)]||0)}</div>`);
+ const extra=k=>k=='mock'?`<div class="stars">完成 ${doneP} / ${ex.papers.length} 回</div>`:k=='battle'?`<div class="stars">打倒 ${beat} / 6 隻</div>`:k=='review'?`<div class="stars" style="${due?'color:var(--bad);font-weight:700':''}">${due?'今天要複習 '+due+' 題':'今天的複習完成了'}</div>`:(['info','learn','map','report','gclass'].includes(k)?'':`<div class="stars">${starStr(best[g+'_'+(k=='read'?'reading':k)]||0)}</div>`);
  app.innerHTML=`
  <div class="grades">${[1,2,3,4,5,6].map(i=>`<button class="gbtn ${i==g?'on':''}" style="background:${COLORS_G[i]}" onclick="setGrade(${i})">${i}年級<small>${BAND[i]}</small></button>`).join('')}</div>
  ${(()=>{const d=srsDue().length;return d?`<button class="revbanner" onclick="go('review')"><span>🔁</span><b>今天有 ${d} 題要複習<small>趁還沒忘記，現在複習最有效！</small></b><span class="go">GO ▶</span></button>`:''})()}
@@ -523,12 +522,11 @@ function home(){
   <h2>${g} 年級的冒險</h2>
   <p>本年級新單字 ${WORDS[g].length} 個${WORDS[g].filter(w=>w.ext).length?`（含⭐銜接國中 ${WORDS[g].filter(w=>w.ext).length} 個）`:''}・句型文法 ${ex.rules.length+ex.tpls.length} 項・模擬考 ${ex.total} 題<br>另有自然發音、情境對話、閱讀理解；學過的題目會依遺忘曲線自動複習</p></div>
  <div class="chapters">${CHAPTERS.map(([k,i,t,d])=>`<button class="ch" onclick="go('${k}')"><div class="ico">${i}</div><b>${t}</b><span>${d}</span>${extra(k)}</button>`).join('')}</div>
- <div class="row"><button class="teasebtn" onclick="toggleTease()">${TEASE?'😜':'🤫'} 答錯時的趣味語音「不要瞎掰好嗎？」：<b>${TEASE?'開':'關'}</b></button></div>
  <p class="qsub" style="margin-top:10px">版本 ${APP_VERSION}・${location.host}</p>`;
 }
 function setGrade(g){state.grade=g;store.set('kidsEN_grade',g);home()}
 function go(v){try{speechSynthesis.cancel()}catch(e){}window.scrollTo(0,0);
- ({home,learn,match,mock:mockMenu,info,battle:battleMenu,review:reviewMenu,map:mapPage,week:weekPage,phonics:phonicsMenu,talk:talkMenu,read:readMenu,reading:readMenu,report,
+ ({home,learn,match,mock:mockMenu,info,battle:battleMenu,review:reviewMenu,map:mapPage,week:weekPage,phonics:phonicsMenu,talk:talkMenu,read:readMenu,reading:readMenu,report,gclass:grammarClass,
    spell:startSpell,grammar:()=>startRules('grammar','🧱 文法城堡'),tense:()=>startRules('tense','⏰ 時光列車'),trans:startTrans})[v]()}
 
 /* ===================== 各章節開始 ===================== */
@@ -615,8 +613,8 @@ function drawMC(it,el,done,last){
   ok=b.dataset.o===it.ans;
   el.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.dataset.o===it.ans)x.classList.add('ok')});
   if(!ok)b.classList.add('bad');beep(ok);
-  const s=it.sayAfter||(it.speak?fill(it.q,it.ans).replace(/\s*\(.*?\)/g,''):'');if(!ok)tease(s);else if(s)say(s);
-  const tip=$('#tip');tip.innerHTML=(ok?'✅ '+one(praise):'💡 正確答案是 <b class="en">'+esc(it.ans)+'</b>')+(it.tip?'<br>'+it.tip:'')+(!ok&&it.fam?'<br><small>📘 這題會加 3 題補充習題</small>':'');tip.classList.add('show');
+  const s=it.sayAfter||(it.speak?fill(it.q,it.ans).replace(/\s*\(.*?\)/g,''):'');if(s)say(s);
+  const tip=$('#tip');tip.innerHTML=(ok?'✅ '+one(praise):'💡 正確答案是 <b class="en">'+esc(it.ans)+'</b>')+(it.fam&&it.fam.k==='rule'?explainHTML(it):(it.tip?'<br>'+it.tip:''))+(!ok&&it.fam?'<br><small>📘 這題會加 3 題補充習題</small>':'');tip.classList.add('show');
   $('#nextRow').style.display='flex';
  });
  $('#nx').onclick=()=>done(ok);
@@ -653,7 +651,7 @@ function drawSpell(it,el,done){
    el.querySelectorAll('.slot.hole').forEach(s=>{s.textContent=letters[+s.dataset.k];s.classList.remove('hole','cur');s.classList.add('reveal','en')});
    el.querySelectorAll('.tile').forEach(x=>x.disabled=true);
    $('#spmsg').innerHTML=`❌ 正確拼法是 <b class="en">${w.e}</b><br>等一下會換空格位置再考一次！`;$('#spmsg').classList.add('show');
-   tease(w.e);setTimeout(()=>done(false),2600);
+   say(w.e);setTimeout(()=>done(false),2200);
   }
  });
  setTimeout(()=>say(w.e),300);
@@ -674,8 +672,8 @@ function drawArrange(it,el,done,last){
   $('#ck').onclick=()=>{
    if(bank.length){toast('還有單字沒用到喔');return}
    if(chosen.map(c=>c.t).join(' ')===it.en){beep(true);say(it.en);finished=true;paint((tries?'✅ 這次對了！':'✅ '+one(praise))+' <b class="en">'+esc(it.en)+'</b>'+(tries?'<br><small>📘 這句會加 3 題補充習題</small>':''))}
-   else{beep(false);tries++;if(tries==1){tease();bank=bank.concat(chosen);chosen=[];paint('🤔 順序不太對，再試一次！提示：第一個字是 <b class="en">'+esc(tokens[0])+'</b>')}
-    else{tease(it.en);finished=true;paint('💡 正確句子：<b class="en">'+esc(it.en)+'</b><br><small>📘 這句會加 3 題補充習題</small>')}}
+   else{beep(false);tries++;if(tries==1){bank=bank.concat(chosen);chosen=[];paint('🤔 順序不太對，再試一次！提示：第一個字是 <b class="en">'+esc(tokens[0])+'</b>')}
+    else{say(it.en);finished=true;paint('💡 正確句子：<b class="en">'+esc(it.en)+'</b><br><small>📘 這句會加 3 題補充習題</small>')}}
   };
  }
  paint();
@@ -693,7 +691,7 @@ function result(o,score,wrong){
   head=`<h2>${score} / ${total}</h2>`;
   msg=wrong.length?(s==3?'超級厲害！🏆':s==2?'很不錯喔！再一次就滿分！':s==1?'有進步！多練幾次會更棒':'沒關係，再試一次！💪'):(o.remedial?'補充習題全對！觀念都弄懂了 🎉':o.review?'今天的錯題全部答對！🎓':'全部答對！超級厲害！🏆');
  }
- const backName={mock:'回模擬考目錄',battle:'回怪獸列表',review:'回錯題本'}[o.back]||'回島上';
+ const backName={mock:'回模擬考目錄',battle:'回怪獸列表',review:'回錯題本',gclass:'回文法教室'}[o.back]||'回島上';
  window.scrollTo(0,0);
  app.innerHTML=topBar(o.remedial?'補充習題成績':B?'戰鬥結果':o.review?'複習成績':'成績單')+`<div class="panel result">
   <div class="s">${starStr(s)}</div>${head}<p style="font-size:18px">${msg}</p>
@@ -1160,6 +1158,221 @@ function xMenu(cat,title,intro){
 const phonicsMenu=()=>xMenu('phonics','🔤 自然發音','<b>自然發音（字母拼讀）</b>讓孩子看到字就會唸、聽到字就會拼。從字母的聲音、短母音字族（cat、hat、bat），到字尾 e 的魔法（cap → cape）、子音組合（sh、ch、th）和母音組合（ee、ai、oa）。<br>🎧 每題都會唸出單字，記得打開聲音。');
 const talkMenu=()=>xMenu('talk','💬 情境對話','在<b>真實情境</b>中聽懂別人說的話，選出最合適的回答：打招呼、點餐、買東西、問路、關心別人。每題都會唸出對方說的話，可以按「再聽一次」。');
 const readMenu=()=>xMenu('reading','📖 閱讀理解','讀一段短文，回答問題。3～4 年級是自我介紹和一天的生活，5～6 年級加入上學日常和過去式的生日故事。按 🔊 可以聽整段短文。');
+
+/* =====================================================================
+   📘 文法教室：每單元＝重點說明 → 例句 → 常見錯誤 → 小測驗（附解析）
+   參考 Grammar Practice 系列的單元架構（說明、例句、練習、造句、檢核），內容為自編
+   ===================================================================== */
+const LESSONS=[
+/* ---------- 1～2 年級 ---------- */
+{id:'L01',g:1,t:'be 動詞 am / is / are',rules:['be','yes_be'],
+ pts:['be 動詞的意思是「是」，也可以表示「在」。','主詞是 <b>I</b> → 用 <b>am</b>','主詞是 <b>he / she / it</b>、一個人或一樣東西 → 用 <b>is</b>','主詞是 <b>you / we / they</b>、兩個以上 → 用 <b>are</b>'],
+ tbl:[['主詞','be 動詞','例句'],['I','am','I am happy.'],['he / she / it','is','She is my sister.'],['you / we / they','are','We are friends.']],
+ ex:[['I am a boy.','我是男生。'],['It is a cat.','牠是一隻貓。'],['They are my friends.','他們是我的朋友。']],
+ mis:[['I is happy.','I am happy.','I 一定配 am'],['You is my friend.','You are my friend.','you 一定配 are（就算只有一個人）']]},
+{id:'L02',g:1,t:'a 和 an',rules:['a_an'],
+ pts:['a / an 都是「一個」，放在<b>一個</b>可以數的東西前面。','單字的<b>發音</b>是母音 a、e、i、o、u 開頭 → 用 <b>an</b>','其他（子音開頭）→ 用 <b>a</b>'],
+ tbl:[['a + 子音開頭','an + 母音開頭'],['a book','an apple'],['a dog','an egg'],['a pencil','an eraser']],
+ ex:[['This is an apple.','這是一顆蘋果。'],['That is a dog.','那是一隻狗。']],
+ mis:[['a apple','an apple','apple 是 a 開頭的母音'],['an book','a book','book 是 b 開頭的子音']]},
+{id:'L03',g:1,t:'我的、你的 my / your',rules:['poss'],
+ pts:['「我的」→ <b>my</b>，「你的」→ <b>your</b>，後面一定要接名詞。','I 是「我」（當主詞），my 是「我的」。','you 是「你」，your 是「你的」。'],
+ tbl:[['我','我的','你','你的'],['I','my','you','your']],
+ ex:[['My name is Amy.','我的名字是 Amy。'],["What's your name?",'你叫什麼名字？'],['This is my book.','這是我的書。']],
+ mis:[['I name is Tom.','My name is Tom.','「我的」名字要用 my'],["What's you name?","What's your name?",'「你的」要用 your']]},
+{id:'L04',g:2,t:'Who 和 What',rules:['wh1'],
+ pts:['問「<b>誰</b>」→ <b>Who</b>，回答人。','問「<b>什麼</b>」→ <b>What</b>，回答東西。'],
+ tbl:[['問句','回答'],['Who is he?','He is my dad.'],['What is this?',"It's a ball."]],
+ ex:[['Who is she? She is my mom.','她是誰？她是我媽媽。'],["What is this? It's a book.",'這是什麼？這是一本書。']],
+ mis:[['What is he? He is my brother.','Who is he? He is my brother.','問人是誰要用 Who']]},
+/* ---------- 3～4 年級 ---------- */
+{id:'L05',g:3,t:'this / that / these / those',rules:['this_these'],
+ pts:['<b>this</b> 這個（近的、一個）、<b>that</b> 那個（遠的、一個）','<b>these</b> 這些（近的、很多）、<b>those</b> 那些（遠的、很多）','一個配 is，很多配 are。'],
+ tbl:[['','一個','很多'],['近','this','these'],['遠','that','those']],
+ ex:[['This is my pen.','這是我的筆。'],['These are my pens.','這些是我的筆。'],['Those are birds.','那些是鳥。']],
+ mis:[['These is my shoes.','These are my shoes.','these 是很多個，要用 are'],['This are my bag.','This is my bag.','this 只有一個，要用 is']]},
+{id:'L06',g:3,t:'名詞複數 s / es',rules:['plural','like_pl','how_many'],
+ pts:['兩個以上要用<b>複數</b>，大部分加 <b>s</b>：pen → pens','字尾是 s、x、ch、sh → 加 <b>es</b>：box → boxes、sandwich → sandwiches','問數量：<b>How many</b> + 複數？','說「喜歡某一種東西」也用複數：I like dogs.'],
+ tbl:[['一個','兩個以上'],['a pen','two pens'],['a box','three boxes'],['a sandwich','four sandwiches']],
+ ex:[['I have two pencils.','我有兩枝鉛筆。'],['How many books are there?','有幾本書？'],['I like cats.','我喜歡貓。']],
+ mis:[['I have three book.','I have three books.','三本要用複數'],['How much pens?','How many pens?','可以數的東西用 How many']]},
+{id:'L07',g:3,t:'否定句與 Yes / No 回答',rules:['neg_be','yes_be'],
+ pts:['否定：在 be 動詞後面加 <b>not</b>。','is not = <b>isn\'t</b>、are not = <b>aren\'t</b>、I am not = <b>I\'m not</b>','回答 Yes/No 問句時，用<b>同一個 be 動詞</b>回答。'],
+ tbl:[['問句','肯定','否定'],['Are you a student?','Yes, I am.',"No, I'm not."],['Is it a dog?','Yes, it is.',"No, it isn't."],['Are they cats?','Yes, they are.',"No, they aren't."]],
+ ex:[["Is this your bag? No, it isn't.",'這是你的書包嗎？不，不是。']],
+ mis:[["Are you a teacher? No, I don't.","No, I'm not.",'用 are 問，就用 be 動詞回答，不用 do']]},
+{id:'L08',g:3,t:'can 會、能',rules:['can_ans','can_base'],
+ pts:['<b>can</b> 表示「會、能夠」。','can 後面接<b>原形動詞</b>，不加 s、不加 ing。','否定：<b>can\'t</b>（cannot）；問句：Can you…? → Yes, I can. / No, I can\'t.'],
+ tbl:[['肯定','否定','問句'],['I can swim.',"I can't swim.",'Can you swim?'],['She can dance.',"She can't dance.",'Can she dance?']],
+ ex:[['I can sing.','我會唱歌。'],["Can he run fast? No, he can't.",'他跑得快嗎？不，他不行。']],
+ mis:[['She can dances.','She can dance.','can 後面用原形動詞'],['Can you swim? Yes, I do.','Yes, I can.','用 can 問就用 can 回答']]},
+{id:'L09',g:3,t:'位置介系詞 in / on / under',rules:['prep','where_q'],
+ pts:['<b>in</b> 在…裡面、<b>on</b> 在…上面（有接觸）、<b>under</b> 在…下面','問「在哪裡」用 <b>Where</b>。'],
+ tbl:[['介系詞','意思','例子'],['in','在裡面','in the box'],['on','在上面','on the desk'],['under','在下面','under the chair']],
+ ex:[['The pen is in the bag.','筆在書包裡。'],['Where is my cat? It is under the table.','我的貓在哪裡？在桌子下面。']],
+ mis:[['The book is in the desk.（書在桌面上）','The book is on the desk.','在桌面上方要用 on']]},
+{id:'L10',g:3,t:'一般動詞與 Do 問句',rules:['do_ans','habit'],
+ pts:['一般動詞：like、play、swim、read…','I / you / we / they 用<b>原形</b>：I like pizza.','問句用 <b>Do</b>：Do you like…? → Yes, I do. / No, I don\'t.','每天、每週的習慣 → 現在簡單式。'],
+ tbl:[['肯定','否定','問句'],['I like milk.',"I don't like milk.",'Do you like milk?']],
+ ex:[['I play games every Sunday.','我每週日玩遊戲。'],["Do you like rice? Yes, I do.",'你喜歡飯嗎？喜歡。']],
+ mis:[['Do you like pizza? Yes, I am.','Yes, I do.','用 Do 問，就用 do 回答']]},
+{id:'L11',g:4,t:'現在進行式 be + V-ing',rules:['prog_ing','prog_be'],
+ pts:['表示「<b>現在正在做</b>」→ be 動詞 + 動詞ing','常和 <b>now</b>、<b>Look!</b>、<b>Listen!</b> 一起出現。','加 ing 的規則：大部分直接加（read → reading）；字尾 e 去 e 加 ing（dance → dancing）；短母音＋子音要重複字尾（swim → swimming、run → running）'],
+ tbl:[['原形','V-ing'],['read','reading'],['dance','dancing'],['swim','swimming'],['run','running']],
+ ex:[["I'm reading now.",'我現在正在看書。'],['Look! The kids are running.','你看！孩子們正在跑。']],
+ mis:[['She is sing now.','She is singing now.','進行式要加 ing'],['I reading.','I am reading.','進行式不能少了 be 動詞']]},
+{id:'L12',g:4,t:"幾點鐘 o'clock",rules:['oclock'],
+ pts:["問時間：<b>What time is it?</b>","整點回答：<b>It's + 數字 + o'clock.</b>"],
+ tbl:[['問','答'],['What time is it?',"It's seven o'clock."]],
+ ex:[["What time is it? It's nine o'clock.",'現在幾點？九點。']],
+ mis:[["It's seven clock.","It's seven o'clock.","整點要說 o'clock"]]},
+/* ---------- 5～6 年級 ---------- */
+{id:'L13',g:5,t:'have 和 has',rules:['has_have','have_neg'],
+ pts:['have / has 都是「有」。','<b>I / you / we / they</b> → have','<b>he / she / it</b>、一個人 → has','問句：Do you have…? / Does she have…?，否定 don\'t have / doesn\'t have（後面都用 have）'],
+ tbl:[['主詞','有'],['I / you / we / they','have'],['he / she / it / Tom','has']],
+ ex:[['My mom has a car.','我媽媽有一台車。'],["Do you have an eraser? No, I don't.",'你有橡皮擦嗎？沒有。']],
+ mis:[['She have a dog.','She has a dog.','she 用 has'],['Does he has a pen?','Does he have a pen?','Does 後面用原形 have']]},
+{id:'L14',g:5,t:'第三人稱單數 + s',rules:['third_s','does_q'],
+ pts:['主詞是 <b>he / she / it / 一個人</b>，現在式的動詞要<b>加 s 或 es</b>。','字尾 s、x、ch、sh、o → 加 es：watch → watches、go → goes','子音 + y → 去 y 加 ies：study → studies、fly → flies','問句用 <b>Does</b>，後面動詞用原形。'],
+ tbl:[['原形','第三人稱'],['play','plays'],['watch','watches'],['go','goes'],['study','studies']],
+ ex:[['He goes to school by MRT.','他搭捷運上學。'],['What does your father do?','你爸爸做什麼工作？']],
+ mis:[['She watch TV every day.','She watches TV every day.','she 是第三人稱，動詞加 es'],['Does Amy likes candy?','Does Amy like candy?','Does 後面用原形']]},
+{id:'L15',g:5,t:'進行式 vs. 簡單式',rules:['prog_simple'],
+ pts:['<b>現在正在發生</b>（now、Look!、Listen!）→ 進行式 is/are + V-ing','<b>習慣、常常做</b>（every day、every Sunday、always）→ 簡單式'],
+ tbl:[['時間詞','時態','例句'],['now / Look!','進行式','Look! Tom is swimming.'],['every day','簡單式','Tom swims every day.']],
+ ex:[['Listen! She is singing.','你聽！她正在唱歌。'],['Every Saturday, he cleans his room.','每週六他打掃房間。']],
+ mis:[['Look! The baby sleeps.','Look! The baby is sleeping.','Look! 表示正在發生']]},
+{id:'L16',g:5,t:'his / her 和 Whose',rules:['his_her','whose'],
+ pts:['<b>his</b> 他的（男生）、<b>her</b> 她的（女生）','問「<b>誰的</b>」→ <b>Whose</b> + 名詞'],
+ tbl:[['人','的'],['he（男生）','his'],['she（女生）','her'],['they','their']],
+ ex:[['This is Amy. Her bag is red.','這是 Amy，她的書包是紅色的。'],["Whose key is it? It's his key.",'這是誰的鑰匙？是他的。']],
+ mis:[['This is Tom. Her cap is blue.','His cap is blue.','Tom 是男生，用 his'],['Who key is it?','Whose key is it?','「誰的」要用 Whose']]},
+{id:'L17',g:5,t:'介系詞 by / at / from',rules:['by','at_time','from'],
+ pts:['搭交通工具：<b>by</b> bus / by MRT；走路：<b>on foot</b>','幾點鐘前面：<b>at</b> seven','來自哪裡：be <b>from</b> Taiwan'],
+ tbl:[['用法','例子'],['by + 交通工具','by bike'],['on foot','走路'],['at + 時間','at six'],['from + 地方','from Japan']],
+ ex:[['I go to school by bus.','我搭公車上學。'],['I get up at six.','我六點起床。'],["Where are you from? I'm from Taiwan.",'你從哪裡來？我來自台灣。']],
+ mis:[['I go to school on bus.','by bus','交通工具用 by'],['I go to the park by foot.','on foot','走路是固定用法 on foot']]},
+{id:'L18',g:5,t:'There is / There are',rules:['there_be'],
+ pts:['表示「<b>某處有…</b>」','一個東西 → <b>There is</b> + a/an + 名詞','兩個以上 → <b>There are</b> + 複數名詞'],
+ tbl:[['數量','句型'],['一個','There is a cat under the table.'],['很多','There are three books on the desk.']],
+ ex:[['There is an apple in the box.','盒子裡有一顆蘋果。'],['There are two birds in the tree.','樹上有兩隻鳥。']],
+ mis:[['There are a cat.','There is a cat.','一隻用 There is'],['There is three pens.','There are three pens.','三枝用 There are']]},
+{id:'L19',g:5,t:'some / any、How much / How many',rules:['some_any','how_much'],
+ pts:['<b>some</b> 一些：用在肯定句。','<b>any</b> 任何：用在問句和否定句。','<b>How many</b> + 可數名詞複數：問數量。','<b>How much</b>：問價錢（或不可數的量）。'],
+ tbl:[['句型','例子'],['肯定 some','I have some cookies.'],['問句 any','Do you have any cookies?'],['價錢','How much is it?']],
+ ex:[["How much is the cake? It's fifty dollars.",'蛋糕多少錢？五十元。']],
+ mis:[['Do you have some pens?','Do you have any pens?','問句通常用 any'],['How many is the book?','How much is the book?','問價錢用 How much']]},
+{id:'L20',g:5,t:'未來式 will',rules:['future_will'],
+ pts:['表示「<b>將會</b>」，常和 <b>tomorrow、next week</b> 一起用。','<b>will + 原形動詞</b>，所有主詞都一樣。'],
+ tbl:[['主詞','will + 原形'],['I / you / he / they','will go']],
+ ex:[['I will visit my grandma tomorrow.','我明天會去看奶奶。']],
+ mis:[['She will goes to the park.','She will go to the park.','will 後面用原形']]},
+{id:'L21',g:5,t:'want to + 動詞、比較級',rules:['want_to','compar'],
+ pts:['想要做某事：<b>want to + 原形動詞</b>','比較兩個：<b>形容詞 + er + than</b>：tall → taller than','短母音 + 子音字尾要重複：big → bigger；子音 + y → ier：heavy → heavier'],
+ tbl:[['原級','比較級'],['tall','taller'],['big','bigger'],['heavy','heavier']],
+ ex:[['I want to fly a kite.','我想放風箏。'],['Tom is taller than Ben.','Tom 比 Ben 高。']],
+ mis:[['I want fly.','I want to fly.','want 後面要加 to'],['He is tall than me.','He is taller than me.','比較要用比較級']]},
+{id:'L22',g:6,t:'過去式 was / were',rules:['past_be'],
+ pts:['過去的事（yesterday、last night）→ be 動詞變過去式。','am / is → <b>was</b>、are → <b>were</b>'],
+ tbl:[['現在','過去'],['I am / he is','I was / he was'],['you are / they are','you were / they were']],
+ ex:[['I was tired yesterday.','我昨天很累。'],['They were at the zoo last Sunday.','他們上週日在動物園。']],
+ mis:[['I were happy yesterday.','I was happy yesterday.','I 的過去式是 was']]},
+{id:'L23',g:6,t:'過去式動詞與 Did 問句',rules:['past_verb','past_q'],
+ pts:['規則動詞加 <b>ed</b>：play → played、dance → danced','不規則動詞要背：go → went、eat → ate、swim → swam、run → ran','問句用 <b>Did</b>，否定用 <b>didn\'t</b>，後面都用<b>原形</b>。'],
+ tbl:[['原形','過去式'],['play','played'],['go','went'],['eat','ate'],['write','wrote']],
+ ex:[['I played basketball yesterday.','我昨天打籃球。'],["Did you go to school yesterday? Yes, I did.",'你昨天有去上學嗎？有。']],
+ mis:[['I go to the zoo yesterday.','I went to the zoo yesterday.','yesterday 要用過去式'],["I didn't went.","I didn't go.","didn't 後面用原形"]]},
+{id:'L24',g:6,t:'be going to 打算',rules:['going_to'],
+ pts:['表示「<b>打算、準備要做</b>」：<b>be going to + 原形</b>','be 動詞要跟主詞配合：I am / he is / they are going to…'],
+ tbl:[['主詞','be going to'],['I','am going to swim'],['she','is going to swim'],['we','are going to swim']],
+ ex:[['We are going to swim this weekend.','我們這個週末要去游泳。']],
+ mis:[['He are going to play.','He is going to play.','he 用 is']]},
+{id:'L25',g:6,t:'最高級 the -est',rules:['superl'],
+ pts:['三個以上比較「<b>最…</b>」→ <b>the + 形容詞est</b>','tall → the tallest、big → the biggest、heavy → the heaviest'],
+ tbl:[['原級','比較級','最高級'],['tall','taller','tallest'],['big','bigger','biggest'],['busy','busier','busiest']],
+ ex:[['Ben is the tallest in our class.','Ben 是我們班最高的。']],
+ mis:[['She is the taller in the class.','She is the tallest in the class.','全班比較用最高級']]},
+{id:'L26',g:6,t:'受格和所有格代名詞',rules:['obj_pron','poss_pron'],
+ pts:['動詞後面的「他、她、我…」要用<b>受格</b>：me、him、her、us、them','「…的（東西）」後面沒有名詞時用<b>所有格代名詞</b>：mine、yours、his、hers、ours'],
+ tbl:[['主格','受格','所有格','所有格代名詞'],['I','me','my','mine'],['he','him','his','his'],['she','her','her','hers'],['we','us','our','ours'],['they','them','their','theirs']],
+ ex:[['I like him.','我喜歡他。'],['This book is mine.','這本書是我的。']],
+ mis:[['I like he.','I like him.','動詞後面用受格'],['This pen is my.','This pen is mine.','後面沒有名詞要用 mine']]},
+{id:'L27',g:6,t:'頻率副詞與助動詞',rules:['freq','modal'],
+ pts:['頻率：<b>always</b> 總是 > <b>usually</b> 通常 > <b>often</b> 常常 > <b>sometimes</b> 有時 > <b>never</b> 從不','頻率副詞放在一般動詞前面：I always get up early.','助動詞 <b>should</b> 應該、<b>must</b> 必須、<b>can</b> 可以、<b>will</b> 將會，後面都接原形動詞。'],
+ tbl:[['副詞','頻率'],['always','100%'],['usually','80%'],['often','60%'],['sometimes','30%'],['never','0%']],
+ ex:[['I never eat breakfast late.','我從不晚吃早餐。'],['You should go to bed early.','你應該早點睡。']],
+ mis:[['You should goes home.','You should go home.','should 後面用原形']]},
+{id:'L28',g:6,t:'時間介系詞 in / on / at',rules:['time_prep'],
+ pts:['<b>in</b> + 月份、季節、年：in May、in summer','<b>on</b> + 星期、日期：on Monday','<b>at</b> + 幾點鐘：at seven o\'clock'],
+ tbl:[['介系詞','用在'],['in','月份、季節'],['on','星期幾'],['at','幾點鐘']],
+ ex:[['My birthday is in July.','我的生日在七月。'],['We have art on Friday.','我們星期五有美術課。']],
+ mis:[['on May','in May','月份用 in'],['in Monday','on Monday','星期用 on']]},
+{id:'L29',g:6,t:'時態總複習',rules:['tense_mix','past_q','future_will','prog_simple'],
+ pts:['看<b>時間詞</b>決定時態：','yesterday、last … → <b>過去式</b>','now、Look! → <b>現在進行式</b>','every day、always → <b>現在簡單式</b>（第三人稱加 s）','tomorrow、next … → <b>未來式 will</b>'],
+ tbl:[['時間詞','時態','例子（Tom / play）'],['yesterday','過去式','Tom played.'],['now','進行式','Tom is playing.'],['every day','簡單式','Tom plays.'],['tomorrow','未來式','Tom will play.']],
+ ex:[['Tom played basketball yesterday.','Tom 昨天打籃球。'],['Tom will play basketball tomorrow.','Tom 明天會打籃球。']],
+ mis:[['I play yesterday.','I played yesterday.','yesterday 要用過去式']]}
+];
+
+/* ---------- 選項解析：說明每個選項的用法 ---------- */
+const GLOSS={am:'am 只搭配 I',is:'is 搭配 he / she / it 或一個人、一樣東西',are:'are 搭配 you / we / they 或兩個以上',was:'was 是 am / is 的過去式',were:'were 是 are 的過去式',
+ a:'a 用在子音開頭的單數名詞前',an:'an 用在母音開頭的單數名詞前',two:'two 是「兩個」，後面要接複數',the:'the 是「這個、那個（特定的）」',
+ This:'This 指一個近的東西',That:'That 指一個遠的東西',These:'These 指很多個近的東西，配 are',Those:'Those 指很多個遠的東西，配 are',
+ Who:'Who 問「誰」',What:'What 問「什麼」',Where:'Where 問「在哪裡」',Whose:'Whose 問「誰的」',How:'How 問「如何」',Did:'Did 用在過去式問句',Do:'Do 用在 I/you/we/they 的現在式問句',Does:'Does 用在第三人稱單數現在式問句',Is:'Is 是 be 動詞問句',Are:'Are 是 be 動詞問句',
+ my:'my 是「我的」，後面要接名詞',My:'My 是「我的」，後面要接名詞',I:'I 是「我」，當主詞',Me:'me 是受格「我」',me:'me 是受格「我」，放在動詞後面',your:'your 是「你的」，後面要接名詞',you:'you 是「你」',yours:'yours 是「你的（東西）」，後面不接名詞',
+ his:'his 是「他的」',His:'His 是「他的」',her:'her 是「她的」或受格「她」',Her:'Her 是「她的」',hers:'hers 是「她的（東西）」，後面不接名詞',he:'he 是主格「他」，不能放動詞後面',He:'He 是主格「他」',she:'she 是主格「她」',She:'She 是主格「她」',
+ him:'him 是受格「他」',them:'them 是受格「他們」',they:'they 是主格「他們」',their:'their 是「他們的」',us:'us 是受格「我們」',we:'we 是主格「我們」',our:'our 是「我們的」，後面要接名詞',ours:'ours 是「我們的（東西）」',mine:'mine 是「我的（東西）」，後面不接名詞',
+ in:'in 是「在…裡面」，也用在月份、季節',on:'on 是「在…上面」，也用在星期幾、on foot',under:'under 是「在…下面」',at:'at 用在幾點鐘、地點',by:'by + 交通工具',from:'from 是「來自」',to:'to 是「到、去」',for:'for 是「為了、給」',
+ many:'many 用在可數名詞（數量）',much:'much 用在不可數名詞或問價錢',old:'How old 問年紀',some:'some 用在肯定句',any:'any 用在問句、否定句',
+ can:'can 是「會、能」',"can't":"can't 是「不會、不能」",do:'do 是一般動詞的助動詞',does:'does 是第三人稱單數的助動詞',"don't":"don't 是一般動詞否定（I/you/we/they）","doesn't":"doesn't 是第三人稱單數的否定",
+ not:'not 要放在 be 動詞或助動詞後面',no:'no 是「不」，但否定句要用 not',"isn't":"isn't = is not","aren't":"aren't = are not",'am not':'am not 只配 I',has:'has 搭配 he / she / it',have:'have 搭配 I / you / we / they，或在 do/does/can 後面',
+ "o'clock":"整點要說 o'clock",time:'time 是「時間」',clock:'clock 是「時鐘」',always:'always 總是',usually:'usually 通常',often:'often 常常',sometimes:'sometimes 有時候',never:'never 從不',
+ did:'did 是過去式助動詞，不能和 tomorrow 一起用',should:'should 應該',must:'must 必須',will:'will 將會'};
+function verbNote(o){
+ for(const v of VERBS){
+  if(o===v.i||o==='is '+v.i||o==='are '+v.i)return `${o}：V-ing 是進行式，要和 be 動詞一起用，表示「正在」`;
+  if(o==='will '+v.b)return `${o}：未來式，用在 tomorrow、next…`;
+  if(o===v.p&&v.p!==v.b)return `${o}：過去式，用在 yesterday、last…`;
+  if(o===v.s)return `${o}：加 s/es 只用在第三人稱單數（he/she/一個人）的現在式`;
+  if(o===v.b)return `${o}：原形動詞，用在 I/you/we/they 的現在式，或 can、will、to、did 後面`;}
+ for(const a of COMP){if(o===a.b)return `${o}：原級，沒有比較`;if(o===a.c)return `${o}：比較級，比較兩個（than）`;if(o===a.s)return `${o}：最高級，三個以上（the …est）`}
+ return ''}
+function noteOf(o){if(GLOSS[o])return GLOSS[o];const v=verbNote(o);if(v)return v.replace(/^[^：]+：/,'');
+ if(/s$/.test(o)&&!/ss$/.test(o))return '複數形，兩個以上用';if(/^a |^an /.test(o))return '「一個」，單數';if(/^[a-z]+$/.test(o))return '單數形（只有一個）；兩個以上要用複數';return ''}
+function explainHTML(it){
+ const rows=it.opts.map(o=>{const n=noteOf(o);const ok=o===it.ans;return `<div class="exrow ${ok?'ok':'no'}"><b class="en">${ok?'✅':'❌'} ${esc(o)}</b>${n?`<span>${n}</span>`:''}</div>`}).join('');
+ return `<div class="explain"><div class="exh">📖 解析</div>${it.tip?`<div class="exmain">${it.tip}</div>`:''}${rows}</div>`}
+
+/* ---------- 文法教室頁面 ---------- */
+function grammarClass(){
+ const g=state.grade,groups=[[1,2,'1～2 年級'],[3,4,'3～4 年級'],[5,6,'5～6 年級']];
+ const done=LESSONS.filter(l=>best[g+'_'+l.id]).length;
+ app.innerHTML=topBar('📘 文法教室')+`<div class="panel">
+  <div class="remedy-box">每個單元：<b>① 文法重點 → ② 例句（可聽）→ ③ 常見錯誤 → ④ 小測驗 10 題</b>，每題都有解析，連錯的選項為什麼錯都會說明。<br>共 ${LESSONS.length} 個單元，已完成 ${done} 個（${g} 年級紀錄）。</div>
+  ${groups.map(([a,b,n])=>`<h3 class="semh">${n}</h3><div class="papers">${LESSONS.filter(l=>l.g>=a&&l.g<=b).map(l=>`<button class="ch ${g<l.g?'locked':''}" onclick="lesson('${l.id}')"><b>${l.t}</b><span>${l.g} 年級起</span><div class="stars">${starStr(best[g+'_'+l.id]||0)}</div></button>`).join('')}</div>`).join('')}</div>`;
+}
+function lesson(id){
+ const l=LESSONS.find(x=>x.id===id),i=LESSONS.indexOf(l),nx=LESSONS[i+1];
+ window.scrollTo(0,0);
+ app.innerHTML=topBar('📘 '+l.t)+`<div class="panel lesson">
+  <div class="lsec"><div class="lh">① 文法重點</div><ul>${l.pts.map(p=>`<li>${p}</li>`).join('')}</ul>
+   ${l.tbl?`<table class="ltbl">${l.tbl.map((r,k)=>`<tr>${r.map(c=>k?`<td class="en">${esc(c)}</td>`:`<th>${esc(c)}</th>`).join('')}</tr>`).join('')}</table>`:''}</div>
+  <div class="lsec"><div class="lh">② 例句（點一下聽發音）</div>${l.ex.map(([e,z])=>`<button class="lex" data-say="${esc(e)}"><b class="en">🔊 ${esc(e)}</b><span>${esc(z)}</span></button>`).join('')}</div>
+  <div class="lsec"><div class="lh">③ 常見錯誤</div>${l.mis.map(([w,r,why])=>`<div class="lmis"><div><span class="bad">❌</span> <s class="en">${esc(w)}</s></div><div><span class="good">✅</span> <b class="en">${esc(r)}</b></div><small>💡 ${esc(why)}</small></div>`).join('')}</div>
+  <div class="lsec"><div class="lh">④ 檢核：讀完了嗎？</div><div class="qsub" style="text-align:left">□ 我知道什麼時候用這個文法　□ 我能看懂例句　□ 我知道常見錯誤</div></div>
+  <div class="row"><button class="btn" id="lq">📝 開始小測驗（10 題，附解析）</button></div>
+  ${nx?`<div class="row"><button class="btn ghost" onclick="lesson('${nx.id}')">下一單元：${nx.t} →</button></div>`:''}</div>`;
+ app.querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>say(b.dataset.say));
+ $('#lq').onclick=()=>lessonQuiz(id);
+}
+function lessonQuiz(id){
+ const l=LESSONS.find(x=>x.id===id),og=state.grade;
+ /* 依單元難度出題：年級不足時，用單元建議年級的字庫 */
+ if(state.grade<l.g)state.grade=l.g;
+ let k=0;const items=distinct(()=>{const it=ruleItem(l.rules[k++%l.rules.length]);it.explain=true;return it},10,x=>x.q,200);
+ state.grade=og;
+ runQuiz({title:'📝 '+l.t,items:shuffle(items),saveKey:l.id,replay:()=>lessonQuiz(id),back:'gclass',lessonId:id});
+}
 
 ensureDay();updateStars();home();
 
